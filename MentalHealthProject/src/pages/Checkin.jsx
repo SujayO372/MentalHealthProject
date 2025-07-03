@@ -1,3 +1,9 @@
+import NavBar from '../components/NavBar'
 export default function Checkin() {
-  return <h1>Home Page</h1>;
+  return (
+    <>
+      <NavBar />
+      <h1>Checkin Page</h1>;
+    </>
+  )
 }
