@@ -1,8 +1,8 @@
-// import NavBar here (hint: file path is '../components/NavBar)
+import NavBar from '../components/NavBar'
 export default function Hotlines() {
   return (
     <>
-      {/* Add NavBar component here */}
+      <NavBar />
       <h1>Hotlines Page</h1>
     </>
   )

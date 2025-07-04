@@ -14,7 +14,11 @@ createRoot(root).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* https://reactrouter.com/start/declarative/routing */}
+        <Route index element={<Home />} />
+        <Route path="chatbot" element={<Chatbot />} />
+        <Route path="checkin" element={<Checkin />} />
+        <Route path="healthtest" element={<HealthTest />} />
+        <Route path="hotlines" element={<Hotlines />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
