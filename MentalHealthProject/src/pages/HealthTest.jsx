@@ -1,3 +1,9 @@
+import NavBar from '../components/NavBar'
 export default function HealthTest() {
-  return <h1>Home Page</h1>;
+  return (
+    <>
+      <NavBar />
+      <h1>HealthTest Page</h1>
+    </>
+  )
 }
