@@ -1,9 +1,9 @@
-import NavBar from '../components/NavBar'
+// import NavBar here (hint: file path is '../components/NavBar)
 export default function Checkin() {
   return (
     <>
-      <NavBar />
-      <h1>Checkin Page</h1>;
+      {/* Add NavBar component here */}
+      <h1>Checkin Page</h1>
     </>
   )
 }
