@@ -4,6 +4,7 @@ export default function Chatbot() {
     <>
       <NavBar />
       <h1>Chatbot Page</h1>
+      
     </>
   )
 }

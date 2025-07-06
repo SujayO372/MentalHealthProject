@@ -1,0 +1,19 @@
+{
+  "name": "mentalhealthproject",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000M\u0000e\u0000n\u0000t\u0000a\u0000l\u0000H\u0000e\u0000a\u0000l\u0000t\u0000h\u0000P\u0000r\u0000o\u0000j\u0000e\u0000c\u0000t\u0000\r\u0000 \u0000\"# MentalHealthProject\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SujayO372/MentalHealthProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SujayO372/MentalHealthProject/issues"
+  },
+  "homepage": "https://github.com/SujayO372/MentalHealthProject#readme"
+}
