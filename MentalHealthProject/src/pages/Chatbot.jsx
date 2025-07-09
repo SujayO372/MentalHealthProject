@@ -1,32 +1,27 @@
 import NavBar from '../components/NavBar';
 
-const QuestionsToAsk = [
+const dummyMessages = [
   {
-    id: 0,
-    question: 'How have you been feeling emotionally over the past two weeks?'
+    isUser: true,
+    messageContent: "Hi, how are you?",
+    timestamp: "10:38:23"
   },
   {
-    id: 1,
-    question: 'Have you experienced any recent changes in sleep patterns?'
+    isUser: false,
+    messageContent: "I'm good! How can I support you today?",
+    timestamp: "10:39:42"
   },
   {
-    id: 2,
-    question: 'Do you often feel overwhelmed or unable to cope with daily tasks?'
+    isUser: true,
+    messageContent: "I'm feeling a bit down lately.",
+    timestamp: "10:40:57"
   },
   {
-    id: 3,
-    question: 'Have you noticed any changes in your appetite or eating habits?'
-  },
-  {
-    id: 4,
-    question: 'Do you find it difficult to concentrate or stay focused?'
-  },
-  {
-    id: 5,
-    question: 'Have you had any thoughts of self-harm or harming others?'
+    isUser: false,
+    messageContent: "I'm here to help. Would you like to talk about what's been bothering you?",
+    timestamp: "10:42:00"
   }
 ];
-
 
 export default function Chatbot() {
   const message = {

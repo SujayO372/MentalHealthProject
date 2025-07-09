@@ -11,11 +11,7 @@ function Home() {
     <>
       <NavBar />
       <h1> Benefit your Mental Health </h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
+    
       <p className="read-the-docs">
         Click on different categories to go to the pages
       </p>
