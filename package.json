@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/SujayO372/MentalHealthProject/issues"
   },
-  "homepage": "https://github.com/SujayO372/MentalHealthProject#readme"
+  "homepage": "https://github.com/SujayO372/MentalHealthProject#readme",
+  "dependencies": {
+    "lucide-react": "^0.525.0"
+  }
 }
