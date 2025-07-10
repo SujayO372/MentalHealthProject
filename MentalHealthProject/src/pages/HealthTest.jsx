@@ -31,8 +31,7 @@ export default function HealthTest() {
       <NavBar />
       <div >
         <h1> Take a Health Test </h1>
-        <article>
-        </article>
+        
       </div>
     </div>
   );

@@ -65,7 +65,7 @@ export default function Chatbot() {
             border: 'none',
             borderRadius: '5px'
           }}>Start a New Chat</button>
-
+          {/* Sidebar Button */}
           <h2>Recent Chats</h2>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {recentChats.map(chat => (
@@ -77,6 +77,7 @@ export default function Chatbot() {
             ))}
           </ul>
         </div>
+        {/* Maps Day/Time & Title */}
 
         {/* Chat Area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
