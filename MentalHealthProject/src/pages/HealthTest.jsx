@@ -30,7 +30,7 @@ export default function HealthTest() {
     <div>
       <NavBar />
       <div >
-        <h1> Various Health Tests </h1>
+        <h1> Take a Health Test </h1>
         <article>
         </article>
       </div>
