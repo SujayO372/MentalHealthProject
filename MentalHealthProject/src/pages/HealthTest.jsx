@@ -115,7 +115,7 @@ export default function HealthTest() {
       <NavBar />
       <h2 style={{ textAlign: 'center', color: '#333' }}>Personalized Recommendations</h2>
       <p style={{ maxWidth: '600px', margin: '0 auto', color: '#444', textAlign: 'center' }}>
-        Thank you for completing the check-in. Based on your responses, here are some suggestions:
+        Thank you for completing the check-in. Based on your responses, here are some suggestions for articles:
       </p>
       <ul style={{
         marginTop: '20px',
