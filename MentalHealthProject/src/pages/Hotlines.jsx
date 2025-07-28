@@ -54,11 +54,34 @@ export default function Hotlines() {
         </section>
 
         {/* Description */}
-        <p style={{ marginTop: '30px', color: '#555' }}>
-          Hotlines are dedicated phone lines designed to provide immediate assistance, support, and information for specific issues.
-          Whether it’s for mental health crises, domestic violence, substance abuse, or emergency services, hotlines offer confidential, timely help to individuals in need.
-          They serve as a vital resource for connecting people with the appropriate care and guidance.
-        </p>
+       <div style={{
+  marginTop: '40px',
+  maxWidth: '800px',
+  backgroundColor: '#e0f7fa',  // soft cyan background for calmness
+  borderRadius: '12px',
+  padding: '25px 30px',
+  boxShadow: '0 8px 15px rgba(0, 0, 0, 0.1)',
+  color: '#004d40',  // dark teal text for readability and calm
+  fontSize: '1.15rem',
+  lineHeight: '1.6',
+  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+  marginLeft: 'auto',
+  marginRight: 'auto',
+}}>
+  <h2 style={{
+    marginBottom: '15px',
+    fontWeight: '700',
+    color: '#00796b'
+  }}>
+    What Are Hotlines?
+  </h2>
+  <p>
+    Hotlines are dedicated phone lines designed to provide immediate assistance, support, and information for specific issues.
+    Whether it’s for mental health crises, domestic violence, substance abuse, or emergency services, hotlines offer confidential, timely help to individuals in need.
+    They serve as a vital resource for connecting people with the appropriate care and guidance.
+  </p>
+</div>
+
       </div>
     </div>
   );
