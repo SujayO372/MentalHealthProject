@@ -9,12 +9,11 @@ function UserNavBar({ username = 'Guest' }) {
 
       <nav style={styles.nav}>
         <a href="/settings" style={styles.link}>⚙️ Settings</a>
-        <a href="/logout" style={styles.link}>🚪 Logout</a>
-        <a href="/profile" style={styles.link}>👥 Profile</a>
-        <a href="/notifications" style={styles.link}>🔔 Notifications</a>
-        <a href="/help" style={styles.link}>❓ Help</a>
+        <a href="/therapy" style={styles.link}>🧠 Therapy Nearby</a>
+        <a href="/checkups" style={styles.link}>🧪 Daily Check-Ups</a>
+        <a href="/medicines" style={styles.link}>💊 Medicine Types</a>
         <a href="/feedback" style={styles.link}>✉️ Feedback</a>
-        <a href="/about" style={styles.link}>ℹ️ About</a>
+        <a href="/logout" style={styles.link}>🚪 Logout</a>
       </nav>
     </div>
   );
@@ -26,7 +25,7 @@ const styles = {
     top: 0,
     right: 0,
     height: '100vh',
-    width: '140px',
+    width: '160px',
     backgroundColor: '#e6f2ff',
     display: 'flex',
     flexDirection: 'column',

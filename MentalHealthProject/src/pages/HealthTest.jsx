@@ -4,29 +4,86 @@ import NavBar from '../components/NavBar';
 const QuestionsToAsk = [
   {
     id: 0,
-    question: 'Over the past two weeks, how would you describe your overall emotional well-being?'
+    question: "Over the past two weeks, how would you describe your overall emotional well-being?"
   },
   {
     id: 1,
-    question: 'Have you experienced any notable changes in your sleep patterns or quality of rest recently?'
+    question: "Have you experienced any notable changes in your sleep patterns or quality of rest recently?"
   },
   {
     id: 2,
-    question: 'How often do you feel overwhelmed or find it difficult to manage daily responsibilities?'
+    question: "How often do you feel overwhelmed or find it difficult to manage daily responsibilities?"
   },
   {
     id: 3,
-    question: 'Have you noticed any recent changes in your appetite or eating habits?'
+    question: "Have you noticed any recent changes in your appetite or eating habits?"
   },
   {
     id: 4,
-    question: 'Do you find it challenging to concentrate or maintain focus throughout the day?'
+    question: "Do you find it challenging to concentrate or maintain focus throughout the day?"
   },
   {
     id: 5,
-    question: 'Have you had any thoughts related to self-harm or harming others?'
+    question: "Have you had any thoughts related to self-harm or harming others?"
+  },
+  {
+    id: 6,
+    question: "Have you been avoiding social situations or withdrawing from friends and family?"
+  },
+  {
+    id: 7,
+    question: "Do you often feel a sense of hopelessness or that things won't improve?"
+  },
+  {
+    id: 8,
+    question: "Have you lost interest in activities or hobbies that you usually enjoy?"
+  },
+  {
+    id: 9,
+    question: "How often do you experience feelings of anxiety, panic, or excessive worry?"
+  },
+  {
+    id: 10,
+    question: "Do you find yourself feeling unusually irritable or short-tempered?"
+  },
+  {
+    id: 11,
+    question: "Have you noticed physical symptoms like fatigue, headaches, or stomach issues without a clear cause?"
+  },
+  {
+    id: 12,
+    question: "Do you feel emotionally numb or disconnected from your surroundings?"
+  },
+  {
+    id: 13,
+    question: "How frequently do you experience mood swings or emotional highs and lows?"
+  },
+  {
+    id: 14,
+    question: "Are you currently experiencing any major life changes or stressors?"
+  },
+  {
+    id: 15,
+    question: "Do you feel supported by the people around you when you're struggling emotionally?"
+  },
+  {
+    id: 16,
+    question: "Have you been relying on substances like alcohol, nicotine, or drugs to cope with your emotions?"
+  },
+  {
+    id: 17,
+    question: "Do you feel like you’re able to express your feelings openly and honestly?"
+  },
+  {
+    id: 18,
+    question: "Have you found it hard to get out of bed or start your day on most mornings?"
+  },
+  {
+    id: 19,
+    question: "Are there specific thoughts or concerns that keep repeating in your mind and are hard to ignore?"
   }
 ];
+
 
 const Choices = ['Never', 'Rarely', 'Occasionally', 'Often', 'Always'];
 
