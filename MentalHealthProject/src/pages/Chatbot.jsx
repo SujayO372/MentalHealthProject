@@ -30,20 +30,33 @@ const recentChats = [
   { id: 3, title: "Daily Check-in", lastUpdated: "Monday" },
 ];
 
+
+
 export default function Chatbot() {
   const [messages, setMessages] = useState(dummyMessages);
   const [input, setInput] = useState('');
 
-  const handleSend = () => {
+   const handleSend = async() => {
     if (!input.trim()) return;
-    const newMsg = {
+    const newMsg = {      
       isUser: true,
       messageContent: input.trim(),
       timestamp: new Date().toLocaleTimeString(),
+      
     };
+    const response = await fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
+      body: JSON.stringify({ query: input}),
+    });
+
+    console.log(response.json())
     setMessages([...messages, newMsg]);
     setInput('');
   };
+  
+
+ 
+
 
   return (
     <>
