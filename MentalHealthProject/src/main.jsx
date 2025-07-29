@@ -10,7 +10,7 @@ import Hotlines from './pages/Hotlines.jsx'
 import Signup from './pages/Signup.jsx';
 import './index.css'
 import Login from './pages/Login.jsx'
-import PhysicalHealthCheckup from './pages/Checkups.jsx'
+import PhysicalHealthCheckup from './pages/Therapy.jsx'
 
 
 
@@ -26,7 +26,7 @@ createRoot(root).render(
         <Route path="hotlines" element={<Hotlines />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
-        <Route path="checkups" element={<PhysicalHealthCheckup />} />
+        <Route path="therapy" element={<Therapy />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
