@@ -37,6 +37,11 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
 
    const handleSend = async() => {
+
+    /// implement create operation in Supabase
+    /// CRUD create read update delete
+    /// creating = sending a message
+    /// drop down with side bar
     if (!input.trim()) return;
     const newMsg = {      
       isUser: true,
@@ -53,6 +58,7 @@ export default function Chatbot() {
     setMessages([...messages, newMsg]);
     setInput('');
   };
+  
   
 
  

@@ -4,8 +4,6 @@ export default function UserNavBar({ username = 'Guest' }) {
   const links = [
     { name: '⚙️ Settings', href: '/settings' },
     { name: '🧠 Therapy Nearby', href: '/therapy' },
-    { name: '🧪 Daily Check-Ups', href: '/checkups' },
-    { name: '💊 Medicine Types', href: '/medicines' },
     { name: '✉️ Feedback', href: '/feedback' },
     { name: '🚪 Logout', href: '/logout' },
   ];
@@ -60,7 +58,7 @@ export default function UserNavBar({ username = 'Guest' }) {
               e.target.style.color = '#2c3e50';
             }}
           >
-            {name}
+        {name}
           </a>
         ))}
       </nav>
