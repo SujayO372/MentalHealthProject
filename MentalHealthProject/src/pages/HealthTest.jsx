@@ -1,5 +1,54 @@
-import { useState } from 'react';
 import NavBar from '../components/NavBar';
+
+import { useState } from "react";
+
+const [formData, setFormData] = useState(""); // or your structured form input
+const [response, setResponse] = useState(null);
+const [loading, setLoading] = useState(false);
+
+const handleSubmit = async () => {
+  setLoading(true);  // to disable UI
+
+  try {
+    const res = await fetch("http://localhost:5173/gemini-query", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: formData })
+    });
+
+    const data = await res.json();
+    setResponse(data.response?.result || "No response");
+  } catch (err) {
+    console.error("Error calling Gemini:", err);
+    setResponse("An error occurred.");
+  }
+
+  setLoading(false);  // Done loading
+};
+
+return (
+  <div>
+    <h2>Health Test</h2>
+    <textarea
+      value={formData}
+      onChange={(e) => setFormData(e.target.value)}
+      placeholder="Type your concerns here..."
+      rows={6}
+      style={{ width: "100%", marginBottom: "1rem" }}
+    />
+    <button onClick={handleSubmit} disabled={loading}>
+      {loading ? "Loading..." : "Submit"}
+    </button>
+    {response && (
+      <div style={{ marginTop: "1rem", whiteSpace: "pre-wrap" }}>
+        <h3>Response:</h3>
+        <p>{response}</p>
+      </div>
+    )}
+  </div>
+);
+
+
 
 const QuestionsToAsk = [
   {

@@ -62,7 +62,7 @@ export default function Chatbot() {
         },
         body: JSON.stringify({ query: input}),
       });
-
+      
         const data = await response.json();
         const botMsg = {
           isUser: false,
