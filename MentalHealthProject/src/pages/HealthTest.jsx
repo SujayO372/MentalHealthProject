@@ -2,52 +2,69 @@ import NavBar from '../components/NavBar';
 
 import { useState } from "react";
 
-const [formData, setFormData] = useState(""); // or your structured form input
-const [response, setResponse] = useState(null);
-const [loading, setLoading] = useState(false);
 
-const handleSubmit = async () => {
-  setLoading(true);  // to disable UI
 
-  try {
-    const res = await fetch("http://localhost:5173/gemini-query", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: formData })
-    });
+import React, { useState } from 'react';
 
-    const data = await res.json();
-    setResponse(data.response?.result || "No response");
-  } catch (err) {
-    console.error("Error calling Gemini:", err);
-    setResponse("An error occurred.");
-  }
+export default function GeminiChat() {
+  const [query, setQuery] = useState('');
+  const [response, setResponse] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  setLoading(false);  // Done loading
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    setResponse('');
 
-return (
-  <div>
-    <h2>Health Test</h2>
-    <textarea
-      value={formData}
-      onChange={(e) => setFormData(e.target.value)}
-      placeholder="Type your concerns here..."
-      rows={6}
-      style={{ width: "100%", marginBottom: "1rem" }}
-    />
-    <button onClick={handleSubmit} disabled={loading}>
-      {loading ? "Loading..." : "Submit"}
-    </button>
-    {response && (
-      <div style={{ marginTop: "1rem", whiteSpace: "pre-wrap" }}>
-        <h3>Response:</h3>
-        <p>{response}</p>
-      </div>
-    )}
-  </div>
-);
+    try {
+      const res = await fetch('http://localhost:5000/gemini-query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      });
 
+      if (!res.ok) {
+        throw new Error('Server error');
+      }
+
+      const data = await res.json();
+      setResponse(data.response.result);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <textarea
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Ask your question..."
+          rows={4}
+          cols={50}
+          required
+        />
+        <br />
+        <button type="submit" disabled={loading}>
+          {loading ? 'Thinking...' : 'Ask Gemini'}
+        </button>
+      </form>
+
+      {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+      {response && (
+        <div>
+          <h3>Response:</h3>
+          <p>{response}</p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 
 const QuestionsToAsk = [
