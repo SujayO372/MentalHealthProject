@@ -3,8 +3,6 @@ import React from 'react';
 export default function UserNavBar({ username = 'Guest' }) {
   const links = [
     { name: '⚙️ Settings', href: '/settings' },
-    { name: '🧠 Therapy Nearby', href: '/therapy' },
-    { name: '✉️ Feedback', href: '/feedback' },
     { name: '🚪 Logout', href: '/logout' },
   ];
 
