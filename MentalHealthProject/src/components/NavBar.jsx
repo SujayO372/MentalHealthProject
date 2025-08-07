@@ -15,7 +15,9 @@ export default function NavBar() {
         { name: "Check In", href: "/checkin" },
         { name: "Take a Health Test", href: "/healthtest" },
         { name: "Hotlines", href: "/hotlines" },
-        { name: "Sign In/Up", href: "/signup" },  // ✅ new link
+        { name: "Nearby Professionals", href: "/maps" }, 
+        { name: "Sign In/Up", href: "/signup" },
+         // ✅ new link
       ].map(({ name, href }) => (
         <a
           key={name}

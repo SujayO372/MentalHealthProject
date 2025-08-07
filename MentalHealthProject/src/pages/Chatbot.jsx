@@ -30,49 +30,39 @@ const recentChats = [
   { id: 3, title: "Daily Check-in", lastUpdated: "Monday" },
 ];
 
-
-
 export default function Chatbot() {
   const [messages, setMessages] = useState(dummyMessages);
   const [input, setInput] = useState('');
 
-   const handleSend = async() => {
-
-    /// implement create operation in Supabase
-    /// CRUD create read update delete
-    /// creating = sending a message
-    /// drop down with side bar
+  const handleSend = async () => {
     if (!input.trim()) return;
-    const newMsg = {      
+    const newMsg = {
       isUser: true,
       messageContent: input.trim(),
       timestamp: new Date().toLocaleTimeString(),
-      
     };
-    
-    // Add user message immediately
+
     setMessages([...messages, newMsg]);
     setInput('');
-    
+
     try {
       const response = await fetch("http://127.0.0.1:5000/query", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: input}),
+        body: JSON.stringify({ query: input }),
       });
-      
-        const data = await response.json();
-        const botMsg = {
-          isUser: false,
-          messageContent: data.response.result,
-          timestamp: new Date().toLocaleTimeString(),
-        };
-        setMessages(prevMessages => [...prevMessages, botMsg]);
+
+      const data = await response.json();
+      const botMsg = {
+        isUser: false,
+        messageContent: data.response.result.message.content,
+        timestamp: new Date().toLocaleTimeString(),
+      };
+      setMessages(prevMessages => [...prevMessages, botMsg]);
     } catch (error) {
       console.error('Error fetching response:', error);
-      // Handle network error
       const botMsg = {
         isUser: false,
         messageContent: "Sorry, I'm having trouble connecting right now. Please try again later.",
@@ -81,11 +71,6 @@ export default function Chatbot() {
       setMessages(prevMessages => [...prevMessages, botMsg]);
     }
   };
-  
-  
-
- 
-
 
   return (
     <>
@@ -96,7 +81,8 @@ export default function Chatbot() {
           width: '250px',
           borderRight: '1px solid #ccc',
           padding: '20px',
-          backgroundColor: '#f8f8f8'
+          backgroundColor: '#f8f8f8',
+          color: '#000'
         }}>
           <button style={{
             marginBottom: '20px',
@@ -107,24 +93,29 @@ export default function Chatbot() {
             border: 'none',
             borderRadius: '5px'
           }}>Start a New Chat</button>
-          {/* Sidebar Button */}
-          <h2>Recent Chats</h2>
+          <h2 style={{ color: '#000' }}>Recent Chats</h2>
           <ul style={{ listStyle: 'none', padding: 0 }}>
             {recentChats.map(chat => (
               <li key={chat.id} style={{ marginBottom: '10px', cursor: 'pointer' }}>
-                <strong>{chat.title}</strong>
+                <strong style={{ color: '#000' }}>{chat.title}</strong>
                 <br />
-                <small>{chat.lastUpdated}</small>
+                <small style={{ color: '#555' }}>{chat.lastUpdated}</small>
               </li>
             ))}
           </ul>
         </div>
-        {/* Maps Day/Time & Title */}
 
         {/* Chat Area */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-          <h1 style={{ padding: '20px' }}>Speak to an AI</h1>
-          
+          <h1 style={{
+            padding: '20px',
+            backgroundColor: '#007bff',
+            color: '#fff',
+            margin: 0
+          }}>
+            Speak to an AI
+          </h1>
+
           {/* Message List */}
           <div style={{
             flex: 1,
@@ -160,7 +151,8 @@ export default function Chatbot() {
                 padding: '10px',
                 borderRadius: '5px',
                 border: '1px solid #ccc',
-                marginRight: '10px'
+                marginRight: '10px',
+                color: '#000'
               }}
             />
             <button
@@ -192,10 +184,11 @@ function Message({ isUser, messageContent, timestamp }) {
       borderRadius: '10px',
       maxWidth: '60%',
       marginLeft: isUser ? 'auto' : '0',
-      marginRight: isUser ? '0' : 'auto'
+      marginRight: isUser ? '0' : 'auto',
+      color: '#000'
     }}>
-      <p>{messageContent}</p>
-      <small>{timestamp}</small>
+      <p style={{ color: '#000', margin: 0 }}>{messageContent}</p>
+      <small style={{ color: '#333' }}>{timestamp}</small>
     </div>
   );
 }

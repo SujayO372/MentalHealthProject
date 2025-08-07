@@ -2,10 +2,17 @@ import NavBar from '../components/NavBar';
 
 export default function Hotlines() {
   return (
-    <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" }}>
+    <div style={{ fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: '#000' }}>
       <NavBar />
       <div style={{ padding: '40px', backgroundColor: '#f8f9fa' }}>
-        <h1 style={{ fontSize: '2rem', marginBottom: '30px', color: '#333' }}>
+        <h1 style={{
+          fontSize: '2rem',
+          marginBottom: '30px',
+          backgroundColor: '#007bff',
+          color: '#fff',
+          padding: '20px',
+          borderRadius: '8px'
+        }}>
           Emergency Hotlines for Support
         </h1>
 

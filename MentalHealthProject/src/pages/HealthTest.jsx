@@ -1,4 +1,5 @@
 import { useState } from "react";
+import NavBar from "../components/NavBar";
 
 const QuestionsToAsk = [
   { id: 0, question: "Over the past two weeks, how often have you felt down, depressed, or hopeless?" },
@@ -211,7 +212,7 @@ export default function HealthTest() {
 
   return (
     <>
-      <Navbar />
+    <NavBar> </NavBar>
       <main
         style={{
           paddingTop: 80,
