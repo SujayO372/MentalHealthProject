@@ -1,29 +1,6 @@
 import { useState } from 'react';
 import NavBar from '../components/NavBar';
 
-const dummyMessages = [
-  {
-    isUser: true,
-    messageContent: "Hi, how are you?",
-    timestamp: "10:38:23"
-  },
-  {
-    isUser: false,
-    messageContent: "I'm good! How can I support you today?",
-    timestamp: "10:39:42"
-  },
-  {
-    isUser: true,
-    messageContent: "I'm feeling a bit down lately.",
-    timestamp: "10:40:57"
-  },
-  {
-    isUser: false,
-    messageContent: "I'm here to help. Would you like to talk about what's been bothering you?",
-    timestamp: "10:42:00"
-  }
-];
-
 const recentChats = [
   { id: 1, title: "Therapy Chat", lastUpdated: "10:42 AM" },
   { id: 2, title: "Motivation", lastUpdated: "Yesterday" },
@@ -31,18 +8,20 @@ const recentChats = [
 ];
 
 export default function Chatbot() {
-  const [messages, setMessages] = useState(dummyMessages);
+  const [messages, setMessages] = useState([]); // <- start empty
   const [input, setInput] = useState('');
 
   const handleSend = async () => {
     if (!input.trim()) return;
+
     const newMsg = {
       isUser: true,
       messageContent: input.trim(),
       timestamp: new Date().toLocaleTimeString(),
     };
 
-    setMessages([...messages, newMsg]);
+    // Add user message immediately for snappy UI
+    setMessages(prev => [...prev, newMsg]);
     setInput('');
 
     try {
@@ -51,13 +30,14 @@ export default function Chatbot() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: input }),
+        body: JSON.stringify({ query: input.trim() }),
       });
 
       const data = await response.json();
       const botMsg = {
         isUser: false,
-        messageContent: data.response.result.message.content,
+        // defend against unexpected response shapes:
+        messageContent: data?.response?.result?.message?.content ?? "Sorry — I couldn't parse the response.",
         timestamp: new Date().toLocaleTimeString(),
       };
       setMessages(prevMessages => [...prevMessages, botMsg]);
@@ -123,14 +103,21 @@ export default function Chatbot() {
             padding: '20px',
             backgroundColor: '#eee'
           }}>
-            {messages.map((msg, index) => (
-              <Message
-                key={index}
-                isUser={msg.isUser}
-                messageContent={msg.messageContent}
-                timestamp={msg.timestamp}
-              />
-            ))}
+            {messages.length === 0 ? (
+              <div style={{ textAlign: 'center', color: '#666', marginTop: '50px' }}>
+                <p style={{ margin: 0, fontSize: '18px' }}>No messages yet — say hi 👋</p>
+                <p style={{ marginTop: '8px' }}>Type a message below to start the conversation.</p>
+              </div>
+            ) : (
+              messages.map((msg, index) => (
+                <Message
+                  key={index}
+                  isUser={msg.isUser}
+                  messageContent={msg.messageContent}
+                  timestamp={msg.timestamp}
+                />
+              ))
+            )}
           </div>
 
           {/* Message Input Bar */}
