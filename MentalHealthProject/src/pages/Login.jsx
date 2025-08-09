@@ -1,18 +1,55 @@
+import { useState } from 'react';
 import NavBar from '../components/NavBar';
 
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if (user) {
+      setErrorMsg('');
+      localStorage.setItem('username', user.fullName || user.email);
+      alert(`Welcome back, ${user.fullName || user.email}! You are logged in.`);
+      // Add redirect logic here if needed
+    } else {
+      setErrorMsg('Invalid email or password.');
+    }
+  };
+
   return (
     <div style={{ backgroundColor: '#eef2f5', minHeight: '100vh' }}>
       <NavBar />
       <div style={container}>
         <h2 style={title}>Log In to Your Account</h2>
 
-        <form style={form}>
+        <form style={form} onSubmit={handleSubmit}>
           <label style={label}>Email</label>
-          <input type="email" placeholder="you@example.com" style={input} />
+          <input
+            type="email"
+            placeholder="you@example.com"
+            style={input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
           <label style={label}>Password</label>
-          <input type="password" placeholder="••••••••" style={input} />
+          <input
+            type="password"
+            placeholder="••••••••"
+            style={input}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          {errorMsg && <p style={{ color: 'red', marginBottom: '1rem' }}>{errorMsg}</p>}
 
           <button type="submit" style={button}>Log In</button>
         </form>

@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default function NavBar() {
   return (
     <nav style={{
@@ -16,6 +18,7 @@ export default function NavBar() {
         { name: "Take a Health Test", href: "/healthtest" },
         { name: "Hotlines", href: "/hotlines" },
         { name: "Sign In/Up", href: "/signup" },
+        { name: "Settings", href: "/settings" },
          // ✅ new link
       ].map(({ name, href }) => (
         <a

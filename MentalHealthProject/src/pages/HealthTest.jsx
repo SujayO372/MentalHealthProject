@@ -14,7 +14,6 @@ const QuestionsToAsk = [
   { id: 9, question: "How often have you experienced physical symptoms like headaches, stomachaches, or muscle tension due to stress?" },
 ];
 
-
 const Choices = ["Never", "Rarely", "Occasionally", "Often", "Always"];
 
 export default function HealthTest() {
@@ -40,7 +39,6 @@ export default function HealthTest() {
         body: JSON.stringify({ answers }),
       });
       const data = await response.json();
-      console.log("Health Test Result:", data.response);
       setRecommendations(data.response.recommendations || []);
       setSubmitted(true);
     } catch (error) {
@@ -66,10 +64,11 @@ export default function HealthTest() {
           background: "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
           fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
           color: "#212529",
-          maxWidth: 900,
+          maxWidth: 1200, // wider container
           margin: "0 auto 50px",
           paddingLeft: 24,
           paddingRight: 24,
+          boxSizing: "border-box",
         }}
       >
         {!submitted ? (
@@ -90,7 +89,7 @@ export default function HealthTest() {
                 key={id}
                 style={{
                   marginBottom: 32,
-                  padding: 20,
+                  padding: 20, // slight more padding
                   borderRadius: 12,
                   backgroundColor: "#f0f4ff",
                   boxShadow: "0 3px 6px rgba(0, 64, 133, 0.15)",
@@ -122,7 +121,7 @@ export default function HealthTest() {
                         key={choice}
                         onClick={() => handleSelect(id, choice)}
                         style={{
-                          padding: "10px 20px",
+                          padding: "12px 24px", // slightly bigger buttons
                           borderRadius: 30,
                           border: selected ? "3px solid #004085" : "2px solid #a9c0ff",
                           backgroundColor: selected ? "#cfe2ff" : "#e6efff",

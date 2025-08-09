@@ -1,7 +1,44 @@
-import '../styling/Home.css';
+import { useState } from 'react';
 import NavBar from '../components/NavBar';
 
 export default function Signup() {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (password !== confirmPassword) {
+      setErrorMsg("Passwords don't match.");
+      return;
+    }
+
+    // Retrieve existing users or empty array
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+
+    // Check if email already exists
+    if (users.find(u => u.email === email)) {
+      setErrorMsg('An account with this email already exists.');
+      return;
+    }
+
+    // Save new user
+    const newUser = { fullName, email, password };
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    // Save username to localStorage for display (optional)
+    localStorage.setItem('username', fullName);
+
+    setErrorMsg('');
+    alert('Account created successfully! You can now log in.');
+    window.location.href = '/login';
+  };
+
   return (
     <div style={pageWrapper}>
       <NavBar />
@@ -9,18 +46,50 @@ export default function Signup() {
       <div style={container}>
         <h2 style={title}>Create an Account</h2>
 
-        <form style={form}>
+        <form style={form} onSubmit={handleSubmit}>
           <label style={label}>Full Name</label>
-          <input type="text" placeholder="Your name" style={input} />
+          <input
+            type="text"
+            placeholder="Your name"
+            style={input}
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            required
+          />
 
           <label style={label}>Email</label>
-          <input type="email" placeholder="you@example.com" style={input} />
+          <input
+            type="email"
+            placeholder="you@example.com"
+            style={input}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
           <label style={label}>Password</label>
-          <input type="password" placeholder="••••••••" style={input} />
+          <input
+            type="password"
+            placeholder="••••••••"
+            style={input}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
           <label style={label}>Confirm Password</label>
-          <input type="password" placeholder="••••••••" style={input} />
+          <input
+            type="password"
+            placeholder="••••••••"
+            style={input}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+
+          {errorMsg && (
+            <p style={{ color: 'red', marginBottom: '1rem' }}>{errorMsg}</p>
+          )}
 
           <button type="submit" style={button}>Sign Up</button>
         </form>
@@ -42,7 +111,7 @@ const pageWrapper = {
 };
 
 const container = {
-  maxWidth: '600px', // wider
+  maxWidth: '600px',
   margin: '0 auto',
   padding: '2.5rem',
   backgroundColor: '#f7f9fc',

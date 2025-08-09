@@ -10,6 +10,7 @@ import Hotlines from './pages/Hotlines.jsx'
 import Signup from './pages/Signup.jsx';
 import './index.css'
 import Login from './pages/Login.jsx'
+import Settings from './pages/Settings.jsx'
 
 
 
@@ -25,6 +26,7 @@ createRoot(root).render(
         <Route path="hotlines" element={<Hotlines />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
+        <Route path="settings" element={<Settings />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
