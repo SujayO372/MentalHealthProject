@@ -369,4 +369,4 @@ function Message({ isUser, messageContent, timestamp }) {
       </div>
     </div>
   );
-}
+} 

@@ -61,14 +61,18 @@ export default function HealthTest() {
         style={{
           paddingTop: 80,
           minHeight: "100vh",
-          background: "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
+          background:
+            "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
           fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
           color: "#212529",
-          maxWidth: 1200, // wider container
+          maxWidth: 1200,
           margin: "0 auto 50px",
           paddingLeft: 24,
           paddingRight: 24,
           boxSizing: "border-box",
+          userSelect: "none",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         }}
       >
         {!submitted ? (
@@ -76,31 +80,61 @@ export default function HealthTest() {
             <h1
               style={{
                 textAlign: "center",
-                marginBottom: 40,
+                marginBottom: 20,
                 color: "#004085",
                 fontWeight: "700",
                 fontSize: 32,
+                letterSpacing: "0.04em",
+                textTransform: "uppercase",
+                textShadow: "1px 1px 2px rgba(0,64,133,0.15)",
               }}
             >
               Mental Wellness Check-In
             </h1>
+            <p
+              style={{
+                maxWidth: 700,
+                margin: "0 auto 40px",
+                fontSize: 18,
+                color: "#3a4a69",
+                lineHeight: 1.5,
+                textAlign: "center",
+                fontWeight: "500",
+                userSelect: "text",
+              }}
+            >
+              We appreciate you taking a moment to check in on your mental wellbeing.
+              Your honest responses help us provide personalized insights and
+              resources tailored to your needs.
+            </p>
             {QuestionsToAsk.map(({ id, question }) => (
               <section
                 key={id}
                 style={{
                   marginBottom: 32,
-                  padding: 20, // slight more padding
-                  borderRadius: 12,
+                  padding: 24,
+                  borderRadius: 14,
                   backgroundColor: "#f0f4ff",
-                  boxShadow: "0 3px 6px rgba(0, 64, 133, 0.15)",
+                  boxShadow: "0 8px 20px rgba(0, 64, 133, 0.1)",
+                  transition: "box-shadow 0.3s ease",
+                  cursor: "default",
                 }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.boxShadow =
+                    "0 12px 30px rgba(0,64,133,0.18)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.boxShadow =
+                    "0 8px 20px rgba(0,64,133,0.1)")
+                }
               >
                 <p
                   style={{
                     fontWeight: "700",
                     fontSize: 18,
-                    marginBottom: 16,
+                    marginBottom: 20,
                     color: "#003366",
+                    lineHeight: 1.3,
                     userSelect: "none",
                   }}
                 >
@@ -109,9 +143,10 @@ export default function HealthTest() {
                 <div
                   style={{
                     display: "flex",
-                    gap: 14,
+                    gap: 16,
                     flexWrap: "wrap",
                     userSelect: "none",
+                    justifyContent: "center",
                   }}
                 >
                   {Choices.map((choice) => {
@@ -121,20 +156,29 @@ export default function HealthTest() {
                         key={choice}
                         onClick={() => handleSelect(id, choice)}
                         style={{
-                          padding: "12px 24px", // slightly bigger buttons
+                          padding: "14px 28px",
                           borderRadius: 30,
-                          border: selected ? "3px solid #004085" : "2px solid #a9c0ff",
+                          border: selected
+                            ? "3px solid #004085"
+                            : "2px solid #a9c0ff",
                           backgroundColor: selected ? "#cfe2ff" : "#e6efff",
                           color: selected ? "#002752" : "#004085",
                           fontWeight: selected ? "700" : "600",
-                          fontSize: 14,
+                          fontSize: 15,
                           cursor: "pointer",
-                          minWidth: 100,
+                          minWidth: 110,
                           textAlign: "center",
-                          transition: "all 0.25s ease",
+                          transition: "all 0.3s ease",
                           boxShadow: selected
-                            ? "0 0 8px rgba(0,64,133,0.4)"
-                            : "none",
+                            ? "0 0 12px rgba(0,64,133,0.5)"
+                            : "0 2px 6px rgba(0, 64, 133, 0.1)",
+                          userSelect: "none",
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!selected) e.currentTarget.style.backgroundColor = "#d3e0ff";
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!selected) e.currentTarget.style.backgroundColor = "#e6efff";
                         }}
                       >
                         {choice}
@@ -144,7 +188,7 @@ export default function HealthTest() {
                 </div>
               </section>
             ))}
-            <div style={{ textAlign: "center", marginTop: 40 }}>
+            <div style={{ textAlign: "center", marginTop: 50 }}>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
@@ -153,12 +197,22 @@ export default function HealthTest() {
                   color: "white",
                   border: "none",
                   borderRadius: 28,
-                  padding: "14px 40px",
-                  fontSize: 20,
+                  padding: "16px 48px",
+                  fontSize: 22,
                   fontWeight: "700",
-                  cursor: "pointer",
-                  boxShadow: "0 6px 16px rgb(0 64 133 / 0.35)",
+                  cursor: loading ? "not-allowed" : "pointer",
+                  boxShadow: loading
+                    ? "none"
+                    : "0 8px 24px rgb(0 64 133 / 0.45)",
                   opacity: loading ? 0.6 : 1,
+                  userSelect: "none",
+                  transition: "background-color 0.3s ease",
+                }}
+                onMouseEnter={(e) => {
+                  if (!loading) e.currentTarget.style.backgroundColor = "#003366";
+                }}
+                onMouseLeave={(e) => {
+                  if (!loading) e.currentTarget.style.backgroundColor = "#004085";
                 }}
               >
                 {loading ? "Processing..." : "Submit"}
@@ -172,7 +226,9 @@ export default function HealthTest() {
                 textAlign: "center",
                 color: "#004085",
                 fontWeight: "700",
-                fontSize: 28,
+                fontSize: 30,
+                letterSpacing: "0.03em",
+                textShadow: "1px 1px 1.5px rgba(0,64,133,0.2)",
               }}
             >
               Thank You for Completing the Check-In
@@ -180,11 +236,12 @@ export default function HealthTest() {
             <p
               style={{
                 maxWidth: 700,
-                margin: "12px auto 36px",
+                margin: "16px auto 40px",
                 color: "#495057",
-                fontSize: 16,
+                fontSize: 17,
                 textAlign: "center",
-                lineHeight: 1.5,
+                lineHeight: 1.6,
+                fontWeight: "500",
               }}
             >
               Your responses have been reviewed. Here are some resources that may help.
@@ -195,11 +252,12 @@ export default function HealthTest() {
                 <h3
                   style={{
                     marginTop: 40,
-                    marginBottom: 20,
+                    marginBottom: 24,
                     textAlign: "center",
                     color: "#28a745",
-                    fontSize: 22,
+                    fontSize: 24,
                     fontWeight: "700",
+                    letterSpacing: "0.02em",
                   }}
                 >
                   🌟 AI-Recommended Articles for You
@@ -209,20 +267,53 @@ export default function HealthTest() {
                     key={i}
                     style={{
                       background: "#fff",
-                      padding: 20,
-                      borderRadius: 10,
-                      marginBottom: 16,
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.05)",
+                      padding: 24,
+                      borderRadius: 14,
+                      marginBottom: 18,
+                      boxShadow: "0 8px 22px rgba(0,0,0,0.07)",
+                      transition: "transform 0.3s ease",
+                      cursor: "default",
                     }}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.transform = "translateY(-4px)")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.transform = "translateY(0)")
+                    }
                   >
-                    <strong>{rec.title}</strong>
-                    <p>{rec.summary}</p>
+                    <strong
+                      style={{
+                        fontSize: 19,
+                        color: "#212529",
+                        display: "block",
+                        marginBottom: 8,
+                      }}
+                    >
+                      {rec.title}
+                    </strong>
+                    <p
+                      style={{
+                        margin: 0,
+                        color: "#495057",
+                        fontSize: 15,
+                        lineHeight: 1.5,
+                      }}
+                    >
+                      {rec.summary}
+                    </p>
                     {rec.link && (
                       <a
                         href={rec.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: "#007bff", textDecoration: "underline" }}
+                        style={{
+                          color: "#007bff",
+                          textDecoration: "underline",
+                          fontWeight: "600",
+                          marginTop: 12,
+                          display: "inline-block",
+                          userSelect: "text",
+                        }}
                       >
                         Read more →
                       </a>
@@ -232,21 +323,26 @@ export default function HealthTest() {
               </>
             )}
 
-            <div style={{ textAlign: "center", marginTop: 50 }}>
+            <div style={{ textAlign: "center", marginTop: 60 }}>
               <button
                 onClick={reset}
                 style={{
-                  padding: "14px 40px",
+                  padding: "16px 48px",
                   backgroundColor: "#6c757d",
                   color: "white",
                   border: "none",
                   borderRadius: 28,
                   cursor: "pointer",
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: "700",
+                  userSelect: "none",
+                  boxShadow: "0 6px 16px rgb(108 117 125 / 0.4)",
+                  transition: "background-color 0.3s ease",
                 }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#5a6268")}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#6c757d")}
               >
-                Retake Assessment
+                Take the Test Again
               </button>
             </div>
           </>

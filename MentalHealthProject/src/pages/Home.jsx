@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import '../styling/Home.css';  // Your old CSS import
 import NavBar from '../components/NavBar';
 
 function Home() {
@@ -12,168 +11,322 @@ function Home() {
     };
 
     updateUsername();
-
     window.addEventListener('userNameChanged', updateUsername);
-
-    return () => {
-      window.removeEventListener('userNameChanged', updateUsername);
-    };
+    return () => window.removeEventListener('userNameChanged', updateUsername);
   }, []);
 
   return (
     <>
       <NavBar />
-      <div
-        style={{
-          width: '100%',
-          backgroundColor: '#f7f9fc',
-          padding: '60px 0',
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1200px',
-            margin: '0 auto',
-            padding: '0 30px',
-            fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-            color: '#2c3e50',
-          }}
-        >
-          {/* Show logged-in username */}
-          <p
-            style={{
-              fontSize: '1.2rem',
-              marginBottom: '20px',
-              textAlign: 'center',
-              color: '#34495e',
-            }}
-          >
-            Welcome back, <strong>{username}</strong>!
+      
+      {/* Hero Section */}
+      <div style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        minHeight: '70vh',
+        display: 'flex',
+        alignItems: 'center',
+        color: 'white',
+        padding: '0 60px'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+          <p style={{ fontSize: '1.1rem', marginBottom: '10px' }}>
+            Hi, <strong>{username}</strong>
           </p>
-
-          <h1
-            style={{
-              fontSize: '3rem',
-              marginBottom: '10px',
-              color: '#2c3e50',
-              textAlign: 'center',
-            }}
-          >
-            Benefit Your Mental Health
+          
+          <h1 style={{
+            fontSize: '3.5rem',
+            fontWeight: '700',
+            marginBottom: '20px'
+          }}>
+            SereneSpace
           </h1>
-
-          <p
-            style={{
-              fontSize: '1.2rem',
-              marginBottom: '30px',
-              color: '#4a6072',
-              textAlign: 'center',
-            }}
-          >
-            Click on different categories above to explore helpful tools and resources that support your emotional well-being.
+          
+          <p style={{
+            fontSize: '1.3rem',
+            marginBottom: '30px',
+            maxWidth: '600px'
+          }}>
+            Professional support and evidence-based tools to help you thrive emotionally and mentally.
           </p>
+          
+          <p style={{
+            background: 'rgba(255,255,255,0.15)',
+            border: '2px solid rgba(255,255,255,0.3)',
+            color: 'white',
+            padding: '15px 35px',
+            borderRadius: '50px',
+            fontSize: '1.1rem',
+            display: 'inline-block',
+            userSelect: 'none'
+          }}>
+            Start Your Journey
+          </p>
+        </div>
+      </div>
 
-          <hr style={{ margin: '40px auto', width: '60%', borderColor: '#ccc' }} />
-
-          <blockquote
-            style={{
-              fontStyle: 'italic',
-              color: '#4a6072',
-              fontSize: '1.3rem',
-              maxWidth: '700px',
-              margin: '40px auto',
-              textAlign: 'center',
-            }}
-          >
-            “Mental health is just as important as physical health. Take time to care for your mind.”
-          </blockquote>
-
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-              gap: '20px',
-              marginTop: '30px',
-            }}
-          >
-            <img
-              src="https://c1.wallpaperflare.com/preview/391/732/863/mental-health-wellness-psychology-mind.jpg"
-              alt="Illustration representing mental health and wellness"
-              style={{ width: '100%', maxWidth: '300px', borderRadius: '12px' }}
-            />
-            <img
-              src="https://media.gettyimages.com/id/1494341356/video/brain-emerging-from-a-complex-network-artificial-intelligence-learning-mental-health.jpg?s=640x640&k=20&c=xBnWqDjs1cxxZtyvaAmfkWf20QBkNhBO4Zj__4Jxu1w="
-              alt="Visualization of mindfulness and meditation concepts"
-              style={{ width: '100%', maxWidth: '400px', borderRadius: '12px' }}
-            />
+      {/* Features Section */}
+      <div style={{ padding: '80px 60px', background: '#f8fafc' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+            <h2 style={{
+              fontSize: '2.5rem',
+              fontWeight: '700',
+              color: '#1a202c',
+              marginBottom: '15px'
+            }}>
+              Comprehensive Mental Health Support
+            </h2>
+            <p style={{ fontSize: '1.2rem', color: '#4a5568' }}>
+              Access professional-grade tools and resources designed to support your mental wellness
+            </p>
           </div>
 
-          <section
-            style={{
-              maxWidth: '900px',
-              margin: '60px auto',
-              padding: '40px 30px',
-              backgroundColor: '#ffffff',
-              borderRadius: '15px',
-              color: '#2c3e50',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
-              fontSize: '1.1rem',
-              lineHeight: 1.7,
-            }}
-          >
-            <h2 style={{ fontSize: '2rem', marginBottom: '20px' }}>Our Mission</h2>
-            <p style={{ marginBottom: '30px' }}>
-              We aim to empower every visitor with reliable mental health tools and resources to nurture emotional well-being and resilience.
-            </p>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '30px'
+          }}>
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🧠</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                AI-Powered Support
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Get personalized guidance through our intelligent chatbot trained on evidence-based approaches.
+              </p>
+            </div>
 
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '15px' }}>Why Trust Us?</h3>
-            <ul
-              style={{
-                listStyleType: 'disc',
-                paddingLeft: '20px',
-                marginBottom: '30px',
-              }}
-            >
-              <li>Certified mental health professionals contribute to our content.</li>
-              <li>Affiliated with leading health organizations.</li>
-              <li>Regularly updated with evidence-based information.</li>
-            </ul>
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>📊</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Wellness Tracking
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Monitor your emotional patterns and progress with comprehensive mood assessments.
+              </p>
+            </div>
 
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '15px' }}>Privacy You Can Count On</h3>
-            <p style={{ marginBottom: '30px' }}>
-              Your privacy matters. This website is a safe, confidential space where your data and interactions are protected and never shared.
-            </p>
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🎯</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Targeted Resources
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Access curated content for anxiety, depression, stress, and relationship issues.
+              </p>
+            </div>
 
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '15px' }}>What You’ll Find Here</h3>
-            <p>
-              Explore curated tools, expert articles, interactive resources, and community support to guide you on your mental health journey.
-            </p>
-          </section>
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>💬</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Crisis Support
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Immediate access to crisis resources and emergency mental health support.
+              </p>
+            </div>
 
-          <section
-            style={{
-              maxWidth: '900px',
-              margin: '60px auto 100px',
-              padding: '40px 30px',
-              backgroundColor: '#ffffff',
-              borderRadius: '15px',
-              color: '#2c3e50',
-              boxShadow: '0 8px 25px rgba(0, 0, 0, 0.1)',
-              fontSize: '1.1rem',
-              lineHeight: 1.7,
-            }}
-          >
-            <h2 style={{ fontSize: '2rem', marginBottom: '20px' }}>
-              Understanding Mental Health and Its Impact
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🌱</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Personal Growth
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Develop resilience and healthy coping mechanisms for long-term wellness.
+              </p>
+            </div>
+
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>👥</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Community Support
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Connect with others through our safe, moderated peer support groups.
+              </p>
+            </div>
+
+            {/* New sections */}
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>🧪</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Health Test
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Take scientifically-backed assessments to understand your mental health better.
+              </p>
+            </div>
+
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>✅</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Check In
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Regularly track your moods and feelings to stay aware and proactive.
+              </p>
+            </div>
+
+            <div style={{
+              background: 'white',
+              borderRadius: '20px',
+              padding: '30px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              textAlign: 'center'
+            }}>
+              <div style={{ fontSize: '3rem', marginBottom: '20px' }}>📞</div>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '15px', color: '#1a202c' }}>
+                Hotlines
+              </h3>
+              <p style={{ color: '#4a5568', lineHeight: '1.6' }}>
+                Quick access to trusted mental health hotlines for immediate help.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Tools */}
+      <div style={{ padding: '80px 60px', background: 'white' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+            <h2 style={{
+              fontSize: '2.2rem',
+              fontWeight: '700',
+              color: '#1a202c',
+              marginBottom: '15px'
+            }}>
+              Quick Access Tools
             </h2>
-            <p>
-              Every year, millions of people around the world suffer from mental health challenges such as anxiety, depression, and other disorders that impact their daily lives and overall well-being.
-              Despite its prevalence, mental health remains a widely misunderstood and often stigmatized issue, causing many individuals to suffer in silence without access to proper care or support.
-              These struggles affect not only individuals but also families and communities, making mental health a critical public health concern. This website is committed to being a reliable and compassionate
-              resource, offering tools, information, and support to help you or your loved ones navigate these challenges with hope and confidence—reminding you that you are never alone on this journey.
+            <p style={{ fontSize: '1.1rem', color: '#4a5568' }}>
+              Get immediate support with our most popular resources
             </p>
-          </section>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '25px'
+          }}>
+            <div style={{
+              background: '#f8fafc',
+              borderRadius: '16px',
+              padding: '30px',
+              textAlign: 'center',
+              border: '1px solid #e2e8f0'
+            }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>📝</div>
+              <h3 style={{ fontSize: '1.3rem', marginBottom: '8px', color: '#1a202c' }}>
+                Mood Check-in
+              </h3>
+              <p style={{ color: '#6b7280', marginBottom: '20px' }}>
+                Quick daily assessment
+              </p>
+            </div>
+
+            <div style={{
+              background: '#f8fafc',
+              borderRadius: '16px',
+              padding: '30px',
+              textAlign: 'center',
+              border: '1px solid #e2e8f0'
+            }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>🆘</div>
+              <h3 style={{ fontSize: '1.3rem', marginBottom: '8px', color: '#1a202c' }}>
+                Crisis Hotline
+              </h3>
+              <p style={{ color: '#6b7280', marginBottom: '20px' }}>
+                24/7 immediate support
+              </p>
+            </div>
+
+            <div style={{
+              background: '#f8fafc',
+              borderRadius: '16px',
+              padding: '30px',
+              textAlign: 'center',
+              border: '1px solid #e2e8f0'
+            }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '15px' }}>✍️</div>
+              <h3 style={{ fontSize: '1.3rem', marginBottom: '8px', color: '#1a202c' }}>
+                Journal Entry
+              </h3>
+              <p style={{ color: '#6b7280', marginBottom: '20px' }}>
+                Record your thoughts
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* SereneSpace Mission Section */}
+      <div style={{ padding: '80px 60px', background: '#e0e7ff', color: '#1a202c' }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '20px' }}>
+            Our Mission at SereneSpace
+          </h2>
+          <p style={{ fontSize: '1.2rem', marginBottom: '16px', lineHeight: '1.7' }}>
+            At SereneSpace, we believe mental health is a fundamental right and essential for a fulfilling life. 
+            Our mission is to provide accessible, compassionate, and effective mental health support to everyone, 
+            regardless of where they are in their journey.
+          </p>
+          <p style={{ fontSize: '1.2rem', marginBottom: '16px', lineHeight: '1.7' }}>
+            We harness the power of technology combined with human empathy to create a safe space where individuals 
+            can feel understood, empowered, and supported. Through innovative tools and trusted resources, we aim 
+            to reduce stigma and break down barriers to care.
+          </p>
+          <p style={{ fontSize: '1.2rem', marginBottom: '0', lineHeight: '1.7' }}>
+            Our commitment is to foster mental wellness by offering personalized support, encouraging connection, 
+            and inspiring growth. Together, we can create a world where no one faces mental health challenges alone.
+          </p>
         </div>
       </div>
     </>
