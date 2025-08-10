@@ -26,7 +26,7 @@ createRoot(root).render(
         <Route path="hotlines" element={<Hotlines />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
-                <Route path="settings" element={<Settings />} />
+         <Route path="settings" element={<Settings />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>
