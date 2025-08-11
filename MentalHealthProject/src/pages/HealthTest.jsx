@@ -57,47 +57,20 @@ export default function HealthTest() {
   return (
     <>
       <NavBar />
-      <div
-        style={{
-          overflowX: "hidden",
-          paddingTop: 60,
-          background:
-            "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
-          minHeight: "100vh",
-          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-          color: "#212529",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            minWidth: 1200,  // Reduced from 1600+
-            maxWidth: 1400,
-            margin: "0 auto 40px",
-            gap: 24,
-            padding: "0 16px",
-            boxSizing: "border-box",
-          }}
-        >
+      <div style={{ overflowX: 'auto', paddingTop: 80, background: 'linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)', minHeight: '100vh', fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif", color: '#212529' }}>
+        <div style={{ display: 'flex', minWidth: 1600, maxWidth: 1800, margin: '0 auto 50px', gap: 40, padding: '0 24px', boxSizing: 'border-box' }}>
+          
           {/* Left Panel: Questions + Submit */}
-          <div
-            style={{
-              flex: 2,
-              backgroundColor: "#f0f4ff",
-              borderRadius: 12,
-              padding: 24,
-              boxShadow: "0 6px 16px rgba(0, 64, 133, 0.1)",
-            }}
-          >
+          <div style={{ flex: 1, backgroundColor: '#f0f4ff', borderRadius: 14, padding: 32, boxShadow: "0 8px 20px rgba(0, 64, 133, 0.1)" }}>
             {!submitted ? (
               <>
                 <h1
                   style={{
                     textAlign: "center",
-                    marginBottom: 16,
+                    marginBottom: 20,
                     color: "#004085",
                     fontWeight: "700",
-                    fontSize: 26, // smaller
+                    fontSize: 32,
                     letterSpacing: "0.04em",
                     textTransform: "uppercase",
                     textShadow: "1px 1px 2px rgba(0,64,133,0.15)",
@@ -107,48 +80,48 @@ export default function HealthTest() {
                 </h1>
                 <p
                   style={{
-                    maxWidth: 600,
-                    margin: "0 auto 32px",
-                    fontSize: 16, // smaller
+                    maxWidth: 700,
+                    margin: "0 auto 40px",
+                    fontSize: 18,
                     color: "#3a4a69",
-                    lineHeight: 1.4,
+                    lineHeight: 1.5,
                     textAlign: "center",
                     fontWeight: "500",
                     userSelect: "text",
                   }}
                 >
-                  We appreciate you taking a moment to check in on your mental
-                  wellbeing. Your honest responses help us provide personalized
-                  insights and resources tailored to your needs.
+                  We appreciate you taking a moment to check in on your mental wellbeing.
+                  Your honest responses help us provide personalized insights and
+                  resources tailored to your needs.
                 </p>
                 {QuestionsToAsk.map(({ id, question }) => (
                   <section
                     key={id}
                     style={{
-                      marginBottom: 24, // less spacing
-                      padding: 20,
-                      borderRadius: 12,
+                      marginBottom: 32,
+                      padding: 24,
+                      borderRadius: 14,
                       backgroundColor: "#e6efff",
-                      boxShadow: "0 6px 16px rgba(0, 64, 133, 0.1)",
+                      boxShadow: "0 8px 20px rgba(0, 64, 133, 0.1)",
                       transition: "box-shadow 0.3s ease",
                       cursor: "default",
                     }}
                     onMouseEnter={(e) =>
                       (e.currentTarget.style.boxShadow =
-                        "0 10px 26px rgba(0,64,133,0.15)")
+                        "0 12px 30px rgba(0,64,133,0.18)")
                     }
                     onMouseLeave={(e) =>
                       (e.currentTarget.style.boxShadow =
-                        "0 6px 16px rgba(0,64,133,0.1)")
+                        "0 8px 20px rgba(0,64,133,0.1)")
                     }
                   >
                     <p
                       style={{
                         fontWeight: "700",
-                        fontSize: 16, // smaller
-                        marginBottom: 16,
+                        fontSize: 18,
+                        marginBottom: 20,
                         color: "#003366",
-                        lineHeight: 1.25,
+                        lineHeight: 1.3,
                         userSelect: "none",
                       }}
                     >
@@ -157,7 +130,7 @@ export default function HealthTest() {
                     <div
                       style={{
                         display: "flex",
-                        gap: 12,
+                        gap: 16,
                         flexWrap: "wrap",
                         userSelect: "none",
                         justifyContent: "center",
@@ -170,17 +143,17 @@ export default function HealthTest() {
                             key={choice}
                             onClick={() => handleSelect(id, choice)}
                             style={{
-                              padding: "12px 24px",
-                              borderRadius: 28,
+                              padding: "14px 28px",
+                              borderRadius: 30,
                               border: selected
                                 ? "3px solid #004085"
                                 : "2px solid #a9c0ff",
                               backgroundColor: selected ? "#cfe2ff" : "#e6efff",
                               color: selected ? "#002752" : "#004085",
                               fontWeight: selected ? "700" : "600",
-                              fontSize: 14,
+                              fontSize: 15,
                               cursor: "pointer",
-                              minWidth: 90,
+                              minWidth: 110,
                               textAlign: "center",
                               transition: "all 0.3s ease",
                               boxShadow: selected
@@ -189,12 +162,10 @@ export default function HealthTest() {
                               userSelect: "none",
                             }}
                             onMouseEnter={(e) => {
-                              if (!selected)
-                                e.currentTarget.style.backgroundColor = "#d3e0ff";
+                              if (!selected) e.currentTarget.style.backgroundColor = "#d3e0ff";
                             }}
                             onMouseLeave={(e) => {
-                              if (!selected)
-                                e.currentTarget.style.backgroundColor = "#e6efff";
+                              if (!selected) e.currentTarget.style.backgroundColor = "#e6efff";
                             }}
                           >
                             {choice}
@@ -204,7 +175,7 @@ export default function HealthTest() {
                     </div>
                   </section>
                 ))}
-                <div style={{ textAlign: "center", marginTop: 16 }}>
+                <div style={{ textAlign: "center", marginTop: 20 }}>
                   <button
                     onClick={handleSubmit}
                     disabled={loading}
@@ -212,14 +183,14 @@ export default function HealthTest() {
                       backgroundColor: "#004085",
                       color: "white",
                       border: "none",
-                      borderRadius: 26,
-                      padding: "14px 40px",
-                      fontSize: 18,
+                      borderRadius: 28,
+                      padding: "16px 48px",
+                      fontSize: 22,
                       fontWeight: "700",
                       cursor: loading ? "not-allowed" : "pointer",
                       boxShadow: loading
                         ? "none"
-                        : "0 8px 20px rgb(0 64 133 / 0.45)",
+                        : "0 8px 24px rgb(0 64 133 / 0.45)",
                       opacity: loading ? 0.6 : 1,
                       userSelect: "none",
                       transition: "background-color 0.3s ease",
@@ -238,11 +209,11 @@ export default function HealthTest() {
             ) : (
               <div
                 style={{
-                  padding: 24,
+                  padding: 32,
                   textAlign: "center",
                   color: "#004085",
                   fontWeight: "700",
-                  fontSize: 20,
+                  fontSize: 24,
                   letterSpacing: "0.04em",
                   userSelect: "none",
                 }}
@@ -251,14 +222,14 @@ export default function HealthTest() {
                 <button
                   onClick={reset}
                   style={{
-                    marginTop: 20,
-                    padding: "12px 40px",
+                    marginTop: 24,
+                    padding: "14px 48px",
                     backgroundColor: "#6c757d",
                     color: "white",
                     border: "none",
-                    borderRadius: 26,
+                    borderRadius: 28,
                     cursor: "pointer",
-                    fontSize: 18,
+                    fontSize: 20,
                     fontWeight: "700",
                     userSelect: "none",
                     boxShadow: "0 6px 16px rgb(108 117 125 / 0.4)",
@@ -278,57 +249,118 @@ export default function HealthTest() {
             style={{
               flex: 1,
               backgroundColor: "#d6f0f5",
-              borderRadius: 12,
-              padding: 24,
-              boxShadow: "0 6px 16px rgba(0, 64, 133, 0.1)",
+              borderRadius: 14,
+              padding: 32,
+              boxShadow: "0 8px 20px rgba(0, 64, 133, 0.1)",
               color: "#212529",
               overflowY: "auto",
-              maxHeight: "calc(100vh - 140px)",
+              maxHeight: "calc(100vh - 160px)", // allow scrolling inside if content is long
             }}
           >
-            <h2
-              style={{
-                fontWeight: "700",
-                fontSize: 20,
-                marginBottom: 24,
-                color: "#004085",
-                textAlign: "center",
-                userSelect: "none",
-              }}
-            >
-              Recommendations
-            </h2>
-            {recommendations.length === 0 ? (
-              <p
+            {submitted ? (
+              <>
+                <h2
+                  style={{
+                    textAlign: "center",
+                    color: "#004085",
+                    fontWeight: "700",
+                    fontSize: 30,
+                    letterSpacing: "0.03em",
+                    textShadow: "1px 1px 1.5px rgba(0,64,133,0.2)",
+                    marginBottom: 20,
+                  }}
+                >
+                  Thank You for Completing the Check-In
+                </h2>
+                <p
+                  style={{
+                    color: "#495057",
+                    fontSize: 17,
+                    textAlign: "center",
+                    lineHeight: 1.6,
+                    fontWeight: "500",
+                    marginBottom: 30,
+                  }}
+                >
+                  Your responses have been reviewed. Here are some resources that may help.
+                </p>
+                {recommendations.length > 0 ? (
+                  recommendations.map((rec, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        background: "#fff",
+                        padding: 24,
+                        borderRadius: 14,
+                        marginBottom: 18,
+                        boxShadow: "0 8px 22px rgba(0,0,0,0.07)",
+                        transition: "transform 0.3s ease",
+                        cursor: "default",
+                      }}
+                      onMouseEnter={(e) =>
+                        (e.currentTarget.style.transform = "translateY(-4px)")
+                      }
+                      onMouseLeave={(e) =>
+                        (e.currentTarget.style.transform = "translateY(0)")
+                      }
+                    >
+                      <strong
+                        style={{
+                          fontSize: 19,
+                          color: "#212529",
+                          display: "block",
+                          marginBottom: 8,
+                        }}
+                      >
+                        {rec.title}
+                      </strong>
+                      <p
+                        style={{
+                          margin: 0,
+                          color: "#495057",
+                          fontSize: 15,
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {rec.summary}
+                      </p>
+                      {rec.link && (
+                        <a
+                          href={rec.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: "#007bff",
+                            textDecoration: "underline",
+                            fontWeight: "600",
+                            marginTop: 12,
+                            display: "inline-block",
+                            userSelect: "text",
+                          }}
+                        >
+                          Read more →
+                        </a>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ textAlign: "center", color: "#495057", marginTop: 30 }}>
+                    No recommendations available at this time.
+                  </p>
+                )}
+              </>
+            ) : (
+              <div
                 style={{
-                  fontWeight: "600",
-                  fontSize: 16,
-                  color: "#6c757d",
                   textAlign: "center",
+                  color: "#6c757d",
+                  fontSize: 18,
+                  marginTop: 60,
                   userSelect: "none",
                 }}
               >
-                No recommendations yet. Please submit your answers.
-              </p>
-            ) : (
-              recommendations.map((rec, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    padding: 12,
-                    marginBottom: 18,
-                    borderRadius: 10,
-                    backgroundColor: "#cfe2ff",
-                    boxShadow: "0 4px 10px rgba(0, 64, 133, 0.12)",
-                    fontWeight: "600",
-                    fontSize: 15,
-                    userSelect: "text",
-                    color: "#003366",
-                  }}
-                >
-                  {rec}
-                </div>
-              ))
+                <p>Complete the questionnaire on the left to see your personalized recommendations.</p>
+              </div>
             )}
           </div>
         </div>
