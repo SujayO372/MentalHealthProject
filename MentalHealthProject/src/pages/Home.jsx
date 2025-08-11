@@ -28,12 +28,12 @@ function Home() {
         color: 'white',
         padding: '0 60px'
       }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+        <div style={{ maxWidth: '2000px', margin: '0 auto', width: '100%' }}>
           <p style={{ fontSize: '1.1rem', marginBottom: '10px' }}>
             Hi, <strong>{username}!</strong>
           </p>
 
-          <h1 style={{
+                    <h1 style={{
             fontSize: '3.5rem',
             fontWeight: '700',
             marginBottom: '20px'
@@ -41,12 +41,34 @@ function Home() {
             Welcome to SereneSpace
           </h1>
 
+          {/* New Wide Section */}
+          <div style={{
+            background: '#ffffff',
+            width: '100%',
+            maxWidth: '90%',
+            margin: '40px 0',
+            padding: '60px',
+            boxShadow: '0 5px 20px rgba(0,0,0,0.1)',
+            borderRadius: '20px',
+            color: '#1a202c'
+          }}>
+            
+            <p style={{
+              fontSize: '1.2rem',
+              lineHeight: '1.6',
+              maxWidth: '1400px',
+              margin: '0 auto'
+            }}>
+              Taking care of your mental health is just as important as looking after your physical well-being. At SereneSpace, we believe that creating a calm, supportive environment can help you feel grounded and more resilient. Whether you’re facing stress, anxiety, or simply need a moment of mindfulness, dedicating time to self-care and reflection empowers you to live a balanced, fulfilling life.
+            </p>
+          </div>
+
           <p style={{
             fontSize: '1.3rem',
             marginBottom: '30px',
             maxWidth: '600px'
           }}>
-            Professional support and evidence-based tools to help you thrive emotionally and mentally.
+             Support and evidence-based tools to help you thrive emotionally and mentally.
           </p>
 
           <p style={{
@@ -55,14 +77,14 @@ function Home() {
             opacity: 0.85,
             maxWidth: '500px'
           }}>
-            Begin your path to wellness with trusted resources and compassionate care.
+            Begin your path to wellness with reliable resources and compassionate care.
           </p>
         </div>
       </div>
 
       {/* Features Section */}
       <div style={{ padding: '80px 60px', background: '#f8fafc' }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '2400px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <h2 style={{
               fontSize: '2.5rem',
