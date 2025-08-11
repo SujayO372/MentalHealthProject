@@ -57,10 +57,23 @@ export default function Checkin() {
   return (
     <>
       <NavBar />
-      <div style={{ overflowX: 'auto' }}>
-        <div style={{ display: 'flex', height: '100vh', minWidth: '1600px' }}>
+      <div style={{ overflowX: 'auto', backgroundColor: '#fff', minHeight: '100vh', padding: '40px' }}>
+        <div style={{ display: 'flex', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
           {/* Mood Selector Panel */}
-          <div style={{ flex: 0.4, padding: '40px', backgroundColor: '#e3f2fd', color: '#000' }}>
+          <div
+            style={{
+              flex: 0.4,
+              padding: '40px',
+              backgroundColor: '#e3f2fd',
+              color: '#000',
+              borderRadius: '10px',
+              boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+              minWidth: '280px',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
             <h2
               style={{
                 marginBottom: '20px',
@@ -68,6 +81,7 @@ export default function Checkin() {
                 backgroundColor: '#bbdefb',
                 padding: '10px 15px',
                 borderRadius: '6px',
+                textAlign: 'center',
               }}
             >
               How are you feeling today?
@@ -94,7 +108,7 @@ export default function Checkin() {
                 </button>
               ))}
               {selectedMood && (
-                <p style={{ marginTop: '20px', fontSize: '1rem', color: '#000' }}>
+                <p style={{ marginTop: '20px', fontSize: '1rem', color: '#000', textAlign: 'center' }}>
                   You already checked in today!
                 </p>
               )}
@@ -102,25 +116,40 @@ export default function Checkin() {
           </div>
 
           {/* Mood Graph Panel */}
-          <div style={{ flex: 2.6, padding: '40px', backgroundColor: '#d6f0f5', color: '#000' }}>
+          <div
+            style={{
+              flex: 0.6,
+              backgroundColor: '#fff',
+              color: '#000',
+              borderRadius: '10px',
+              padding: '40px',
+              boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              minWidth: '600px',
+            }}
+          >
             <h2
               style={{
                 color: '#0d47a1',
                 backgroundColor: '#bbdefb',
                 padding: '10px 15px',
                 borderRadius: '6px',
+                width: '100%',
+                textAlign: 'center',
+                marginBottom: '20px',
               }}
             >
               Your Mood Progression
             </h2>
             <div
               style={{
-                width: '100%',
+                width: '600px',
                 height: '300px',
-                backgroundColor: '#e3f2fd',
+                backgroundColor: '#fff',
                 borderRadius: '10px',
                 border: '1px solid #90caf9',
-                marginTop: '20px',
                 padding: '20px',
                 color: '#000',
               }}
@@ -134,7 +163,7 @@ export default function Checkin() {
                     ticks={[1, 2, 3, 4, 5]}
                     stroke="#000"
                     tickFormatter={(value) =>
-                      moods.find((m) => m.value === value)?.label.split(' - ')[0]
+                      moods.find((m) => m.value === value)?.label.split(' ')[1]
                     }
                   />
                   <Tooltip
@@ -150,6 +179,23 @@ export default function Checkin() {
                   />
                 </LineChart>
               </ResponsiveContainer>
+            </div>
+
+            {/* New section below the graph */}
+            <div
+              style={{
+                marginTop: '40px',
+                backgroundColor: '#fff',
+                borderRadius: '10px',
+                padding: '20px',
+                width: '100%',
+                color: '#0d47a1',
+                fontWeight: '600',
+                textAlign: 'center',
+                boxShadow: '0 0 8px rgba(27, 117, 188, 0.15)',
+              }}
+            >
+              Keep tracking your mood daily for better self-awareness and well-being!
             </div>
           </div>
         </div>

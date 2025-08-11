@@ -142,7 +142,7 @@ export default function Signup() {
 
 // --- Styles ---
 const pageWrapper = {
-  backgroundColor: '#0f1113ff',
+  backgroundColor: '#f5f5f5ff',
   minHeight: '100vh',
   padding: '3rem 1rem',
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
@@ -196,7 +196,7 @@ const formWrapper = {
 
 const title = {
   marginBottom: '2rem',
-  color: '#2c3e50',
+  color: '#b7babdff',
   textAlign: 'center',
 };
 

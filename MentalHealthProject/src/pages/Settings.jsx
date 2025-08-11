@@ -121,7 +121,7 @@ const funFactSection = {
   backgroundColor: '#d1e7dd',
   borderRadius: '12px',
   padding: '40px 30px',
-  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+  boxShadow: '0 4px 12px rgba(212, 190, 190, 0.1)',
   color: '#14532d',
 };
 
@@ -137,10 +137,10 @@ const funFactText = {
 
 const container = {
   flex: 3,
-  backgroundColor: '#121314ff',
+  backgroundColor: '#8898a9ff',
   borderRadius: '12px',
   padding: '40px 35px',
-  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+  boxShadow: '0 4px 12px rgba(78, 60, 60, 0.1)',
 };
 
 const label = {
