@@ -178,143 +178,210 @@ export default function Chatbot() {
   return (
     <>
       <NavBar />
-      <div style={{ display: "flex", height: "90vh", fontFamily: "Tahoma" }}>
-        {/* Sidebar */}
-        <div style={{ width: "260px", borderRight: "1px solid #ccc", background: "#f4f4f4", padding: "12px" }}>
-          <button
-            onClick={handleNewChat}
-            style={{
-              width: "100%",
-              padding: "10px",
-              background: "#007bff",
-              color: "#fff",
-              border: "none",
-              borderRadius: "6px",
-              marginBottom: "12px",
-              cursor: "pointer"
-            }}
-          >
-            ➕ New Chat
-          </button>
-          <h3 style={{ color: "#333", marginBottom: "4px" }}>Recent Chats</h3>
-          <small style={{ color: "#777", fontSize: "12px" }}>
-            Double click on a chat title to rename
-          </small>
-          <ul style={{ listStyle: "none", padding: 0, marginTop: "8px" }}>
-            {recentChats.map((chat) => (
-              <li
-                key={chat.id}
-                style={{
-                  background: chat.id === activeChatId ? "#dfeeff" : "transparent",
-                  padding: "6px",
-                  borderRadius: "6px",
-                  marginBottom: "6px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center"
-                }}
-              >
-                <div style={{ flex: 1, cursor: "pointer" }}>
+      <div style={{ backgroundColor: '#e3f2fd', minHeight: '100vh', padding: '40px' }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          display: 'flex',
+          gap: '30px',
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          color: '#0d47a1',
+        }}>
+          {/* Sidebar */}
+          <div style={{
+            flex: 0.3,
+            backgroundColor: '#bbdefb',
+            borderRadius: '10px',
+            padding: '20px',
+            boxShadow: '0 0 10px rgba(13, 71, 161, 0.15)',
+            minWidth: '280px',
+            display: 'flex',
+            flexDirection: 'column',
+            color: '#0d47a1',
+          }}>
+            <button
+              onClick={handleNewChat}
+              style={{
+                padding: '12px',
+                backgroundColor: '#1976d2',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: 'bold',
+                marginBottom: '20px',
+                cursor: 'pointer',
+                boxShadow: '0 4px 8px rgba(25, 118, 210, 0.4)',
+                transition: 'background-color 0.3s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0d47a1'}
+              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1976d2'}
+            >
+              ➕ New Chat
+            </button>
+            <h3 style={{ marginBottom: '10px' }}>Recent Chats</h3>
+            <small style={{ color: '#1976d2', fontSize: '12px', marginBottom: '10px' }}>
+              Double click to rename
+            </small>
+            <ul style={{ listStyle: 'none', padding: 0, marginTop: 0, overflowY: 'auto', flex: 1 }}>
+              {recentChats.map(chat => (
+                <li
+                  key={chat.id}
+                  style={{
+                    backgroundColor: chat.id === activeChatId ? '#1976d2' : 'transparent',
+                    color: chat.id === activeChatId ? 'white' : '#0d47a1',
+                    padding: '10px 15px',
+                    borderRadius: '8px',
+                    marginBottom: '10px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    boxShadow: chat.id === activeChatId ? '0 4px 12px rgba(25, 118, 210, 0.6)' : 'none',
+                    transition: 'background-color 0.3s ease, color 0.3s ease',
+                  }}
+                  onClick={() => handleSelectChat(chat.id)}
+                  onDoubleClick={() => handleEditChatTitle(chat)}
+                >
                   {editingChatId === chat.id ? (
                     <input
                       type="text"
                       value={editingTitle}
                       onChange={(e) => setEditingTitle(e.target.value)}
                       onBlur={saveChatTitle}
-                      onKeyDown={(e) => e.key === "Enter" && saveChatTitle()}
+                      onKeyDown={(e) => e.key === 'Enter' && saveChatTitle()}
                       autoFocus
-                      style={{ width: "100%" }}
+                      style={{
+                        flex: 1,
+                        padding: '6px 8px',
+                        borderRadius: '5px',
+                        border: '1px solid #1976d2',
+                        fontSize: '14px',
+                        color: '#0d47a1',
+                      }}
                     />
                   ) : (
-                    <div
-                      onClick={() => handleSelectChat(chat.id)}
-                      onDoubleClick={() => handleEditChatTitle(chat)}
-                      style={{ fontWeight: "700", color: "#000" }}
-                    >
-                      {chat.title || "Untitled Chat"}
-                    </div>
+                    <span style={{ flex: 1, fontWeight: '600' }}>
+                      {chat.title || <em style={{ color: '#90caf9' }}>Untitled Chat</em>}
+                    </span>
                   )}
-                  <small style={{ color: "#555" }}>{chat.lastUpdated}</small>
-                </div>
-                <button
-                  onClick={() => handleDeleteChat(chat.id)}
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "red",
-                    cursor: "pointer",
-                    marginLeft: "8px"
-                  }}
-                  title="Delete chat"
-                >
-                  🗑
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Chat area */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-          <div style={{ padding: "14px", background: "#007bff", color: "#fff", fontWeight: "700" }}>
-            {activeChat?.title ? activeChat.title : "Speak to an AI"}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteChat(chat.id);
+                    }}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: chat.id === activeChatId ? 'white' : '#0d47a1',
+                      fontSize: '18px',
+                      cursor: 'pointer',
+                      padding: 0,
+                      marginLeft: '10px',
+                    }}
+                    title="Delete chat"
+                  >
+                    ✖
+                  </button>
+                </li>
+              ))}
+              {recentChats.length === 0 && (
+                <li style={{ color: '#1976d2', fontStyle: 'italic' }}>
+                  No chats yet. Start a new chat!
+                </li>
+              )}
+            </ul>
           </div>
 
-          <div style={{ flex: 1, overflowY: "auto", padding: "15px", background: "#e9ecef" }}>
-            {messages.length === 0 ? (
-              <div style={{ textAlign: "center", color: "#666", marginTop: "50px" }}>
-                <p>No messages yet — say hi 👋</p>
-                <p>Type a message below to start chatting.</p>
-              </div>
-            ) : (
-              messages.map((m, i) => (
-                <div key={i} style={{ margin: "10px 0", textAlign: m.isUser ? "right" : "left" }}>
-                  <div
-                    style={{
-                      display: "inline-block",
-                      background: m.isUser ? "#dcf8c6" : "#fff",
-                      padding: "10px",
-                      borderRadius: "10px",
-                      maxWidth: "70%",
-                      color: "#000"
-                    }}
-                  >
-                    <p style={{ margin: 0 }}>{m.messageContent}</p>
-                    <small style={{ color: "#666" }}>{m.timestamp}</small>
+          {/* Chat window */}
+          <div style={{
+            flex: 0.7,
+            backgroundColor: 'white',
+            borderRadius: '15px',
+            padding: '25px',
+            display: 'flex',
+            flexDirection: 'column',
+            boxShadow: '0 0 20px rgba(25, 118, 210, 0.2)',
+            minHeight: '70vh',
+            color: '#0d47a1',
+          }}>
+            <h2 style={{ marginBottom: '15px', borderBottom: '2px solid #1976d2', paddingBottom: '8px' }}>
+              {activeChat ? activeChat.title || "New Chat" : "Select or Start a Chat"}
+            </h2>
+            <div style={{ flex: 1, overflowY: 'auto', marginBottom: '20px', paddingRight: '10px' }}>
+              {messages.length === 0 && (
+                <p style={{ fontStyle: 'italic', color: '#90caf9' }}>
+                  No messages yet. Say hello!
+                </p>
+              )}
+              {messages.map((msg, i) => (
+                <div
+                  key={i}
+                  style={{
+                    maxWidth: '70%',
+                    marginBottom: '15px',
+                    padding: '12px 18px',
+                    borderRadius: '15px',
+                    backgroundColor: msg.isUser ? '#1976d2' : '#bbdefb',
+                    color: msg.isUser ? 'white' : '#0d47a1',
+                    alignSelf: msg.isUser ? 'flex-end' : 'flex-start',
+                    boxShadow: msg.isUser
+                      ? '0 4px 12px rgba(25, 118, 210, 0.5)'
+                      : '0 4px 8px rgba(187, 222, 251, 0.5)',
+                    whiteSpace: 'pre-wrap',
+                  }}
+                >
+                  {msg.messageContent}
+                  <div style={{ fontSize: '10px', opacity: 0.6, marginTop: '6px', textAlign: 'right' }}>
+                    {msg.timestamp}
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-
-          <div style={{ display: "flex", padding: "12px", borderTop: "1px solid #ccc", background: "#fff" }}>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleSend()}
-              placeholder="Type your message..."
-              style={{
-                flex: 1,
-                padding: "10px",
-                borderRadius: "6px",
-                border: "1px solid #ccc"
-              }}
-            />
-            <button
-              onClick={handleSend}
-              style={{
-                padding: "10px 18px",
-                background: "#28a745",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                marginLeft: "8px",
-                cursor: "pointer"
-              }}
-            >
-              Send
-            </button>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <input
+                type="text"
+                placeholder="Type your message..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                style={{
+                  flex: 1,
+                  padding: '14px 20px',
+                  borderRadius: '30px',
+                  border: '2px solid #1976d2',
+                  fontSize: '16px',
+                  color: '#f0f0f0ff',
+                  outline: 'none',
+                  boxShadow: '0 0 8px rgba(25, 118, 210, 0.3)',
+                  transition: 'border-color 0.3s ease',
+                }}
+                onFocus={(e) => e.currentTarget.style.borderColor = '#0d47a1'}
+                onBlur={(e) => e.currentTarget.style.borderColor = '#1976d2'}
+              />
+              <button
+                onClick={handleSend}
+                style={{
+                  backgroundColor: '#1976d2',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '50px',
+                  height: '50px',
+                  fontSize: '22px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 10px rgba(25, 118, 210, 0.6)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'background-color 0.3s ease',
+                }}
+                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0d47a1'}
+                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1976d2'}
+                title="Send message"
+              >
+                ➤
+              </button>
+            </div>
           </div>
         </div>
       </div>

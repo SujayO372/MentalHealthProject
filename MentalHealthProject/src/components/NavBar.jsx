@@ -16,7 +16,6 @@ export default function NavBar() {
         { name: "Speak with an AI", href: "/chatbot" },
         { name: "Check In", href: "/checkin" },
         { name: "Take a Health Test", href: "/healthtest" },
-        { name: "Hotlines", href: "/hotlines" },
         { name: "Log in/Sign up", href: "/signup" },
         { name: "Settings", href: "/settings" },
          // ✅ new link

@@ -11,11 +11,11 @@ import {
 } from 'recharts';
 
 const moods = [
-  { label: '🤩 Ecstatic', value: 5, color: '#ffeaa7' },
-  { label: '😊 Happy', value: 4, color: '#a8e6cf' },
-  { label: '😐 Neutral', value: 3, color: '#dcedc1' },
-  { label: '😔 Sad', value: 2, color: '#ffd3b6' },
-  { label: '😞 Depressed', value: 1, color: '#ff8b94' },
+  { label: '🤩 Ecstatic', value: 5, color: '#5c6bc0' },  // deeper blue/purple
+  { label: '😊 Happy', value: 4, color: '#7986cb' },
+  { label: '😐 Neutral', value: 3, color: '#9fa8da' },
+  { label: '😔 Sad', value: 2, color: '#b39ddb' },
+  { label: '😞 Depressed', value: 1, color: '#9575cd' },
 ];
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
@@ -57,31 +57,50 @@ export default function Checkin() {
   return (
     <>
       <NavBar />
-      <div style={{ overflowX: 'auto', backgroundColor: '#fff', minHeight: '100vh', padding: '40px' }}>
-        <div style={{ display: 'flex', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div
+        style={{
+          overflowX: 'auto',
+          backgroundColor: '#1c2247',
+          minHeight: '100vh',
+          padding: '40px',
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            gap: '30px',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+          }}
+        >
           {/* Mood Selector Panel */}
           <div
             style={{
-              flex: 0.4,
+              flex: '0 1 500px', // wider panel
               padding: '40px',
-              backgroundColor: '#e3f2fd',
-              color: '#000',
-              borderRadius: '10px',
-              boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-              minWidth: '280px',
+              backgroundColor: '#252b71',
+              color: '#c5cafc',
+              borderRadius: '16px',
+              boxShadow: '0 10px 25px rgba(75, 75, 135, 0.5)',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
+              minWidth: '320px',
             }}
           >
             <h2
               style={{
                 marginBottom: '20px',
-                color: '#0d47a1',
-                backgroundColor: '#bbdefb',
+                color: '#c5cafc',
+                backgroundColor: '#3f51b5',
                 padding: '10px 15px',
                 borderRadius: '6px',
                 textAlign: 'center',
+                fontWeight: '700',
+                textShadow: '1px 1px 2px rgba(0,0,0,0.4)',
               }}
             >
               How are you feeling today?
@@ -91,15 +110,24 @@ export default function Checkin() {
                 <button
                   key={mood.value}
                   style={{
-                    padding: '12px 20px',
+                    padding: '14px 22px',
                     fontSize: '1.1rem',
-                    border: selectedMood === mood.value ? '2px solid #0d47a1' : '1px solid #ccc',
-                    borderRadius: '8px',
+                    border:
+                      selectedMood === mood.value
+                        ? '3px solid #7986cb'
+                        : '2px solid #5c6bc0',
+                    borderRadius: '12px',
                     backgroundColor: mood.color,
                     cursor: selectedMood ? 'not-allowed' : 'pointer',
-                    opacity: selectedMood && selectedMood !== mood.value ? 0.5 : 1,
+                    opacity: selectedMood && selectedMood !== mood.value ? 0.6 : 1,
                     textAlign: 'left',
-                    color: '#000',
+                    color: '#fff',
+                    fontWeight: '600',
+                    boxShadow:
+                      selectedMood === mood.value
+                        ? '0 0 12px 3px rgba(121, 134, 203, 0.7)'
+                        : 'none',
+                    transition: 'all 0.3s ease',
                   }}
                   onClick={() => handleSelectMood(mood)}
                   disabled={!!selectedMood}
@@ -108,7 +136,16 @@ export default function Checkin() {
                 </button>
               ))}
               {selectedMood && (
-                <p style={{ marginTop: '20px', fontSize: '1rem', color: '#000', textAlign: 'center' }}>
+                <p
+                  style={{
+                    marginTop: '20px',
+                    fontSize: '1rem',
+                    color: '#c5cafc',
+                    textAlign: 'center',
+                    fontWeight: '600',
+                    textShadow: '1px 1px 3px rgba(0,0,0,0.3)',
+                  }}
+                >
                   You already checked in today!
                 </p>
               )}
@@ -118,50 +155,54 @@ export default function Checkin() {
           {/* Mood Graph Panel */}
           <div
             style={{
-              flex: 0.6,
-              backgroundColor: '#fff',
-              color: '#000',
-              borderRadius: '10px',
+              flex: '1 1 600px',
+              backgroundColor: '#252b71',
+              color: '#c5cafc',
+              borderRadius: '16px',
               padding: '40px',
-              boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+              boxShadow: '0 10px 25px rgba(75, 75, 135, 0.5)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              minWidth: '600px',
+              minWidth: '320px',
+              maxWidth: '700px',
             }}
           >
             <h2
               style={{
-                color: '#0d47a1',
-                backgroundColor: '#bbdefb',
+                color: '#c5cafc',
+                backgroundColor: '#3f51b5',
                 padding: '10px 15px',
                 borderRadius: '6px',
                 width: '100%',
                 textAlign: 'center',
                 marginBottom: '20px',
+                fontWeight: '700',
+                textShadow: '1px 1px 2px rgba(0,0,0,0.4)',
               }}
             >
               Your Mood Progression
             </h2>
             <div
               style={{
-                width: '600px',
+                width: '100%',
                 height: '300px',
-                backgroundColor: '#fff',
+                backgroundColor: '#1c2247',
                 borderRadius: '10px',
-                border: '1px solid #90caf9',
+                border: '1px solid #7986cb',
                 padding: '20px',
-                color: '#000',
+                color: '#c5cafc',
+                boxShadow: 'inset 0 0 10px #3f51b5',
               }}
             >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" stroke="#000" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#7986cb" />
+                  <XAxis dataKey="date" stroke="#c5cafc" />
                   <YAxis
                     domain={[1, 5]}
                     ticks={[1, 2, 3, 4, 5]}
-                    stroke="#000"
+                    stroke="#c5cafc"
                     tickFormatter={(value) =>
                       moods.find((m) => m.value === value)?.label.split(' ')[1]
                     }
@@ -173,9 +214,9 @@ export default function Checkin() {
                   <Line
                     type="monotone"
                     dataKey="moodValue"
-                    stroke="#1976d2"
+                    stroke="#7986cb"
                     strokeWidth={3}
-                    dot={{ r: 5, stroke: '#0d47a1', strokeWidth: 2 }}
+                    dot={{ r: 5, stroke: '#3f51b5', strokeWidth: 2 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -185,14 +226,14 @@ export default function Checkin() {
             <div
               style={{
                 marginTop: '40px',
-                backgroundColor: '#fff',
-                borderRadius: '10px',
+                backgroundColor: '#252b71',
+                borderRadius: '12px',
                 padding: '20px',
                 width: '100%',
-                color: '#0d47a1',
+                color: '#9fa8da',
                 fontWeight: '600',
                 textAlign: 'center',
-                boxShadow: '0 0 8px rgba(27, 117, 188, 0.15)',
+                boxShadow: '0 0 12px rgba(121, 134, 203, 0.3)',
               }}
             >
               Keep tracking your mood daily for better self-awareness and well-being!

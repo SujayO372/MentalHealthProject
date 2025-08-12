@@ -11,27 +11,21 @@ export default function Signup() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (password !== confirmPassword) {
       setErrorMsg("Passwords don't match.");
       return;
     }
 
-    // Retrieve existing users or empty array
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    // Check if email already exists
     if (users.find(u => u.email === email)) {
       setErrorMsg('An account with this email already exists.');
       return;
     }
 
-    // Save new user
     const newUser = { fullName, email, password };
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
-
-    // Save username to localStorage for display (optional)
     localStorage.setItem('username', fullName);
 
     setErrorMsg('');
@@ -46,7 +40,7 @@ export default function Signup() {
       <div style={mainContainer}>
         {/* Left Welcome Section */}
         <div style={welcomeSection}>
-          <h2 style={welcomeTitle}>We're excited for you to create an account!</h2>
+          <h2 style={welcomeTitle}>We’re excited for you to create an account!</h2>
           <p style={welcomeText}>
             Join our community and gain access to exclusive features, personalized
             content, and much more. Your journey to better mental wellness starts here.
@@ -56,7 +50,7 @@ export default function Signup() {
             {/* Brain Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="#1b75bc"
+              fill="#ffffff"
               viewBox="0 0 24 24"
               width="80"
               height="80"
@@ -69,7 +63,7 @@ export default function Signup() {
             {/* Heart Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="#1b75bc"
+              fill="#ffffff"
               viewBox="0 0 24 24"
               width="80"
               height="80"
@@ -125,7 +119,7 @@ export default function Signup() {
             />
 
             {errorMsg && (
-              <p style={{ color: 'red', marginBottom: '1rem' }}>{errorMsg}</p>
+              <p style={{ color: '#ff4d6d', marginBottom: '1rem' }}>{errorMsg}</p>
             )}
 
             <button type="submit" style={button}>Sign Up</button>
@@ -142,7 +136,7 @@ export default function Signup() {
 
 // --- Styles ---
 const pageWrapper = {
-  backgroundColor: '#f5f5f5ff',
+  backgroundColor: '#f9f9ff',
   minHeight: '100vh',
   padding: '3rem 1rem',
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
@@ -157,12 +151,12 @@ const mainContainer = {
 };
 
 const welcomeSection = {
-  flex: 1.3, // bigger left side
-  backgroundColor: '#1b75bc',
+  flex: 1.3,
+  background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)', // purple to blue gradient
   color: '#fff',
   borderRadius: '10px',
   padding: '3rem 2rem',
-  boxShadow: '0 0 15px rgba(27, 117, 188, 0.3)',
+  boxShadow: '0 0 15px rgba(38, 0, 77, 0.3)',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -188,15 +182,15 @@ const iconContainer = {
 
 const formWrapper = {
   flex: 1,
-  backgroundColor: '#132238ff',
+  backgroundColor: '#2a2a72', // deep blue-purple
   borderRadius: '10px',
   padding: '3rem 3.5rem',
-  boxShadow: '0 0 12px rgba(0,0,0,0.1)',
+  boxShadow: '0 0 12px rgba(0,0,0,0.15)',
 };
 
 const title = {
   marginBottom: '2rem',
-  color: '#b7babdff',
+  color: '#d1d5ff',
   textAlign: 'center',
 };
 
@@ -209,7 +203,7 @@ const form = {
 const label = {
   marginBottom: '0.5rem',
   fontWeight: '600',
-  color: '#000', // black label text
+  color: '#e6e6ff',
 };
 
 const input = {
@@ -222,13 +216,13 @@ const input = {
 
 const button = {
   padding: '0.75rem',
-  backgroundColor: '#2c3e50',
+  background: 'linear-gradient(90deg, #667eea, #764ba2)',
   color: '#fff',
   fontWeight: '600',
   border: 'none',
   borderRadius: '5px',
   cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
+  transition: 'background 0.3s ease',
   fontSize: '1rem',
 };
 
@@ -236,10 +230,11 @@ const footerText = {
   marginTop: '1.5rem',
   fontSize: '0.9rem',
   textAlign: 'center',
+  color: '#cdd6f4',
 };
 
 const link = {
-  color: '#3498db',
+  color: '#a4b3ff',
   textDecoration: 'none',
   fontWeight: '600',
 };

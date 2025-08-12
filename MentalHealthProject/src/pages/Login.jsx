@@ -16,7 +16,6 @@ export default function Login() {
       setErrorMsg('');
       localStorage.setItem('username', user.fullName || user.email);
       alert(`Welcome back, ${user.fullName || user.email}! You are logged in.`);
-      // Add redirect logic here if needed
     } else {
       setErrorMsg('Invalid email or password.');
     }
@@ -39,7 +38,7 @@ export default function Login() {
             {/* Brain Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="#1b75bc"
+              fill="#a78bfa"
               viewBox="0 0 24 24"
               width="80"
               height="80"
@@ -52,7 +51,7 @@ export default function Login() {
             {/* Heart Icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="#1b75bc"
+              fill="#a78bfa"
               viewBox="0 0 24 24"
               width="80"
               height="80"
@@ -103,7 +102,7 @@ export default function Login() {
 
 // --- Styles ---
 const pageWrapper = {
-  backgroundColor: '#eef2f5',
+  backgroundColor: '#f5f5f5',
   minHeight: '100vh',
   padding: '3rem 1rem',
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
@@ -119,11 +118,11 @@ const mainContainer = {
 
 const welcomeSection = {
   flex: 1.3,
-  backgroundColor: '#1b75bc',
+  background: 'linear-gradient(135deg, #4f46e5, #9333ea)',
   color: '#fff',
   borderRadius: '10px',
   padding: '3rem 2rem',
-  boxShadow: '0 0 15px rgba(27, 117, 188, 0.3)',
+  boxShadow: '0 0 15px rgba(79, 70, 229, 0.4)',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -149,7 +148,7 @@ const iconContainer = {
 
 const formWrapper = {
   flex: 1,
-  backgroundColor: '#f7f9fc',
+  backgroundColor: '#1e1b4b',
   borderRadius: '10px',
   padding: '3rem 3.5rem',
   boxShadow: '0 0 12px rgba(0,0,0,0.1)',
@@ -158,7 +157,7 @@ const formWrapper = {
 
 const title = {
   marginBottom: '2rem',
-  color: '#2c3e50',
+  color: '#c4b5fd',
 };
 
 const form = {
@@ -170,7 +169,7 @@ const form = {
 const label = {
   marginBottom: '0.5rem',
   fontWeight: '600',
-  color: '#000', // black label text
+  color: '#fff',
 };
 
 const input = {
@@ -183,7 +182,7 @@ const input = {
 
 const button = {
   padding: '0.75rem',
-  backgroundColor: '#2c3e50',
+  backgroundColor: '#4f46e5',
   color: '#fff',
   fontWeight: '600',
   border: 'none',
@@ -196,10 +195,11 @@ const button = {
 const footerText = {
   marginTop: '1.5rem',
   fontSize: '0.9rem',
+  color: '#c4b5fd',
 };
 
 const link = {
-  color: '#3498db',
+  color: '#a78bfa',
   textDecoration: 'none',
   fontWeight: '600',
 };

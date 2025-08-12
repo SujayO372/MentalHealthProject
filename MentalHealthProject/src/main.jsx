@@ -6,7 +6,6 @@ import Home from './pages/Home.jsx'
 import Chatbot from './pages/Chatbot.jsx'
 import Checkin from './pages/Checkin.jsx'
 import HealthTest from './pages/HealthTest.jsx'
-import Hotlines from './pages/Hotlines.jsx'
 import Signup from './pages/Signup.jsx';
 import './index.css'
 import Login from './pages/Login.jsx'
@@ -23,7 +22,6 @@ createRoot(root).render(
         <Route path="chatbot" element={<Chatbot />} />
         <Route path="checkin" element={<Checkin />} />
         <Route path="healthtest" element={<HealthTest />} />
-        <Route path="hotlines" element={<Hotlines />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
          <Route path="settings" element={<Settings />} />
