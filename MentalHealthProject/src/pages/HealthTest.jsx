@@ -73,7 +73,7 @@ export default function HealthTest() {
                 fontSize: 32,
               }}
             >
-              Mental Wellness Check-In
+              Mental Wellness Test
             </h1>
             {QuestionsToAsk.map(({ id, question }) => (
               <section
