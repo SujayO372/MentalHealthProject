@@ -3,6 +3,13 @@ import NavBar from "../components/NavBar";
 
 const QuestionsToAsk = [
   { id: 0, question: "Over the past two weeks, how often have you felt down, depressed, or hopeless?" },
+  { id: 1, question: "How often have you felt nervous, anxious, or on edge?" },
+  { id: 2, question: "Have you had trouble sleeping or staying asleep recently?" },
+  { id: 3, question: "How often have you felt little interest or pleasure in doing things?" },
+  { id: 4, question: "Have you experienced sudden mood swings?" },
+  { id: 5, question: "How often do you feel overwhelmed by daily tasks?" },
+  { id: 6, question: "Have you noticed changes in your appetite or weight?" },
+  { id: 7, question: "Do you find it hard to concentrate or focus?" },
 ];
 
 const Choices = ["Never", "Rarely", "Occasionally", "Often", "Always"];
@@ -30,8 +37,7 @@ export default function HealthTest() {
         body: JSON.stringify({ answers }),
       });
       const data = await response.json();
-      console.log("Health Test Result:", data.response);
-      setRecommendations(data.response.recommendations || []);
+      setRecommendations(data.response?.recommendations || []);
       setSubmitted(true);
     } catch (error) {
       console.error("Request failed:", error);
@@ -52,14 +58,12 @@ export default function HealthTest() {
       <main
         style={{
           paddingTop: 80,
-          minHeight: "100vh",
-          background: "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
           fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
           color: "#212529",
-          maxWidth: 900,
-          margin: "0 auto 50px",
-          paddingLeft: 24,
-          paddingRight: 24,
+          background: "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
         }}
       >
         {!submitted ? (
@@ -67,7 +71,7 @@ export default function HealthTest() {
             <h1
               style={{
                 textAlign: "center",
-                marginBottom: 40,
+                marginBottom: 24,
                 color: "#004085",
                 fontWeight: "700",
                 fontSize: 32,
@@ -75,67 +79,79 @@ export default function HealthTest() {
             >
               Mental Wellness Test
             </h1>
-            {QuestionsToAsk.map(({ id, question }) => (
-              <section
-                key={id}
-                style={{
-                  marginBottom: 32,
-                  padding: 20,
-                  borderRadius: 12,
-                  backgroundColor: "#f0f4ff",
-                  boxShadow: "0 3px 6px rgba(0, 64, 133, 0.15)",
-                }}
-              >
-                <p
-                  style={{
-                    fontWeight: "700",
-                    fontSize: 18,
-                    marginBottom: 16,
-                    color: "#003366",
-                    userSelect: "none",
-                  }}
-                >
-                  {question}
-                </p>
+
+            <div
+              style={{
+                flexGrow: 1,
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gridTemplateRows: "repeat(2, 1fr)",
+                gap: 16,
+                padding: 16,
+              }}
+            >
+              {QuestionsToAsk.map(({ id, question }) => (
                 <div
+                  key={id}
                   style={{
                     display: "flex",
-                    gap: 14,
-                    flexWrap: "wrap",
-                    userSelect: "none",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: 12,
+                    borderRadius: 12,
+                    backgroundColor: "#f0f4ff",
+                    boxShadow: "0 3px 6px rgba(0, 64, 133, 0.15)",
+                    textAlign: "center",
                   }}
                 >
-                  {Choices.map((choice) => {
-                    const selected = answers[id] === choice;
-                    return (
-                      <button
-                        key={choice}
-                        onClick={() => handleSelect(id, choice)}
-                        style={{
-                          padding: "10px 20px",
-                          borderRadius: 30,
-                          border: selected ? "3px solid #004085" : "2px solid #a9c0ff",
-                          backgroundColor: selected ? "#cfe2ff" : "#e6efff",
-                          color: selected ? "#002752" : "#004085",
-                          fontWeight: selected ? "700" : "600",
-                          fontSize: 14,
-                          cursor: "pointer",
-                          minWidth: 100,
-                          textAlign: "center",
-                          transition: "all 0.25s ease",
-                          boxShadow: selected
-                            ? "0 0 8px rgba(0,64,133,0.4)"
-                            : "none",
-                        }}
-                      >
-                        {choice}
-                      </button>
-                    );
-                  })}
+                  <p
+                    style={{
+                      fontWeight: "700",
+                      fontSize: 16,
+                      marginBottom: 12,
+                      color: "#003366",
+                      userSelect: "none",
+                    }}
+                  >
+                    {question}
+                  </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: 8,
+                      flexWrap: "wrap",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {Choices.map((choice) => {
+                      const selected = answers[id] === choice;
+                      return (
+                        <button
+                          key={choice}
+                          onClick={() => handleSelect(id, choice)}
+                          style={{
+                            padding: "6px 12px",
+                            borderRadius: 20,
+                            border: selected ? "3px solid #004085" : "2px solid #a9c0ff",
+                            backgroundColor: selected ? "#cfe2ff" : "#e6efff",
+                            color: selected ? "#002752" : "#004085",
+                            fontWeight: selected ? "700" : "600",
+                            fontSize: 12,
+                            cursor: "pointer",
+                            transition: "all 0.25s ease",
+                          }}
+                        >
+                          {choice}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </section>
-            ))}
-            <div style={{ textAlign: "center", marginTop: 40 }}>
+              ))}
+            </div>
+
+            <div style={{ textAlign: "center", margin: 24 }}>
               <button
                 onClick={handleSubmit}
                 disabled={loading}
@@ -148,7 +164,7 @@ export default function HealthTest() {
                   fontSize: 20,
                   fontWeight: "700",
                   cursor: "pointer",
-                  boxShadow: "0 6px 16px rgb(0 64 133 / 0.35)",
+                  boxShadow: "0 6px 16px rgb(0 64, 133 / 0.35)",
                   opacity: loading ? 0.6 : 1,
                 }}
               >
