@@ -63,7 +63,6 @@ export default function HealthTest() {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // pick 10 random questions on mount
   useEffect(() => {
     const shuffled = [...AllQuestions].sort(() => Math.random() - 0.5);
     setQuestionsToAsk(shuffled.slice(0, 10));
@@ -109,7 +108,7 @@ export default function HealthTest() {
       <main
         style={{
           paddingTop: 80,
-          height: "100vh",
+          minHeight: "100vh", // allow background to grow
           display: "flex",
           flexDirection: "column",
           fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
@@ -117,198 +116,204 @@ export default function HealthTest() {
           background: "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
         }}
       >
-        {!submitted ? (
-          <>
-            <h1
-              style={{
-                textAlign: "center",
-                marginBottom: 24,
-                color: "#004085",
-                fontWeight: "700",
-                fontSize: 32,
-              }}
-            >
-              Mental Wellness Test
-            </h1>
-
-            <div
-              style={{
-                flexGrow: 1,
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gridTemplateRows: "repeat(3, 1fr)",
-                gap: 16,
-                padding: 16,
-              }}
-            >
-              {questionsToAsk.map(({ id, question }) => (
-                <div
-                  key={id}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: 12,
-                    borderRadius: 12,
-                    backgroundColor: "#f0f4ff",
-                    boxShadow: "0 3px 6px rgba(0, 64, 133, 0.15)",
-                    textAlign: "center",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontWeight: "700",
-                      fontSize: 16,
-                      marginBottom: 12,
-                      color: "#003366",
-                      userSelect: "none",
-                    }}
-                  >
-                    {question}
-                  </p>
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 8,
-                      flexWrap: "wrap",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {Choices.map((choice) => {
-                      const selected = answers[id] === choice;
-                      return (
-                        <button
-                          key={choice}
-                          onClick={() => handleSelect(id, choice)}
-                          style={{
-                            padding: "6px 12px",
-                            borderRadius: 20,
-                            border: selected ? "3px solid #004085" : "2px solid #a9c0ff",
-                            backgroundColor: selected ? "#cfe2ff" : "#e6efff",
-                            color: selected ? "#002752" : "#004085",
-                            fontWeight: selected ? "700" : "600",
-                            fontSize: 12,
-                            cursor: "pointer",
-                            transition: "all 0.25s ease",
-                          }}
-                        >
-                          {choice}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div style={{ textAlign: "center", margin: 24 }}>
-              <button
-                onClick={handleSubmit}
-                disabled={loading}
+        <div style={{ flexGrow: 1, backgroundColor: "#fff", paddingBottom: 40 }}>
+          {!submitted ? (
+            <>
+              <h1
                 style={{
-                  backgroundColor: "#004085",
-                  color: "white",
-                  border: "none",
-                  borderRadius: 28,
-                  padding: "14px 40px",
-                  fontSize: 20,
+                  textAlign: "center",
+                  marginBottom: 24,
+                  color: "#004085",
                   fontWeight: "700",
-                  cursor: "pointer",
-                  boxShadow: "0 6px 16px rgb(0 64, 133 / 0.35)",
-                  opacity: loading ? 0.6 : 1,
+                  fontSize: 32,
                 }}
               >
-                {loading ? "Processing..." : "Submit"}
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            <h2
-              style={{
-                textAlign: "center",
-                color: "#004085",
-                fontWeight: "700",
-                fontSize: 28,
-              }}
-            >
-              Thank You for Completing the Check-In
-            </h2>
-            <p
-              style={{
-                maxWidth: 700,
-                margin: "12px auto 36px",
-                color: "#495057",
-                fontSize: 16,
-                textAlign: "center",
-                lineHeight: 1.5,
-              }}
-            >
-              Your responses have been reviewed. Here are some resources that may help.
-            </p>
+                Mental Wellness Test
+              </h1>
 
-            {recommendations.length > 0 && (
-              <>
-                <h3
+              <div
+                style={{
+                  flexGrow: 1,
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4, 1fr)",
+                  gap: 16,
+                  padding: 16,
+                }}
+              >
+                {questionsToAsk.map(({ id, question }) => (
+                  <div
+                    key={id}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      padding: 12,
+                      borderRadius: 12,
+                      backgroundColor: "#f0f4ff",
+                      boxShadow: "0 3px 6px rgba(0, 64, 133, 0.15)",
+                      textAlign: "center",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontWeight: "700",
+                        fontSize: 16,
+                        marginBottom: 12,
+                        color: "#003366",
+                        userSelect: "none",
+                      }}
+                    >
+                      {question}
+                    </p>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: 8,
+                        flexWrap: "wrap",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {Choices.map((choice) => {
+                        const selected = answers[id] === choice;
+                        return (
+                          <button
+                            key={choice}
+                            onClick={() => handleSelect(id, choice)}
+                            style={{
+                              padding: "6px 12px",
+                              borderRadius: 20,
+                              border: selected
+                                ? "3px solid #004085"
+                                : "2px solid #a9c0ff",
+                              backgroundColor: selected ? "#cfe2ff" : "#e6efff",
+                              color: selected ? "#002752" : "#004085",
+                              fontWeight: selected ? "700" : "600",
+                              fontSize: 12,
+                              cursor: "pointer",
+                              transition: "all 0.25s ease",
+                            }}
+                          >
+                            {choice}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ textAlign: "center", margin: 24 }}>
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
                   style={{
-                    marginTop: 40,
-                    marginBottom: 20,
-                    textAlign: "center",
-                    color: "#28a745",
-                    fontSize: 22,
+                    backgroundColor: "#004085",
+                    color: "white",
+                    border: "none",
+                    borderRadius: 28,
+                    padding: "14px 40px",
+                    fontSize: 20,
+                    fontWeight: "700",
+                    cursor: "pointer",
+                    boxShadow: "0 6px 16px rgb(0 64, 133 / 0.35)",
+                    opacity: loading ? 0.6 : 1,
+                  }}
+                >
+                  {loading ? "Processing..." : "Submit"}
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h2
+                style={{
+                  textAlign: "center",
+                  color: "#004085",
+                  fontWeight: "700",
+                  fontSize: 28,
+                }}
+              >
+                Thank You for Completing the Check-In
+              </h2>
+              <p
+                style={{
+                  maxWidth: 700,
+                  margin: "12px auto 36px",
+                  color: "#495057",
+                  fontSize: 16,
+                  textAlign: "center",
+                  lineHeight: 1.5,
+                }}
+              >
+                Your responses have been reviewed. Here are some resources that may help.
+              </p>
+
+              {recommendations.length > 0 && (
+                <>
+                  <h3
+                    style={{
+                      marginTop: 40,
+                      marginBottom: 20,
+                      textAlign: "center",
+                      color: "#28a745",
+                      fontSize: 22,
+                      fontWeight: "700",
+                    }}
+                  >
+                    🌟 AI-Recommended Articles for You
+                  </h3>
+                  {recommendations.map((rec, i) => (
+                    <div
+                      key={i}
+                      style={{
+                        background: "#fff",
+                        padding: 20,
+                        borderRadius: 10,
+                        marginBottom: 16,
+                        boxShadow: "0 4px 8px rgba(0,0,0,0.05)",
+                      }}
+                    >
+                      <strong>{rec.title}</strong>
+                      <p>{rec.summary}</p>
+                      {rec.link && (
+                        <a
+                          href={rec.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            color: "#007bff",
+                            textDecoration: "underline",
+                          }}
+                        >
+                          Read more →
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </>
+              )}
+
+              <div style={{ textAlign: "center", marginTop: 50 }}>
+                <button
+                  onClick={reset}
+                  style={{
+                    padding: "14px 40px",
+                    backgroundColor: "#6c757d",
+                    color: "white",
+                    border: "none",
+                    borderRadius: 28,
+                    cursor: "pointer",
+                    fontSize: 18,
                     fontWeight: "700",
                   }}
                 >
-                  🌟 AI-Recommended Articles for You
-                </h3>
-                {recommendations.map((rec, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      background: "#fff",
-                      padding: 20,
-                      borderRadius: 10,
-                      marginBottom: 16,
-                      boxShadow: "0 4px 8px rgba(0,0,0,0.05)",
-                    }}
-                  >
-                    <strong>{rec.title}</strong>
-                    <p>{rec.summary}</p>
-                    {rec.link && (
-                      <a
-                        href={rec.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "#007bff", textDecoration: "underline" }}
-                      >
-                        Read more →
-                      </a>
-                    )}
-                  </div>
-                ))}
-              </>
-            )}
-
-            <div style={{ textAlign: "center", marginTop: 50 }}>
-              <button
-                onClick={reset}
-                style={{
-                  padding: "14px 40px",
-                  backgroundColor: "#6c757d",
-                  color: "white",
-                  border: "none",
-                  borderRadius: 28,
-                  cursor: "pointer",
-                  fontSize: 18,
-                  fontWeight: "700",
-                }}
-              >
-                Retake Assessment
-              </button>
-            </div>
-          </>
-        )}
+                  Retake Assessment
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </main>
     </>
   );
