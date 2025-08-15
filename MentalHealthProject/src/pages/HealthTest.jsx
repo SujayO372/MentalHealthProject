@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 
-const QuestionsToAsk = [
+const AllQuestions = [
   { id: 0, question: "Over the past two weeks, how often have you felt down, depressed, or hopeless?" },
   { id: 1, question: "How often have you felt nervous, anxious, or on edge?" },
   { id: 2, question: "Have you had trouble sleeping or staying asleep recently?" },
@@ -10,22 +10,71 @@ const QuestionsToAsk = [
   { id: 5, question: "How often do you feel overwhelmed by daily tasks?" },
   { id: 6, question: "Have you noticed changes in your appetite or weight?" },
   { id: 7, question: "Do you find it hard to concentrate or focus?" },
+  { id: 8, question: "Do you feel fatigued even after a full night’s sleep?" },
+  { id: 9, question: "Have you felt socially withdrawn or isolated?" },
+  { id: 10, question: "Do you have frequent headaches or body aches related to stress?" },
+  { id: 11, question: "Have you experienced panic attacks recently?" },
+  { id: 12, question: "Do you find yourself worrying excessively?" },
+  { id: 13, question: "Have you been more irritable than usual?" },
+  { id: 14, question: "Do you avoid certain situations due to fear or anxiety?" },
+  { id: 15, question: "Have you felt hopeless about the future?" },
+  { id: 16, question: "Do you find it difficult to make decisions?" },
+  { id: 17, question: "Have you noticed any changes in your motivation levels?" },
+  { id: 18, question: "Do you struggle to control racing thoughts?" },
+  { id: 19, question: "Have you felt emotionally numb or detached?" },
+  { id: 20, question: "Do you find yourself overthinking small situations?" },
+  { id: 21, question: "Have you lost interest in hobbies you once enjoyed?" },
+  { id: 22, question: "Do you feel unsafe in your own environment?" },
+  { id: 23, question: "Have you felt unusually pessimistic or cynical?" },
+  { id: 24, question: "Do you have trouble trusting others?" },
+  { id: 25, question: "Have you been avoiding responsibilities?" },
+  { id: 26, question: "Do you feel mentally drained after social interactions?" },
+  { id: 27, question: "Have you had sudden bursts of anger?" },
+  { id: 28, question: "Do you experience frequent nightmares?" },
+  { id: 29, question: "Have you noticed difficulty remembering details?" },
+  { id: 30, question: "Do you feel restless or unable to relax?" },
+  { id: 31, question: "Have you felt easily startled lately?" },
+  { id: 32, question: "Do you avoid places or people that remind you of past trauma?" },
+  { id: 33, question: "Have you had difficulty controlling your emotions?" },
+  { id: 34, question: "Do you struggle with perfectionism?" },
+  { id: 35, question: "Have you been feeling more lonely than usual?" },
+  { id: 36, question: "Do you rely on substances to cope with emotions?" },
+  { id: 37, question: "Have you been feeling guilt or shame without clear reason?" },
+  { id: 38, question: "Do you have difficulty adapting to change?" },
+  { id: 39, question: "Have you felt detached from reality or yourself?" },
+  { id: 40, question: "Do you have unexplained physical symptoms during stress?" },
+  { id: 41, question: "Have you been struggling to maintain relationships?" },
+  { id: 42, question: "Do you feel overwhelmed by too many choices?" },
+  { id: 43, question: "Have you been feeling like a burden to others?" },
+  { id: 44, question: "Do you avoid talking about your feelings?" },
+  { id: 45, question: "Have you been experiencing intrusive thoughts?" },
+  { id: 46, question: "Do you find it hard to forgive yourself for past mistakes?" },
+  { id: 47, question: "Have you felt less productive than you want to be?" },
+  { id: 48, question: "Do you often compare yourself negatively to others?" },
+  { id: 49, question: "Have you felt disconnected from your goals or values?" },
 ];
 
 const Choices = ["Never", "Rarely", "Occasionally", "Often", "Always"];
 
 export default function HealthTest() {
+  const [questionsToAsk, setQuestionsToAsk] = useState([]);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  // pick 10 random questions on mount
+  useEffect(() => {
+    const shuffled = [...AllQuestions].sort(() => Math.random() - 0.5);
+    setQuestionsToAsk(shuffled.slice(0, 10));
+  }, []);
 
   const handleSelect = (id, choice) => {
     setAnswers((prev) => ({ ...prev, [id]: choice }));
   };
 
   const handleSubmit = async () => {
-    if (QuestionsToAsk.some((q) => !answers[q.id])) {
+    if (questionsToAsk.some((q) => !answers[q.id])) {
       alert("Please answer all questions before submitting.");
       return;
     }
@@ -50,6 +99,8 @@ export default function HealthTest() {
     setAnswers({});
     setRecommendations([]);
     setSubmitted(false);
+    const shuffled = [...AllQuestions].sort(() => Math.random() - 0.5);
+    setQuestionsToAsk(shuffled.slice(0, 10));
   };
 
   return (
@@ -85,12 +136,12 @@ export default function HealthTest() {
                 flexGrow: 1,
                 display: "grid",
                 gridTemplateColumns: "repeat(4, 1fr)",
-                gridTemplateRows: "repeat(2, 1fr)",
+                gridTemplateRows: "repeat(3, 1fr)",
                 gap: 16,
                 padding: 16,
               }}
             >
-              {QuestionsToAsk.map(({ id, question }) => (
+              {questionsToAsk.map(({ id, question }) => (
                 <div
                   key={id}
                   style={{
