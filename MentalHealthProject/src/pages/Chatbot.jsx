@@ -178,7 +178,7 @@ export default function Chatbot() {
   return (
     <>
       <NavBar />
-      <div style={{ backgroundColor: '#e3f2fd', minHeight: '100vh', padding: '40px' }}>
+      <div style={{ backgroundColor: '#f7f7f8', minHeight: '100vh', padding: '40px' }}>
         <div style={{
           maxWidth: '1200px',
           margin: '0 auto',
@@ -190,10 +190,10 @@ export default function Chatbot() {
           {/* Sidebar */}
           <div style={{
             flex: 0.3,
-            backgroundColor: '#bbdefb',
+            backgroundColor: '#fff',
             borderRadius: '10px',
             padding: '20px',
-            boxShadow: '0 0 10px rgba(13, 71, 161, 0.15)',
+            boxShadow: '0 0 10px rgba(0,0,0,0.05)',
             minWidth: '280px',
             display: 'flex',
             flexDirection: 'column',
@@ -210,11 +210,7 @@ export default function Chatbot() {
                 fontWeight: 'bold',
                 marginBottom: '20px',
                 cursor: 'pointer',
-                boxShadow: '0 4px 8px rgba(25, 118, 210, 0.4)',
-                transition: 'background-color 0.3s ease',
               }}
-              onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0d47a1'}
-              onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1976d2'}
             >
               ➕ New Chat
             </button>
@@ -236,150 +232,136 @@ export default function Chatbot() {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    boxShadow: chat.id === activeChatId ? '0 4px 12px rgba(25, 118, 210, 0.6)' : 'none',
-                    transition: 'background-color 0.3s ease, color 0.3s ease',
                   }}
                   onClick={() => handleSelectChat(chat.id)}
                   onDoubleClick={() => handleEditChatTitle(chat)}
                 >
                   {editingChatId === chat.id ? (
                     <input
-                      type="text"
                       value={editingTitle}
                       onChange={(e) => setEditingTitle(e.target.value)}
                       onBlur={saveChatTitle}
                       onKeyDown={(e) => e.key === 'Enter' && saveChatTitle()}
                       autoFocus
                       style={{
-                        flex: 1,
-                        padding: '6px 8px',
-                        borderRadius: '5px',
-                        border: '1px solid #1976d2',
-                        fontSize: '14px',
-                        color: '#0d47a1',
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        border: '1px solid #ccc',
+                        width: '100%',
                       }}
                     />
                   ) : (
-                    <span style={{ flex: 1, fontWeight: '600' }}>
-                      {chat.title || <em style={{ color: '#90caf9' }}>Untitled Chat</em>}
+                    <span style={{ flex: 1, marginRight: '10px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      {chat.title || "Untitled"}
                     </span>
                   )}
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteChat(chat.id);
-                    }}
+                    onClick={(e) => { e.stopPropagation(); handleDeleteChat(chat.id); }}
                     style={{
-                      background: 'none',
+                      background: 'transparent',
                       border: 'none',
-                      color: chat.id === activeChatId ? 'white' : '#0d47a1',
-                      fontSize: '18px',
-                      cursor: 'pointer',
-                      padding: 0,
-                      marginLeft: '10px',
+                      color: chat.id === activeChatId ? 'white' : '#d32f2f',
+                      fontWeight: 'bold',
+                      cursor: 'pointer'
                     }}
-                    title="Delete chat"
                   >
-                    ✖
+                    ✕
                   </button>
                 </li>
               ))}
-              {recentChats.length === 0 && (
-                <li style={{ color: '#1976d2', fontStyle: 'italic' }}>
-                  No chats yet. Start a new chat!
-                </li>
-              )}
             </ul>
           </div>
 
-          {/* Chat window */}
+          {/* Chat Area */}
           <div style={{
-            flex: 0.7,
-            backgroundColor: 'white',
-            borderRadius: '15px',
-            padding: '25px',
+            flex: 1,
+            backgroundColor: '#ffffff',
+            borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
-            boxShadow: '0 0 20px rgba(25, 118, 210, 0.2)',
-            minHeight: '70vh',
-            color: '#0d47a1',
+            height: '80vh',
+            boxShadow: '0 0 15px rgba(0,0,0,0.05)',
           }}>
-            <h2 style={{ marginBottom: '15px', borderBottom: '2px solid #1976d2', paddingBottom: '8px' }}>
-              {activeChat ? activeChat.title || "New Chat" : "Select or Start a Chat"}
-            </h2>
-            <div style={{ flex: 1, overflowY: 'auto', marginBottom: '20px', paddingRight: '10px' }}>
-              {messages.length === 0 && (
-                <p style={{ fontStyle: 'italic', color: '#90caf9' }}>
-                  No messages yet. Say hello!
-                </p>
-              )}
+            <div style={{
+              flex: 1,
+              padding: '20px',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px',
+            }}>
               {messages.map((msg, i) => (
                 <div
                   key={i}
                   style={{
-                    maxWidth: '70%',
-                    marginBottom: '15px',
-                    padding: '12px 18px',
-                    borderRadius: '15px',
-                    backgroundColor: msg.isUser ? '#1976d2' : '#bbdefb',
-                    color: msg.isUser ? 'white' : '#0d47a1',
-                    alignSelf: msg.isUser ? 'flex-end' : 'flex-start',
-                    boxShadow: msg.isUser
-                      ? '0 4px 12px rgba(25, 118, 210, 0.5)'
-                      : '0 4px 8px rgba(187, 222, 251, 0.5)',
-                    whiteSpace: 'pre-wrap',
+                    display: 'flex',
+                    justifyContent: msg.isUser ? 'flex-end' : 'flex-start',
                   }}
                 >
-                  {msg.messageContent}
-                  <div style={{ fontSize: '10px', opacity: 0.6, marginTop: '6px', textAlign: 'right' }}>
-                    {msg.timestamp}
+                  <div style={{
+                    maxWidth: '70%',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    backgroundColor: msg.isUser ? '#0b93f6' : '#e5e5ea',
+                    color: msg.isUser ? 'white' : '#000',
+                    fontSize: '15px',
+                    lineHeight: '1.4',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                    whiteSpace: 'pre-wrap',
+                  }}>
+                    {msg.messageContent}
+                    <div style={{
+                      fontSize: '11px',
+                      opacity: 0.5,
+                      marginTop: '4px',
+                      textAlign: 'right',
+                    }}>
+                      {msg.timestamp}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: '10px' }}>
+
+            {/* Input */}
+            <div style={{
+              display: 'flex',
+              padding: '12px 20px',
+              borderTop: '1px solid #ddd',
+              backgroundColor: '#f7f7f8',
+            }}>
               <input
-                type="text"
-                placeholder="Type your message..."
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                style={{
-                  flex: 1,
-                  padding: '14px 20px',
-                  borderRadius: '30px',
-                  border: '2px solid #1976d2',
-                  fontSize: '16px',
-                  color: '#f0f0f0ff',
-                  outline: 'none',
-                  boxShadow: '0 0 8px rgba(25, 118, 210, 0.3)',
-                  transition: 'border-color 0.3s ease',
-                }}
-                onFocus={(e) => e.currentTarget.style.borderColor = '#0d47a1'}
-                onBlur={(e) => e.currentTarget.style.borderColor = '#1976d2'}
-              />
+  type="text"
+  value={input}
+  onChange={(e) => setInput(e.target.value)}
+  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+  placeholder="Type your message..."
+  style={{
+    flex: 1,
+    padding: '12px 16px',
+    borderRadius: '25px',
+    border: '1px solid #ccc',
+    outline: 'none',
+    fontSize: '15px',
+    marginRight: '10px',
+    backgroundColor: 'white',
+    color: '#000', // ensures black text while typing
+  }}
+/>
+
               <button
                 onClick={handleSend}
                 style={{
-                  backgroundColor: '#1976d2',
+                  padding: '12px 20px',
+                  backgroundColor: '#0b93f6',
                   color: 'white',
                   border: 'none',
-                  borderRadius: '50%',
-                  width: '50px',
-                  height: '50px',
-                  fontSize: '22px',
+                  borderRadius: '25px',
+                  fontWeight: 'bold',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 10px rgba(25, 118, 210, 0.6)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  transition: 'background-color 0.3s ease',
                 }}
-                onMouseEnter={e => e.currentTarget.style.backgroundColor = '#0d47a1'}
-                onMouseLeave={e => e.currentTarget.style.backgroundColor = '#1976d2'}
-                title="Send message"
               >
-                ➤
+                Send
               </button>
             </div>
           </div>
