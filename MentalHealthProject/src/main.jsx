@@ -10,7 +10,7 @@ import Signup from './pages/Signup.jsx';
 import './index.css'
 import Login from './pages/Login.jsx'
 import Settings from './pages/Settings.jsx'
-
+import Maps from './pages/Maps.jsx' // Import the Maps component
 const root = document.getElementById('root');
 createRoot(root).render(
   <StrictMode>
@@ -22,7 +22,9 @@ createRoot(root).render(
         <Route path="healthtest" element={<HealthTest />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
-         <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<Settings />} />
+        <Route path="maps" element={<Maps />} /> {/* Add the Maps component route */}
+        {/* Add the Maps component route */}
 
       </Routes>
     </BrowserRouter>
