@@ -24,8 +24,6 @@ createRoot(root).render(
         <Route path="login" element={<Login />} />
         <Route path="settings" element={<Settings />} />
         <Route path="maps" element={<Maps />} /> {/* Add the Maps component route */}
-        {/* Add the Maps component route */}
-
       </Routes>
     </BrowserRouter>
   </StrictMode>
