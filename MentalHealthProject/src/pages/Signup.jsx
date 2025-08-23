@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../context/AuthContext'; // Adjust path as needed
 import NavBar from '../components/NavBar';
 
 export default function Signup() {
@@ -7,30 +8,66 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const { signUp, loading } = useAuth();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg('');
+    setSuccessMsg('');
 
+    // Client-side validation
     if (password !== confirmPassword) {
       setErrorMsg("Passwords don't match.");
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-
-    if (users.find(u => u.email === email)) {
-      setErrorMsg('An account with this email already exists.');
+    if (password.length < 6) {
+      setErrorMsg("Password must be at least 6 characters long.");
       return;
     }
 
-    const newUser = { fullName, email, password };
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-    localStorage.setItem('username', fullName);
+    try {
+      const result = await signUp(email, password, {
+        userData: {
+          full_name: fullName,
+          name: fullName
+        }
+      });
 
-    setErrorMsg('');
-    alert('Account created successfully! You can now log in.');
-    window.location.href = '/login';
+      if (result.success) {
+        setSuccessMsg('Account created successfully! Please check your email for verification.');
+        
+        // Clear form
+        setFullName('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+
+        // If email verification is required, show message
+        if (result.needsVerification) {
+          setSuccessMsg('Account created! Please check your email and click the verification link before signing in.');
+        } else {
+          // If no verification needed, redirect to dashboard or login
+          setTimeout(() => {
+            window.location.href = '/dashboard'; // or wherever you want to redirect
+          }, 2000);
+        }
+      } else {
+        // Handle specific error cases
+        if (result.error.includes('already registered')) {
+          setErrorMsg('An account with this email already exists. Try signing in instead.');
+        } else if (result.error.includes('Password')) {
+          setErrorMsg('Password must be at least 6 characters long.');
+        } else {
+          setErrorMsg(result.error);
+        }
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      setErrorMsg('An unexpected error occurred. Please try again.');
+    }
   };
 
   return (
@@ -40,7 +77,7 @@ export default function Signup() {
       <div style={mainContainer}>
         {/* Left Welcome Section */}
         <div style={welcomeSection}>
-          <h2 style={welcomeTitle}>We’re excited for you to create an account!</h2>
+          <h2 style={welcomeTitle}>We're excited for you to create an account!</h2>
           <p style={welcomeText}>
             Join our community and gain access to exclusive features, personalized
             content, and much more. Your journey to better mental wellness starts here.
@@ -86,6 +123,7 @@ export default function Signup() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
+              disabled={loading}
             />
 
             <label style={label}>Email</label>
@@ -96,6 +134,7 @@ export default function Signup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
 
             <label style={label}>Password</label>
@@ -106,6 +145,8 @@ export default function Signup() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
+              minLength="6"
             />
 
             <label style={label}>Confirm Password</label>
@@ -116,13 +157,33 @@ export default function Signup() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              disabled={loading}
+              minLength="6"
             />
 
             {errorMsg && (
-              <p style={{ color: '#ff4d6d', marginBottom: '1rem' }}>{errorMsg}</p>
+              <p style={{ color: '#ff4d6d', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                {errorMsg}
+              </p>
             )}
 
-            <button type="submit" style={button}>Sign Up</button>
+            {successMsg && (
+              <p style={{ color: '#4CAF50', marginBottom: '1rem', fontSize: '0.9rem' }}>
+                {successMsg}
+              </p>
+            )}
+
+            <button 
+              type="submit" 
+              style={{
+                ...button,
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'not-allowed' : 'pointer'
+              }}
+              disabled={loading}
+            >
+              {loading ? 'Creating Account...' : 'Sign Up'}
+            </button>
           </form>
 
           <p style={footerText}>

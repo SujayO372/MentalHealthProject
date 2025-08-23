@@ -15,6 +15,7 @@ const root = document.getElementById('root');
 createRoot(root).render(
   <StrictMode>
     <BrowserRouter>
+      <AuthContext.Provider>
       <Routes>
         <Route index element={<Home />} />
         <Route path="chatbot" element={<Chatbot />} />
@@ -23,8 +24,9 @@ createRoot(root).render(
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
         <Route path="settings" element={<Settings />} />
-        <Route path="maps" element={<Maps />} /> {/* Add the Maps component route */}
+        <Route path="maps" element={<Maps />} /> 
       </Routes>
+      </AuthContext.Provider>
     </BrowserRouter>
   </StrictMode>
 )

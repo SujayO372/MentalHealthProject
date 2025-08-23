@@ -33,7 +33,6 @@ export default function Login() {
             We're glad to see you again. Log in to continue your journey with us and
             explore all the features waiting for you.
           </p>
-
           <div style={iconContainer}>
             {/* Brain Icon */}
             <svg
