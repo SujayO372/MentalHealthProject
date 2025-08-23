@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from 'react';
+import { useState, useEffect, useRef } from "react";
 import NavBar from "../components/NavBar"; // <- your already-imported NavBar
 
 export default function Maps() {

@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext'; // Adjust path as needed
 import NavBar from '../components/NavBar';

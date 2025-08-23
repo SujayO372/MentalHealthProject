@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import NavBar from '../components/NavBar';
 
 function Settings() {
