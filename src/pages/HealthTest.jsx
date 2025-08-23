@@ -1,48 +1,9 @@
-import React from 'react';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import NavBar from "../components/NavBar"; // <- imported your real NavBar
 
-// Simple NavBar component since the original was imported
-const NavBar = () => (
-  <nav style={{
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 1000,
-    background: 'rgba(10, 10, 10, 0.95)',
-    backdropFilter: 'blur(20px)',
-    borderBottom: '1px solid rgba(0, 255, 255, 0.3)',
-    padding: '15px 30px',
-    boxShadow: '0 0 20px rgba(0, 255, 255, 0.2)',
-  }}>
-    <div style={{
-      maxWidth: '1200px',
-      margin: '0 auto',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-    }}>
-      <div style={{
-        fontSize: '1.5rem',
-        fontWeight: '800',
-        background: 'linear-gradient(45deg, #ff0080, #00ffff)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
-      }}>
-        NEURAL WELLNESS
-      </div>
-      <div style={{
-        display: 'flex',
-        gap: '20px',
-        alignItems: 'center',
-      }}>
-        <span style={{ color: '#00ffff', fontSize: '0.9rem' }}>Mental Health Assessment</span>
-      </div>
-    </div>
-  </nav>
-);
-
+// ----------------------------
+// Questions & Choices
+// ----------------------------
 const AllQuestions = [
   { id: 0, question: "Over the past two weeks, how often have you felt down, depressed, or hopeless?" },
   { id: 1, question: "How often have you felt nervous, anxious, or on edge?" },
@@ -98,6 +59,9 @@ const AllQuestions = [
 
 const Choices = ["Never", "Rarely", "Occasionally", "Often", "Always"];
 
+// ----------------------------
+// HealthTest Component
+// ----------------------------
 export default function HealthTest() {
   const [questionsToAsk, setQuestionsToAsk] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -121,7 +85,6 @@ export default function HealthTest() {
     }
     setLoading(true);
     try {
-      // Simulated API call - replace with actual endpoint
       await new Promise(resolve => setTimeout(resolve, 2000));
       const mockRecommendations = [
         {
@@ -154,6 +117,9 @@ export default function HealthTest() {
 
   const allAnswered = questionsToAsk.every(q => answers[q.id]);
 
+  // ----------------------------
+  // Styles
+  // ----------------------------
   const styles = {
     container: {
       minHeight: '100vh',
@@ -162,7 +128,7 @@ export default function HealthTest() {
       color: '#ffffff',
       overflow: 'hidden',
       position: 'relative',
-      paddingTop: '80px', // Add padding for fixed navbar
+      paddingTop: '80px', // padding for fixed navbar
     },
     neonOverlay: {
       position: 'fixed',
@@ -251,13 +217,6 @@ export default function HealthTest() {
       boxShadow: '0 0 20px rgba(0, 255, 255, 0.6), 0 0 40px rgba(255, 0, 128, 0.4)',
       transform: 'scale(1.05)',
     },
-    navigationContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      gap: '20px',
-      marginTop: '40px',
-    },
     submitButton: {
       padding: '18px 40px',
       borderRadius: '35px',
@@ -274,33 +233,6 @@ export default function HealthTest() {
       margin: '40px auto',
       display: 'block',
     },
-    resultsContainer: {
-      textAlign: 'center',
-      maxWidth: '800px',
-      margin: '0 auto',
-    },
-    resultsTitle: {
-      fontSize: '2.5rem',
-      fontWeight: '800',
-      marginBottom: '20px',
-      color: '#00ffff',
-      textShadow: '0 0 20px rgba(0, 255, 255, 0.5)',
-    },
-    recommendationCard: {
-      background: 'rgba(20, 20, 40, 0.9)',
-      border: '1px solid rgba(255, 0, 128, 0.4)',
-      borderRadius: '15px',
-      padding: '25px',
-      margin: '20px 0',
-      textAlign: 'left',
-      backdropFilter: 'blur(15px)',
-      boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 0, 128, 0.2)',
-    },
-    pageIndicator: {
-      color: '#b0b0ff',
-      fontSize: '1rem',
-      textShadow: '0 0 10px rgba(176, 176, 255, 0.5)',
-    },
     navButton: {
       marginTop: '20px',
       padding: '12px 22px',
@@ -311,6 +243,25 @@ export default function HealthTest() {
       fontWeight: '700',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
+    },
+    // --------------- Floating submit button ---------------
+    floatingSubmit: {
+      position: 'fixed',
+      right: '22px',
+      bottom: '22px',
+      zIndex: 1200,
+      borderRadius: '999px',
+      padding: '16px 22px',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
+      boxShadow: '0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.15)',
+      transition: 'transform 0.12s ease, opacity 0.12s ease',
+    },
+    floatingSubmitDisabled: {
+      opacity: 0.6,
+      cursor: 'not-allowed',
+      transform: 'scale(0.98)',
     }
   };
 
@@ -331,11 +282,6 @@ export default function HealthTest() {
               filter: brightness(1.2) saturate(1.3);
             }
           }
-          
-          @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-          }
         `}
       </style>
 
@@ -349,14 +295,11 @@ export default function HealthTest() {
 
             <div style={styles.questionsGrid}>
               {questionsToAsk.map(({ id, question }) => (
-                <div
-                  key={id}
-                  style={{
-                    ...styles.questionCard,
-                    transform: answers[id] ? 'scale(1.02)' : 'scale(1)',
-                    borderColor: answers[id] ? 'rgba(0, 255, 255, 0.6)' : 'rgba(0, 255, 255, 0.3)',
-                  }}
-                >
+                <div key={id} style={{
+                  ...styles.questionCard,
+                  transform: answers[id] ? 'scale(1.02)' : 'scale(1)',
+                  borderColor: answers[id] ? 'rgba(0, 255, 255, 0.6)' : 'rgba(0, 255, 255, 0.3)',
+                }}>
                   <p style={styles.questionText}>{question}</p>
                   <div style={styles.choicesContainer}>
                     {Choices.map((choice) => {
@@ -369,18 +312,6 @@ export default function HealthTest() {
                             { ...styles.choiceButton, ...styles.choiceButtonSelected } : 
                             styles.choiceButton
                           }
-                          onMouseEnter={(e) => {
-                            if (!selected) {
-                              e.target.style.background = 'rgba(0, 255, 255, 0.2)';
-                              e.target.style.border = '2px solid rgba(0, 255, 255, 0.5)';
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!selected) {
-                              e.target.style.background = 'rgba(255, 255, 255, 0.1)';
-                              e.target.style.border = '2px solid transparent';
-                            }
-                          }}
                         >
                           {choice}
                         </button>
@@ -391,6 +322,7 @@ export default function HealthTest() {
               ))}
             </div>
 
+            {/* Original in-flow submit button (kept as-is) */}
             <button
               onClick={handleSubmit}
               disabled={loading || !allAnswered}
@@ -399,104 +331,56 @@ export default function HealthTest() {
                 opacity: (loading || !allAnswered) ? 0.6 : 1,
                 cursor: (loading || !allAnswered) ? 'not-allowed' : 'pointer',
               }}
-              onMouseEnter={(e) => {
-                if (!loading && allAnswered) {
-                  e.target.style.transform = 'scale(1.05)';
-                  e.target.style.boxShadow = '0 0 40px rgba(0, 255, 255, 0.8)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!loading && allAnswered) {
-                  e.target.style.transform = 'scale(1)';
-                  e.target.style.boxShadow = '0 0 30px rgba(0, 255, 255, 0.6)';
-                }
-              }}
             >
               {loading ? "ANALYZING..." : "SUBMIT ASSESSMENT"}
+            </button>
+
+            {/* Floating submit button for quicker access (mirrors the same behavior) */}
+            <button
+              type="button"
+              aria-label="Submit assessment"
+              onClick={handleSubmit}
+              disabled={loading || !allAnswered}
+              style={{
+                ...styles.floatingSubmit,
+                ...(loading || !allAnswered ? styles.floatingSubmitDisabled : {}),
+                background: 'linear-gradient(45deg, #ff0080, #00ffff)',
+                color: '#ffffff',
+                border: 'none',
+                fontWeight: 800,
+                fontSize: '1rem',
+              }}
+            >
+              {loading ? 'ANALYZING...' : 'SUBMIT'}
             </button>
           </>
         ) : (
           <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-            <h2 style={{
-              fontSize: '2.5rem',
-              fontWeight: '800',
-              marginBottom: '20px',
-              color: '#00ffff',
-              textShadow: '0 0 20px rgba(0, 255, 255, 0.5)',
-            }}>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '20px', color: '#00ffff' }}>
               ✨ ASSESSMENT COMPLETE ✨
             </h2>
-            <p style={{
-              fontSize: '1.2rem',
-              color: '#b0b0ff',
-              marginBottom: '40px',
-              lineHeight: '1.6',
-              textShadow: '0 0 10px rgba(176, 176, 255, 0.5)'
-            }}>
+            <p style={{ fontSize: '1.2rem', color: '#b0b0ff', marginBottom: '40px', lineHeight: '1.6' }}>
               Your neural patterns have been analyzed. Here are personalized recommendations to enhance your mental wellness journey.
             </p>
 
-            {recommendations.length > 0 && (
-              <div style={{ margin: '40px 0' }}>
-                <h3 style={{
-                  fontSize: '1.8rem',
-                  color: '#ff0080',
-                  marginBottom: '30px',
-                  textShadow: '0 0 15px rgba(255, 0, 128, 0.5)'
-                }}>
-                  🧠 AI-Curated Resources
-                </h3>
-                {recommendations.map((rec, i) => (
-                  <div key={i} style={styles.recommendationCard}>
-                    <h4 style={{
-                      color: '#00ffff',
-                      fontSize: '1.3rem',
-                      marginBottom: '15px',
-                      textShadow: '0 0 10px rgba(0, 255, 255, 0.5)'
-                    }}>
-                      {rec.title}
-                    </h4>
-                    <p style={{
-                      color: '#ffffff',
-                      lineHeight: '1.6',
-                      marginBottom: '15px'
-                    }}>
-                      {rec.summary}
-                    </p>
-                    {rec.link && (
-                      <a
-                        href={rec.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          color: '#ff0080',
-                          textDecoration: 'none',
-                          fontWeight: '600',
-                          textShadow: '0 0 10px rgba(255, 0, 128, 0.5)'
-                        }}
-                      >
-                        Explore Resource →
-                      </a>
-                    )}
-                  </div>
-                ))}
+            {recommendations.map((rec, i) => (
+              <div key={i} style={{
+                background: 'rgba(20, 20, 40, 0.9)',
+                border: '1px solid rgba(255, 0, 128, 0.4)',
+                borderRadius: '15px',
+                padding: '25px',
+                margin: '20px 0',
+                textAlign: 'left',
+                backdropFilter: 'blur(15px)',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 0, 128, 0.2)',
+              }}>
+                <h4 style={{ color: '#00ffff', fontSize: '1.3rem', marginBottom: '15px' }}>{rec.title}</h4>
+                <p style={{ color: '#ffffff', lineHeight: '1.6', marginBottom: '15px' }}>{rec.summary}</p>
+                {rec.link && <a href={rec.link} target="_blank" rel="noopener noreferrer" style={{ color: '#ff0080', fontWeight: '600' }}>Explore Resource →</a>}
               </div>
-            )}
+            ))}
 
-            <button
-              onClick={reset}
-              style={styles.navButton}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(0, 255, 255, 0.3)';
-                e.target.style.boxShadow = '0 0 25px rgba(0, 255, 255, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(0, 255, 255, 0.1)';
-                e.target.style.boxShadow = 'none';
-              }}
-            >
-              🔄 RETAKE ASSESSMENT
-            </button>
+            <button onClick={reset} style={styles.navButton}>🔄 RETAKE ASSESSMENT</button>
           </div>
         )}
       </div>
