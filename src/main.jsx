@@ -11,11 +11,12 @@ import './index.css'
 import Login from './pages/Login.jsx'
 import Settings from './pages/Settings.jsx'
 import Maps from './pages/Maps.jsx' // Import the Maps component
+import { AuthProvider } from './context/AuthContext.jsx'
 const root = document.getElementById('root');
 createRoot(root).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthContext.Provider>
+      <AuthProvider>
       <Routes>
         <Route index element={<Home />} />
         <Route path="chatbot" element={<Chatbot />} />
@@ -26,7 +27,7 @@ createRoot(root).render(
         <Route path="settings" element={<Settings />} />
         <Route path="maps" element={<Maps />} /> 
       </Routes>
-      </AuthContext.Provider>
+      </AuthProvider>
     </BrowserRouter>
   </StrictMode>
 )
