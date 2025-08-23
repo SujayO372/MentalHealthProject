@@ -12,11 +12,11 @@ import {
 } from 'recharts';
 
 const moods = [
-  { label: '🤩 Ecstatic', value: 5, color: '#4a567d' },  // muted blue-purple
-  { label: '😊 Happy', value: 4, color: '#67789a' },
-  { label: '😐 Neutral', value: 3, color: '#8a99b5' },
-  { label: '😔 Sad', value: 2, color: '#a199b9' },
-  { label: '😞 Depressed', value: 1, color: '#8677a6' },
+  { label: '🤩 Ecstatic', value: 5, color: '#ff8bd6' },
+  { label: '😊 Happy', value: 4, color: '#6fffe9' },
+  { label: '😐 Neutral', value: 3, color: '#9ad1ff' },
+  { label: '😔 Sad', value: 2, color: '#b48bff' },
+  { label: '😞 Depressed', value: 1, color: '#ff7fa2' },
 ];
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
@@ -34,125 +34,201 @@ export default function Checkin() {
     if (todayMood) {
       setSelectedMood(todayMood.value);
     }
-  }, []);
+  }, [today]);
 
   const handleSelectMood = (mood) => {
     if (selectedMood) return;
 
     const newEntry = { date: today, value: mood.value };
-    const updated = [...moodHistory, newEntry];
+    // if already have entry for date, replace it (defensive)
+    const filtered = moodHistory.filter((e) => e.date !== today);
+    const updated = [...filtered, newEntry].sort((a, b) => a.date.localeCompare(b.date));
 
     localStorage.setItem('moodHistory', JSON.stringify(updated));
     setMoodHistory(updated);
     setSelectedMood(mood.value);
   };
 
-  const chartData = moodHistory.map((entry) => ({
-    date: new Date(entry.date).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    }),
-    moodValue: entry.value,
-  }));
+  const chartData = moodHistory
+    .slice() // clone
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((entry) => ({
+      date: new Date(entry.date).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+      }),
+      moodValue: entry.value,
+    }));
+
+  // neon theme colors
+  const neonPink = '#ff0080';
+  const neonCyan = '#00ffff';
+  const darkBg = '#070014';
 
   return (
     <>
       <NavBar />
       <div
         style={{
-          overflowX: 'auto',
-          backgroundColor: '#f5f7fa',
+          paddingTop: '90px', // space for NavBar
           minHeight: '100vh',
-          padding: '40px',
-          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-          color: '#2e3a59',
+          background: `radial-gradient(circle at 10% 20%, rgba(255,0,128,0.06), transparent 12%), radial-gradient(circle at 90% 85%, rgba(0,255,255,0.04), transparent 14%), linear-gradient(180deg, ${darkBg} 0%, #02021a 100%)`,
+          color: '#e6f7ff',
+          fontFamily: "'Inter', 'Segoe UI', sans-serif",
+          overflowX: 'hidden',
         }}
       >
+        {/* soft neon glows */}
         <div
           style={{
-            display: 'flex',
-            gap: '30px',
+            position: 'fixed',
+            top: 90,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            pointerEvents: 'none',
+            zIndex: 0,
+            background:
+              'radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06) 0%, transparent 20%), radial-gradient(circle at 85% 90%, rgba(0,255,255,0.05) 0%, transparent 20%)',
+            mixBlendMode: 'screen',
+          }}
+        />
+
+        <div
+          style={{
             maxWidth: '1200px',
             margin: '0 auto',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
+            padding: '40px 20px',
+            display: 'flex',
+            gap: '30px',
+            alignItems: 'flex-start',
+            zIndex: 2,
+            position: 'relative',
           }}
         >
           {/* Mood Selector Panel */}
           <div
             style={{
-              flex: '0 1 500px',
-              padding: '40px',
-              backgroundColor: '#e3e8f0',
-              color: '#2e3a59',
-              borderRadius: '12px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              minWidth: '320px',
+              flex: '0 1 480px',
+              padding: '30px',
+              borderRadius: '14px',
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
+              border: `1px solid rgba(0,255,255,0.06)`,
+              boxShadow:
+                '0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,128,0.02)',
+              backdropFilter: 'blur(6px)',
+              color: '#e6f7ff',
+              minWidth: '300px',
             }}
           >
             <h2
               style={{
-                marginBottom: '20px',
-                color: '#3f4a6b',
-                padding: '10px 15px',
-                borderRadius: '6px',
                 textAlign: 'center',
-                fontWeight: '700',
-                backgroundColor: '#d1d9e6',
+                fontSize: '1.6rem',
+                marginBottom: '18px',
+                fontWeight: 900,
+                letterSpacing: '0.5px',
+                background: `linear-gradient(90deg, ${neonPink}, ${neonCyan})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 0 16px rgba(0,255,255,0.06), 0 0 24px rgba(255,0,128,0.06)',
                 userSelect: 'none',
               }}
             >
               How are you feeling today?
             </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-              {moods.map((mood) => (
-                <button
-                  key={mood.value}
-                  style={{
-                    padding: '14px 22px',
-                    fontSize: '1.1rem',
-                    border:
-                      selectedMood === mood.value
-                        ? '2.5px solid #67789a'
-                        : '1.5px solid #4a567d',
-                    borderRadius: '10px',
-                    backgroundColor: mood.color,
-                    cursor: selectedMood ? 'default' : 'pointer',
-                    opacity: selectedMood && selectedMood !== mood.value ? 0.65 : 1,
-                    textAlign: 'left',
-                    color: '#f9fafb',
-                    fontWeight: '600',
-                    boxShadow: selectedMood === mood.value ? '0 0 8px rgba(103, 120, 154, 0.5)' : 'none',
-                    transition: 'all 0.3s ease',
-                    userSelect: 'none',
-                  }}
-                  onClick={() => handleSelectMood(mood)}
-                  disabled={!!selectedMood}
-                  onMouseEnter={(e) => {
-                    if (!selectedMood) e.currentTarget.style.filter = 'brightness(0.9)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!selectedMood) e.currentTarget.style.filter = 'brightness(1)';
-                  }}
-                >
-                  {mood.label}
-                </button>
-              ))}
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {moods.map((mood) => {
+                const isSelected = selectedMood === mood.value;
+                return (
+                  <button
+                    key={mood.value}
+                    onClick={() => handleSelectMood(mood)}
+                    disabled={!!selectedMood}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      justifyContent: 'space-between',
+                      padding: '14px 18px',
+                      borderRadius: '12px',
+                      border: isSelected
+                        ? `2px solid ${neonCyan}`
+                        : `1px solid rgba(255,255,255,0.06)`,
+                      background: isSelected
+                        ? `linear-gradient(90deg, rgba(0,255,255,0.12), rgba(255,0,128,0.08))`
+                        : `linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))`,
+                      color: isSelected ? '#00121a' : '#e6f7ff',
+                      cursor: selectedMood ? 'default' : 'pointer',
+                      boxShadow: isSelected
+                        ? `0 10px 40px rgba(0,255,255,0.08), 0 0 40px rgba(255,0,128,0.06)`
+                        : '0 6px 20px rgba(0,0,0,0.4)',
+                      fontWeight: 700,
+                      fontSize: '1.05rem',
+                      transition: 'all 0.18s ease',
+                      userSelect: 'none',
+                      outline: 'none',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!selectedMood) e.currentTarget.style.boxShadow = '0 10px 40px rgba(0,255,255,0.06)';
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!selectedMood && !isSelected)
+                        e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div
+                        style={{
+                          width: 42,
+                          height: 42,
+                          borderRadius: 10,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontSize: '1.15rem',
+                          background: `linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))`,
+                          border: `1px solid rgba(255,255,255,0.04)`,
+                          boxShadow: '0 6px 18px rgba(0,0,0,0.3)',
+                        }}
+                      >
+                        <span style={{ filter: isSelected ? 'drop-shadow(0 0 6px rgba(0,255,255,0.6))' : 'none' }}>{mood.label.split(' ')[0]}</span>
+                      </div>
+                      <div style={{ minWidth: 120, textAlign: 'left' }}>{mood.label}</div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div
+                        style={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          background: isSelected ? neonCyan : mood.color,
+                          boxShadow: isSelected ? `0 0 10px ${neonCyan}` : `0 0 6px ${mood.color}`,
+                        }}
+                      />
+                      <div style={{ opacity: 0.9, fontWeight: 800, color: isSelected ? '#00121a' : '#cfefff' }}>
+                        {isSelected ? 'Selected' : ''}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+
               {selectedMood && (
                 <p
                   style={{
-                    marginTop: '20px',
-                    fontSize: '1rem',
-                    color: '#576475',
+                    marginTop: '10px',
                     textAlign: 'center',
-                    fontWeight: '600',
+                    color: '#aaddff',
+                    fontWeight: 700,
                     userSelect: 'none',
+                    textShadow: '0 0 8px rgba(0,255,255,0.04)',
                   }}
                 >
-                  You have already checked in today.
+                  You checked in for {new Date().toLocaleDateString()} — thank you ✨
                 </p>
               )}
             </div>
@@ -162,91 +238,128 @@ export default function Checkin() {
           <div
             style={{
               flex: '1 1 600px',
-              backgroundColor: '#e3e8f0',
-              color: '#2e3a59',
-              borderRadius: '12px',
-              padding: '40px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+              minWidth: '320px',
+              borderRadius: '14px',
+              padding: '26px',
+              background:
+                'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
+              border: `1px solid rgba(0,255,255,0.06)`,
+              boxShadow:
+                '0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,128,0.02)',
+              color: '#e6f7ff',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
-              minWidth: '320px',
-              maxWidth: '700px',
+              alignItems: 'stretch',
             }}
           >
             <h2
               style={{
-                color: '#3f4a6b',
-                padding: '10px 15px',
-                borderRadius: '6px',
-                width: '100%',
                 textAlign: 'center',
-                marginBottom: '20px',
-                fontWeight: '700',
+                fontSize: '1.5rem',
+                marginBottom: '14px',
+                fontWeight: 900,
+                background: `linear-gradient(90deg, ${neonCyan}, ${neonPink})`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
                 userSelect: 'none',
-                backgroundColor: '#d1d9e6',
               }}
             >
               Your Mood Progression
             </h2>
+
             <div
               style={{
-                width: '100%',
-                height: '300px',
-                backgroundColor: '#f7f9fc',
-                borderRadius: '8px',
-                border: '1px solid #67789a',
-                padding: '20px',
-                color: '#2e3a59',
+                height: 320,
+                borderRadius: 10,
+                padding: 12,
+                background:
+                  'linear-gradient(180deg, rgba(0,0,0,0.12), rgba(255,255,255,0.01))',
+                border: '1px solid rgba(103,120,154,0.08)',
               }}
             >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#c1c8dd" />
-                  <XAxis dataKey="date" stroke="#67789a" />
+                  {/* gradient defs for line stroke */}
+                  <defs>
+                    <linearGradient id="lineGrad" x1="0" x2="1" y1="0" y2="0">
+                      <stop offset="0%" stopColor={neonCyan} stopOpacity={1} />
+                      <stop offset="100%" stopColor={neonPink} stopOpacity={1} />
+                    </linearGradient>
+                    <filter id="glow" height="200%" width="200%" x="-50%" y="-50%">
+                      <feGaussianBlur stdDeviation="6" result="coloredBlur" />
+                      <feMerge>
+                        <feMergeNode in="coloredBlur" />
+                        <feMergeNode in="SourceGraphic" />
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.03)" />
+                  <XAxis dataKey="date" stroke="rgba(255,255,255,0.3)" tick={{ fill: '#cfefff' }} />
                   <YAxis
                     domain={[1, 5]}
                     ticks={[1, 2, 3, 4, 5]}
-                    stroke="#67789a"
+                    stroke="rgba(255,255,255,0.3)"
+                    tick={{ fill: '#cfefff' }}
                     tickFormatter={(value) =>
                       moods.find((m) => m.value === value)?.label.split(' ')[1]
                     }
                   />
                   <Tooltip
                     formatter={(value) => moods.find((m) => m.value === value)?.label}
-                    contentStyle={{ color: '#2e3a59', backgroundColor: '#f0f3fa', borderRadius: '8px', border: '1px solid #c1c8dd' }}
-                    labelStyle={{ fontWeight: '600' }}
+                    contentStyle={{
+                      color: '#00121a',
+                      backgroundColor: '#e9ffff',
+                      borderRadius: '8px',
+                      border: '1px solid rgba(0,0,0,0.06)',
+                    }}
+                    labelStyle={{ fontWeight: '700' }}
                   />
                   <Line
                     type="monotone"
                     dataKey="moodValue"
-                    stroke="#67789a"
-                    strokeWidth={3}
-                    dot={{ r: 5, stroke: '#4a567d', strokeWidth: 2 }}
+                    stroke="url(#lineGrad)"
+                    strokeWidth={3.5}
+                    dot={{ r: 6, stroke: '#070014', strokeWidth: 3 }}
+                    activeDot={{ r: 8 }}
+                    filter="url(#glow)"
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
-            {/* New section below the graph */}
             <div
               style={{
-                marginTop: '40px',
-                backgroundColor: '#d1d9e6',
-                borderRadius: '10px',
-                padding: '20px',
-                width: '100%',
-                color: '#67789a',
-                fontWeight: '600',
+                marginTop: '20px',
+                padding: '16px',
+                borderRadius: 10,
+                background: `linear-gradient(90deg, rgba(0,255,255,0.03), rgba(255,0,128,0.02))`,
+                border: '1px solid rgba(0,255,255,0.04)',
                 textAlign: 'center',
+                fontWeight: 700,
+                color: '#cfefff',
                 userSelect: 'none',
-                boxShadow: '0 0 8px rgba(103, 120, 154, 0.15)',
+                boxShadow: '0 8px 30px rgba(0,255,255,0.03)',
               }}
             >
-              Keep tracking your mood daily for better self-awareness and well-being.
+              Keep checking in daily — trends reveal what's really changing over time.
             </div>
           </div>
         </div>
+
+        {/* subtle animated neon underline */}
+        <style>{`
+          @keyframes neonPulse {
+            0% { filter: drop-shadow(0 0 6px rgba(0,255,255,0.06)); transform: translateY(0); }
+            50% { filter: drop-shadow(0 0 14px rgba(255,0,128,0.09)); transform: translateY(-2px); }
+            100% { filter: drop-shadow(0 0 6px rgba(0,255,255,0.06)); transform: translateY(0); }
+          }
+
+          /* little breathing effect for selected mood button */
+          button[disabled] {
+            animation: neonPulse 3.2s ease-in-out infinite;
+          }
+        `}</style>
       </div>
     </>
   );
