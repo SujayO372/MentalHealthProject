@@ -79,29 +79,58 @@ export default function HealthTest() {
   };
 
   const handleSubmit = async () => {
+    // ensure all answered
     if (questionsToAsk.some((q) => !answers[q.id])) {
       alert("Please answer all questions before submitting.");
       return;
     }
+
     setLoading(true);
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      const mockRecommendations = [
-        {
-          title: "Mindfulness and Meditation Techniques",
-          summary: "Discover powerful breathing exercises and meditation practices to help manage stress and anxiety.",
-          link: "#"
+      // build payload: answers object (keys will be strings in JSON)
+      const payload = { answers: answers };
+
+      const res = await fetch("http://localhost:5000/health-test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
         },
-        {
-          title: "Building Healthy Sleep Habits",
-          summary: "Learn evidence-based strategies for improving sleep quality and establishing consistent sleep patterns.",
-          link: "#"
-        }
-      ];
-      setRecommendations(mockRecommendations);
+        body: JSON.stringify(payload)
+      });
+
+      // parse JSON
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        // server responded with error status
+        const message = data?.error || data?.response?.result || `Server returned ${res.status}`;
+        alert("Failed to get recommendations: " + message);
+        setLoading(false);
+        return;
+      }
+
+      // Expecting structure: { response: { result: "...", recommendations: [...] } }
+      const recs = data?.response?.recommendations || [];
+
+      if (!Array.isArray(recs) || recs.length === 0) {
+        alert("No recommendations returned. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // Normalize each recommendation so UI doesn't break
+      const normalized = recs.map((r) => ({
+        title: r.title || r.name || "Mental Health Resource",
+        summary: r.summary || r.description || "Summary not available.",
+        link: r.link || r.url || ""
+      }));
+
+      setRecommendations(normalized);
       setSubmitted(true);
-    } catch (error) {
-      console.error("Request failed:", error);
+    } catch (err) {
+      console.error("Request failed:", err);
+      alert("Network error — could not reach the backend. Make sure the backend is running on http://localhost:5000");
     } finally {
       setLoading(false);
     }
