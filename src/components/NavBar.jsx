@@ -3,11 +3,11 @@ import React from 'react';
 export default function NavBar() {
   const navItems = [
     { name: "Home", href: "/" },
-    { name: "Speak with an AI", href: "/chatbot" },
-    { name: "Check In", href: "/checkin" },
-    { name: "Take a Health Test", href: "/healthtest" },
-    { name: "Log in/Sign up", href: "/signup" },
-    { name: "Nearby Help", href: "/maps" },
+    { name: "Serene AI", href: "/chatbot" },
+    { name: "Daily CheckIn", href: "/checkin" },
+    { name: "Assess your Health", href: "/healthtest" },
+    { name: "Hotline Forum", href: "/maps" },
+    { name: "Sign up", href: "/signup" },
     { name: "Settings", href: "/settings" },
   ];
 

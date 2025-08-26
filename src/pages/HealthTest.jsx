@@ -91,7 +91,7 @@ export default function HealthTest() {
       // build payload: answers object (keys will be strings in JSON)
       const payload = { answers: answers };
 
-      const res = await fetch("http://localhost:5000/health-test", {
+      const res = await fetch("http://127.0.0.1:5000/health-test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
