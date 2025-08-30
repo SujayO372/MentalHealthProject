@@ -1,106 +1,279 @@
 import React, { useState } from 'react';
-import NavBar from '../components/NavBar';
+import { useAuth } from '../context/AuthContext.jsx';
+import NavBar from '../components/NavBar.jsx';
+import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+/*
+  Neon-themed UI variants for Signup and Login.
+  - UI only changes (no auth logic altered)
+  - Two named exports: SignupNeon and LoginNeon
+  Copy whichever component you need into your project file.
+*/
+
+const sharedStyles = {
+  page: {
+    paddingTop: '90px',
+    minHeight: '100vh',
+    background: "radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06), transparent 15%), radial-gradient(circle at 90% 90%, rgba(0,255,255,0.06), transparent 15%), linear-gradient(180deg, #020014 0%, #080018 100%)",
+    color: '#e6f7ff',
+    fontFamily: "'Inter', 'Segoe UI', sans-serif",
+  },
+  mainWrap: {
+    maxWidth: '520px',
+    margin: '40px auto',
+    padding: '28px',
+    borderRadius: '16px',
+    background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
+    border: '1px solid rgba(0,255,255,0.04)',
+    boxShadow: '0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,128,0.02)',
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  header: {
+    textAlign: 'center',
+    marginBottom: '18px',
+  },
+  title: {
+    fontSize: '28px',
+    fontWeight: 800,
+    background: 'linear-gradient(90deg, #00ffff, #b58bff)',
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+    color: 'transparent',
+    letterSpacing: '-0.5px',
+  },
+  accentBar: {
+    height: '6px',
+    width: '90px',
+    margin: '12px auto 0',
+    borderRadius: '999px',
+    background: 'linear-gradient(90deg,#00ffff,#ff9ad0)'
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+  },
+  input: {
+    padding: '12px 14px',
+    borderRadius: '12px',
+    border: '1px solid rgba(255,255,255,0.06)',
+    background: 'rgba(255,255,255,0.02)',
+    color: '#e6f7ff',
+    outline: 'none',
+    fontSize: '15px',
+    boxShadow: '0 6px 20px rgba(0,255,255,0.02)',
+    transition: 'box-shadow 0.15s ease, transform 0.12s ease'
+  },
+  inputFocus: {
+    boxShadow: '0 8px 30px rgba(0,255,255,0.06)',
+    transform: 'translateY(-1px)'
+  },
+  error: {
+    color: '#ff6b7a',
+    background: 'linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,0.03))',
+    padding: '8px',
+    borderRadius: '8px',
+  },
+  success: {
+    color: '#6ef2bf',
+    background: 'linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,0.03))',
+    padding: '8px',
+    borderRadius: '8px',
+  },
+  submitBtn: {
+    padding: '12px 16px',
+    borderRadius: '12px',
+    border: 'none',
+    fontWeight: 800,
+    cursor: 'pointer',
+    background: 'linear-gradient(45deg, #ff0080, #00ffff)',
+    color: '#00121a',
+    boxShadow: '0 8px 30px rgba(255,0,128,0.08), 0 8px 30px rgba(0,255,255,0.08)'
+  },
+  footer: {
+    marginTop: '12px',
+    textAlign: 'center',
+    color: '#9fe8ff',
+    fontSize: '14px',
+  },
+  neonOverlay: {
+    position: 'fixed',
+    top: '90px',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    pointerEvents: 'none',
+    zIndex: 0,
+    background: 'radial-gradient(circle at 15% 10%, rgba(255,0,128,0.05) 0%, transparent 20%), radial-gradient(circle at 85% 90%, rgba(0,255,255,0.05) 0%, transparent 20%)',
+    mixBlendMode: 'screen',
+  }
+};
+
+export function SignupNeon() {
+  const { signUp, loading } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMsg(''); setSuccessMsg('');
+    if (password !== confirmPassword) { setErrorMsg("Passwords don't match"); return; }
+    if (password.length < 6) { setErrorMsg("Password must be at least 6 characters"); return; }
+    const result = await signUp(email, password);
+    if (result.success) {
+      setSuccessMsg('Account created! Please check your email if confirmation is enabled.');
+      setEmail(''); setPassword(''); setConfirmPassword('');
+      setTimeout(() => navigate('/login'), 2000);
+    } else setErrorMsg(result.error);
+  };
+
+  const styles = sharedStyles;
+
+  return (
+    <>
+      <NavBar />
+      <div style={styles.page}>
+        <div style={styles.neonOverlay} />
+        <main style={styles.mainWrap}>
+          <div style={{ position: 'absolute', top: -80, left: -80, width: 320, height: 320, borderRadius: '50%', filter: 'blur(60px)', background: 'linear-gradient(135deg, rgba(0,255,255,0.14), rgba(109,0,255,0.12))', opacity: 0.8, transform: 'rotate(20deg)' }} />
+          <div style={{ position: 'absolute', bottom: -60, right: -60, width: 260, height: 260, borderRadius: '50%', filter: 'blur(50px)', background: 'linear-gradient(135deg, rgba(255,0,128,0.12), rgba(255,184,107,0.08))', opacity: 0.75 }} />
+
+          <header style={styles.header}>
+            <h1 style={styles.title}>Create account</h1>
+            <div style={styles.accentBar} />
+          </header>
+
+          <form onSubmit={handleSubmit} style={styles.form}>
+            <input
+              type="email"
+              placeholder="you@domain.com"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              disabled={loading}
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              disabled={loading}
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
+            />
+
+            <input
+              type="password"
+              placeholder="Confirm password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              required
+              disabled={loading}
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
+            />
+
+            {errorMsg && <div style={styles.error}>{errorMsg}</div>}
+            {successMsg && <div style={styles.success}>{successMsg}</div>}
+
+            <button type="submit" disabled={loading} style={styles.submitBtn}>{loading ? 'Signing Up...' : 'Sign up'}</button>
+          </form>
+
+          <div style={styles.footer}>Already have an account? <a href="/login" style={{ color: '#b7faff', textDecoration: 'underline' }}>Log in</a></div>
+
+        </main>
+      </div>
+
+      <style>{`@keyframes neonPulse { 0%,100% { filter: drop-shadow(0 0 6px rgba(0,255,255,0.08)) drop-shadow(0 0 10px rgba(255,0,128,0.04)); } 50% { transform: translateY(-2px); filter: drop-shadow(0 0 12px rgba(0,255,255,0.12)) drop-shadow(0 0 18px rgba(255,0,128,0.08)); } }`}</style>
+    </>
+  );
+}
+
+export function LoginNeon() {
+  const { signIn, loading } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem('users')) || [];
-    const user = users.find(u => u.email === email && u.password === password);
-    if (user) {
-      setErrorMsg('');
-      localStorage.setItem('username', user.fullName || user.email);
-      alert(`Welcome back, ${user.fullName || user.email}!`);
+    setErrorMsg('');
+
+    const result = await signIn(email, password);
+    if (result.success) {
+      navigate('/'); // go to home/dashboard
     } else {
-      setErrorMsg('Invalid email or password.');
+      setErrorMsg(result.error);
     }
   };
 
+  const styles = sharedStyles;
+
   return (
-    <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#fff', fontFamily: "'Inter', sans-serif", paddingTop: '80px', position: 'relative' }}>
+    <>
       <NavBar />
+      <div style={styles.page}>
+        <div style={styles.neonOverlay} />
+        <main style={styles.mainWrap}>
+          <div style={{ position: 'absolute', top: -80, left: -80, width: 320, height: 320, borderRadius: '50%', filter: 'blur(60px)', background: 'linear-gradient(135deg, rgba(0,255,255,0.14), rgba(109,0,255,0.12))', opacity: 0.8, transform: 'rotate(20deg)' }} />
+          <div style={{ position: 'absolute', bottom: -60, right: -60, width: 260, height: 260, borderRadius: '50%', filter: 'blur(50px)', background: 'linear-gradient(135deg, rgba(255,0,128,0.12), rgba(255,184,107,0.08))', opacity: 0.75 }} />
 
-      {/* Neon overlay */}
-      <div style={{
-        position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-        background: 'radial-gradient(circle at 20% 20%, rgba(255,0,150,0.08), transparent 50%), radial-gradient(circle at 80% 80%, rgba(0,255,255,0.08), transparent 50%)',
-        pointerEvents: 'none', zIndex: 0
-      }} />
+          <header style={styles.header}>
+            <h1 style={styles.title}>Welcome back</h1>
+            <div style={styles.accentBar} />
+          </header>
 
-      <div style={{ position: 'relative', zIndex: 2, maxWidth: '1100px', margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '30px', padding: '40px 20px' }}>
-        {/* Left Neon Panel */}
-        <aside style={{
-          flex: 1.3, minWidth: '280px', padding: '32px 24px', borderRadius: '16px',
-          background: 'linear-gradient(135deg, rgba(255,0,128,0.12), rgba(0,255,255,0.05))',
-          border: '1px solid rgba(0,255,255,0.08)', boxShadow: '0 10px 40px rgba(255,0,128,0.06), inset 0 0 24px rgba(0,255,255,0.02)'
-        }}>
-          <h2 style={{
-            fontSize: '2rem', fontWeight: 800,
-            background: 'linear-gradient(90deg, #ff0080, #00ffff)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            textShadow: '0 0 18px rgba(255,0,128,0.08)'
-          }}>Welcome Back!</h2>
-          <p style={{ fontSize: '1rem', marginTop: '8px', color: 'rgba(223,249,255,0.95)' }}>
-            Log in to continue your journey and explore exciting features waiting for you.
-          </p>
-        </aside>
-
-        {/* Right Panel Form */}
-        <main style={{
-          flex: 1, minWidth: '320px', borderRadius: '16px', padding: '32px 24px',
-          background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(0,255,255,0.06)',
-          boxShadow: '0 8px 36px rgba(0,0,0,0.55), 0 0 24px rgba(0,255,255,0.02)'
-        }}>
-          <h3 style={{ fontSize: '1.3rem', fontWeight: 800, marginBottom: '20px', color: '#00ffff' }}>
-            Log In to Your Account
-          </h3>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <label style={{ fontWeight: 700, color: '#b0f0ff' }}>Email</label>
+          <form onSubmit={handleSubmit} style={styles.form}>
             <input
               type="email"
-              placeholder="you@example.com"
+              placeholder="you@domain.com"
               value={email}
               onChange={e => setEmail(e.target.value)}
               required
-              style={{
-                padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(0,255,255,0.1)',
-                background: 'rgba(255,255,255,0.015)', color: '#e6f7ff', outline: 'none',
-                boxShadow: '0 0 8px rgba(0,255,255,0.2)', transition: '0.2s'
-              }}
+              disabled={loading}
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
             />
-            <label style={{ fontWeight: 700, color: '#b0f0ff' }}>Password</label>
+
             <input
               type="password"
-              placeholder="••••••••"
+              placeholder="Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               required
-              style={{
-                padding: '12px 14px', borderRadius: '12px', border: '1px solid rgba(0,255,255,0.1)',
-                background: 'rgba(255,255,255,0.015)', color: '#e6f7ff', outline: 'none',
-                boxShadow: '0 0 8px rgba(0,255,255,0.2)', transition: '0.2s'
-              }}
+              disabled={loading}
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
             />
-            {errorMsg && <div style={{ color: '#ff7f8a', fontWeight: 700 }}>{errorMsg}</div>}
-            <button type="submit" style={{
-              padding: '12px 18px', marginTop: '8px', borderRadius: '14px',
-              fontWeight: 800, background: 'linear-gradient(90deg, #ff0080, #00ffff)',
-              color: '#00121a', border: 'none', cursor: 'pointer',
-              boxShadow: '0 12px 46px rgba(255,0,128,0.08), 0 8px 36px rgba(0,255,255,0.06)',
-              transition: 'transform 0.15s, box-shadow 0.2s'
-            }}
-            onMouseEnter={e => { e.target.style.transform = 'translateY(-3px)'; e.target.style.boxShadow = '0 18px 60px rgba(255,0,128,0.14),0 0 60px rgba(0,255,255,0.1)'; }}
-            onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 12px 46px rgba(255,0,128,0.08),0 8px 36px rgba(0,255,255,0.06)'; }}
-            >Log In</button>
+
+            {errorMsg && <div style={styles.error}>{errorMsg}</div>}
+
+            <button type="submit" disabled={loading} style={styles.submitBtn}>{loading ? 'Logging In...' : 'Log in'}</button>
           </form>
-          <p style={{ marginTop: '14px', fontSize: '0.95rem', color: '#b0f0ff' }}>
-            Don’t have an account? <a href="/signup" style={{ color: '#00ffff', fontWeight: 700 }}>Sign up</a>
-          </p>
+
+          <div style={styles.footer}>Don't have an account? <a href="/signup" style={{ color: '#b7faff', textDecoration: 'underline' }}>Sign up</a></div>
+
         </main>
       </div>
-    </div>
+
+      <style>{`@keyframes neonPulse { 0%,100% { filter: drop-shadow(0 0 6px rgba(0,255,255,0.08)) drop-shadow(0 0 10px rgba(255,0,128,0.04)); } 50% { transform: translateY(-2px); filter: drop-shadow(0 0 12px rgba(0,255,255,0.12)) drop-shadow(0 0 18px rgba(255,0,128,0.08)); } }`}</style>
+    </>
   );
 }
+
+export default LoginNeon;
