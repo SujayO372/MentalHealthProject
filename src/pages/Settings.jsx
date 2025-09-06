@@ -1,22 +1,27 @@
 import React, { useState } from 'react';
 import NavBar from '../components/NavBar';
+import useAuth from '../context/AuthContext'
 
 function Settings() {
-  const [name, setName] = useState(() => localStorage.getItem('userName') || 'John Doe');
-  const [email, setEmail] = useState(localStorage.getItem('userEmail') || 'user@example.com');
+  const { session, user, loading, signOut } = useAuth();
+
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('');
   const [notificationsEnabled, setNotificationsEnabled] = useState(
     JSON.parse(localStorage.getItem('notificationsEnabled')) ?? true
   );
   const [password, setPassword] = useState('');
 
-  const handleSave = () => {
-    localStorage.setItem('userName', name);
-    localStorage.setItem('userEmail', email);
-    localStorage.setItem('notificationsEnabled', JSON.stringify(notificationsEnabled));
-    window.dispatchEvent(new Event('userNameChanged'));
-    if (password.trim()) console.log('Password changed (send to API securely)');
-    alert('Settings saved!');
-    setPassword('');
+  const newUser = {
+    username: name,
+    email: email
+  };
+  const handleSave = async () => {
+      //this specific line, because you don't have a database table for users (we use the authentication
+      //table instead), might be different - but the key idea here is we want to change
+      //the user's username and email by replacing the existing user row in the database
+      //with a new row that has the updated username and email
+      const { data, error } = await supabase.from("users").update(newUser).eq('username', username)
   };
 
   return (
@@ -46,6 +51,8 @@ function Settings() {
             <h3 style={formTitle}>Settings</h3>
             <form style={form}>
               <label style={label}>Name</label>
+              {/*make sure setname and setemail are updating name, email properly 
+              with the hooks, use print statements to debug*/}
               <input style={input} type="text" value={name} onChange={e => setName(e.target.value)} />
 
               <label style={label}>Email Address</label>
@@ -54,10 +61,10 @@ function Settings() {
               <label style={label}>New Password</label>
               <input style={input} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter new password" />
 
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+              {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
                 <input type="checkbox" checked={notificationsEnabled} onChange={e => setNotificationsEnabled(e.target.checked)} style={{ marginRight: '8px' }} />
                 <label style={checkboxLabel}>Enable Email Notifications</label>
-              </div>
+              </div> */}
 
               <button type="button" onClick={handleSave} style={button}>Save Settings</button>
             </form>
