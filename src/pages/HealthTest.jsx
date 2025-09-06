@@ -1,7 +1,9 @@
-import React from 'react';
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import NavBar from "../components/NavBar";
 
+// ----------------------------
+// Questions & Choices
+// ----------------------------
 const AllQuestions = [
   { id: 0, question: "Over the past two weeks, how often have you felt down, depressed, or hopeless?" },
   { id: 1, question: "How often have you felt nervous, anxious, or on edge?" },
@@ -11,7 +13,7 @@ const AllQuestions = [
   { id: 5, question: "How often do you feel overwhelmed by daily tasks?" },
   { id: 6, question: "Have you noticed changes in your appetite or weight?" },
   { id: 7, question: "Do you find it hard to concentrate or focus?" },
-  { id: 8, question: "Do you feel fatigued even after a full night’s sleep?" },
+  { id: 8, question: "Do you feel fatigued even after a full night's sleep?" },
   { id: 9, question: "Have you felt socially withdrawn or isolated?" },
   { id: 10, question: "Do you have frequent headaches or body aches related to stress?" },
   { id: 11, question: "Have you experienced panic attacks recently?" },
@@ -57,6 +59,9 @@ const AllQuestions = [
 
 const Choices = ["Never", "Rarely", "Occasionally", "Often", "Always"];
 
+// ----------------------------
+// HealthTest Component
+// ----------------------------
 export default function HealthTest() {
   const [questionsToAsk, setQuestionsToAsk] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -64,13 +69,30 @@ export default function HealthTest() {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Load persisted state on mount
   useEffect(() => {
-    const shuffled = [...AllQuestions].sort(() => Math.random() - 0.5);
-    setQuestionsToAsk(shuffled.slice(0, 10));
+    const storedSubmitted = localStorage.getItem("healthTestSubmitted");
+    const storedRecs = localStorage.getItem("healthTestRecommendations");
+    const storedQuestions = localStorage.getItem("healthTestQuestions");
+    const storedAnswers = localStorage.getItem("healthTestAnswers");
+
+    if (storedSubmitted === "true" && storedRecs && storedQuestions && storedAnswers) {
+      setSubmitted(true);
+      setRecommendations(JSON.parse(storedRecs));
+      setQuestionsToAsk(JSON.parse(storedQuestions));
+      setAnswers(JSON.parse(storedAnswers));
+    } else {
+      const shuffled = [...AllQuestions].sort(() => Math.random() - 0.5);
+      setQuestionsToAsk(shuffled.slice(0, 6));
+    }
   }, []);
 
   const handleSelect = (id, choice) => {
-    setAnswers((prev) => ({ ...prev, [id]: choice }));
+    setAnswers((prev) => {
+      const updated = { ...prev, [id]: choice };
+      localStorage.setItem("healthTestAnswers", JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const handleSubmit = async () => {
@@ -78,18 +100,50 @@ export default function HealthTest() {
       alert("Please answer all questions before submitting.");
       return;
     }
+
     setLoading(true);
+
     try {
-      const response = await fetch("http://127.0.0.1:5000/health-test", {
+      const payload = { answers: answers };
+      const res = await fetch("http://127.0.0.1:5000/health-test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers }),
+        body: JSON.stringify(payload),
       });
-      const data = await response.json();
-      setRecommendations(data.response?.recommendations || []);
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        const message = data?.error || data?.response?.result || `Server returned ${res.status}`;
+        alert("Failed to get recommendations: " + message);
+        setLoading(false);
+        return;
+      }
+
+      const recs = data?.response?.recommendations || [];
+      if (!Array.isArray(recs) || recs.length === 0) {
+        alert("No recommendations returned. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      const normalized = recs.map((r) => ({
+        title: r.title || r.name || "Mental Health Resource",
+        summary: r.summary || r.description || "Summary not available.",
+        link: r.link || r.url || "",
+      }));
+
+      setRecommendations(normalized);
       setSubmitted(true);
-    } catch (error) {
-      console.error("Request failed:", error);
+
+      // Persist state
+      localStorage.setItem("healthTestSubmitted", "true");
+      localStorage.setItem("healthTestRecommendations", JSON.stringify(normalized));
+      localStorage.setItem("healthTestQuestions", JSON.stringify(questionsToAsk));
+      localStorage.setItem("healthTestAnswers", JSON.stringify(answers));
+    } catch (err) {
+      console.error("Request failed:", err);
+      alert("Network error — could not reach the backend. Make sure the backend is running on http://localhost:5000");
     } finally {
       setLoading(false);
     }
@@ -99,223 +153,142 @@ export default function HealthTest() {
     setAnswers({});
     setRecommendations([]);
     setSubmitted(false);
+    localStorage.removeItem("healthTestSubmitted");
+    localStorage.removeItem("healthTestRecommendations");
+    localStorage.removeItem("healthTestQuestions");
+    localStorage.removeItem("healthTestAnswers");
+
     const shuffled = [...AllQuestions].sort(() => Math.random() - 0.5);
-    setQuestionsToAsk(shuffled.slice(0, 10));
+    setQuestionsToAsk(shuffled.slice(0, 6));
+  };
+
+  const allAnswered = questionsToAsk.every((q) => answers[q.id]);
+
+  // --- styles remain unchanged, same neon UI ---
+  const styles = {
+    container: { minHeight: "100vh", background: "linear-gradient(135deg, #0a0a0a 0%, #1a0033 25%, #000814 50%, #001122 75%, #0a0a0a 100%)", fontFamily: "'Inter', 'Segoe UI', sans-serif", color: "#ffffff", overflow: "hidden", position: "relative", paddingTop: "80px" },
+    neonOverlay: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "radial-gradient(circle at 20% 20%, rgba(255, 0, 150, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 50%)", pointerEvents: "none", zIndex: 1 },
+    content: { position: "relative", zIndex: 2, padding: "40px 20px", maxWidth: "1200px", margin: "0 auto" },
+    title: { textAlign: "center", fontSize: "3.5rem", fontWeight: "900", marginBottom: "20px", background: "linear-gradient(45deg, #ff0080, #00ffff, #ff0080)", backgroundSize: "200% 200%", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text", animation: "neonPulse 3s ease-in-out infinite", textShadow: "0 0 20px rgba(255, 0, 128, 0.5), 0 0 40px rgba(0, 255, 255, 0.3)" },
+    subtitle: { textAlign: "center", fontSize: "1.2rem", color: "#b0b0ff", marginBottom: "40px", textShadow: "0 0 10px rgba(176, 176, 255, 0.5)" },
+    questionsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(500px, 1fr))", gap: "25px", margin: "40px 0", maxWidth: "1400px", marginLeft: "auto", marginRight: "auto" },
+    questionCard: { background: "rgba(20, 20, 40, 0.8)", border: "1px solid rgba(0, 255, 255, 0.3)", borderRadius: "20px", padding: "30px", backdropFilter: "blur(10px)", boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 255, 255, 0.1)", transition: "all 0.3s ease" },
+    questionText: { fontSize: "1.1rem", fontWeight: "600", marginBottom: "20px", color: "#ffffff", lineHeight: "1.4" },
+    choicesContainer: { display: "flex", flexWrap: "wrap", gap: "10px", justifyContent: "center" },
+    choiceButton: { padding: "10px 18px", borderRadius: "25px", border: "2px solid transparent", background: "rgba(255, 255, 255, 0.1)", color: "#ffffff", fontWeight: "600", fontSize: "0.9rem", cursor: "pointer", transition: "all 0.3s ease", backdropFilter: "blur(5px)" },
+    choiceButtonSelected: { background: "linear-gradient(45deg, #ff0080, #00ffff)", border: "2px solid #00ffff", color: "#ffffff", boxShadow: "0 0 20px rgba(0, 255, 255, 0.6), 0 0 40px rgba(255, 0, 128, 0.4)", transform: "scale(1.05)" },
+    submitButton: { padding: "18px 40px", borderRadius: "35px", border: "none", background: "linear-gradient(45deg, #ff0080, #00ffff)", color: "#ffffff", fontWeight: "800", fontSize: "1.2rem", cursor: "pointer", transition: "all 0.3s ease", boxShadow: "0 0 30px rgba(0, 255, 255, 0.6)", textTransform: "uppercase", letterSpacing: "1px", margin: "40px auto", display: "block" },
+    navButton: { marginTop: "20px", padding: "12px 22px", borderRadius: "12px", border: "none", background: "rgba(0, 255, 255, 0.1)", color: "#ffffff", fontWeight: "700", cursor: "pointer", transition: "all 0.2s ease" },
+    floatingSubmit: { position: "fixed", right: "22px", bottom: "22px", zIndex: 1200, borderRadius: "999px", padding: "16px 22px", display: "flex", alignItems: "center", gap: "10px", boxShadow: "0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,255,0.15)", transition: "transform 0.12s ease, opacity 0.12s ease" },
+    floatingSubmitDisabled: { opacity: 0.6, cursor: "not-allowed", transform: "scale(0.98)" },
   };
 
   return (
-    <>
+    <div style={styles.container}>
       <NavBar />
-      <main
-        style={{
-          paddingTop: 80,
-          minHeight: "100vh", // allow background to grow
-          display: "flex",
-          flexDirection: "column",
-          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-          color: "#212529",
-          background: "linear-gradient(135deg, #e9f0ff 0%, #f7faff 50%, #ffffff 100%)",
-        }}
-      >
-        <div style={{ flexGrow: 1, backgroundColor: "#fff", paddingBottom: 40 }}>
-          {!submitted ? (
-            <>
-              <h1
-                style={{
-                  textAlign: "center",
-                  marginBottom: 24,
-                  color: "#004085",
-                  fontWeight: "700",
-                  fontSize: 32,
-                }}
-              >
-                Mental Wellness Test
-              </h1>
+      <div style={styles.neonOverlay}></div>
 
-              <div
-                style={{
-                  flexGrow: 1,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(4, 1fr)",
-                  gap: 16,
-                  padding: 16,
-                }}
-              >
-                {questionsToAsk.map(({ id, question }) => (
-                  <div
-                    key={id}
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      padding: 12,
-                      borderRadius: 12,
-                      backgroundColor: "#f0f4ff",
-                      boxShadow: "0 3px 6px rgba(0, 64, 133, 0.15)",
-                      textAlign: "center",
-                    }}
-                  >
-                    <p
-                      style={{
-                        fontWeight: "700",
-                        fontSize: 16,
-                        marginBottom: 12,
-                        color: "#003366",
-                        userSelect: "none",
-                      }}
-                    >
-                      {question}
-                    </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: 8,
-                        flexWrap: "wrap",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {Choices.map((choice) => {
-                        const selected = answers[id] === choice;
-                        return (
-                          <button
-                            key={choice}
-                            onClick={() => handleSelect(id, choice)}
-                            style={{
-                              padding: "6px 12px",
-                              borderRadius: 20,
-                              border: selected
-                                ? "3px solid #004085"
-                                : "2px solid #a9c0ff",
-                              backgroundColor: selected ? "#cfe2ff" : "#e6efff",
-                              color: selected ? "#002752" : "#004085",
-                              fontWeight: selected ? "700" : "600",
-                              fontSize: 12,
-                              cursor: "pointer",
-                              transition: "all 0.25s ease",
-                            }}
-                          >
-                            {choice}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))}
-              </div>
+      <style>{`
+          @keyframes neonPulse {
+            0%, 100% { background-position: 0% 50%; filter: brightness(1) saturate(1); }
+            50% { background-position: 100% 50%; filter: brightness(1.2) saturate(1.3); }
+          }
+      `}</style>
 
-              <div style={{ textAlign: "center", margin: 24 }}>
-                <button
-                  onClick={handleSubmit}
-                  disabled={loading}
-                  style={{
-                    backgroundColor: "#004085",
-                    color: "white",
-                    border: "none",
-                    borderRadius: 28,
-                    padding: "14px 40px",
-                    fontSize: 20,
-                    fontWeight: "700",
-                    cursor: "pointer",
-                    boxShadow: "0 6px 16px rgb(0 64, 133 / 0.35)",
-                    opacity: loading ? 0.6 : 1,
-                  }}
-                >
-                  {loading ? "Processing..." : "Submit"}
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <h2
-                style={{
-                  textAlign: "center",
-                  color: "#004085",
-                  fontWeight: "700",
-                  fontSize: 28,
-                }}
-              >
-                Thank You for Completing the Check-In
-              </h2>
-              <p
-                style={{
-                  maxWidth: 700,
-                  margin: "12px auto 36px",
-                  color: "#495057",
-                  fontSize: 16,
-                  textAlign: "center",
-                  lineHeight: 1.5,
-                }}
-              >
-                Your responses have been reviewed. Here are some resources that may help.
-              </p>
+      <div style={styles.content}>
+        {!submitted ? (
+          <>
+            <h1 style={styles.title}>NEURAL WELLNESS</h1>
+            <p style={styles.subtitle}>
+              Advanced Mental Health Assessment • Complete all {questionsToAsk.length} questions below
+            </p>
 
-              {recommendations.length > 0 && (
-                <>
-                  <h3
-                    style={{
-                      marginTop: 40,
-                      marginBottom: 20,
-                      textAlign: "center",
-                      color: "#28a745",
-                      fontSize: 22,
-                      fontWeight: "700",
-                    }}
-                  >
-                    🌟 AI-Recommended Articles for You
-                  </h3>
-                  {recommendations.map((rec, i) => (
-                    <div
-                      key={i}
-                      style={{
-                        background: "#fff",
-                        padding: 20,
-                        borderRadius: 10,
-                        marginBottom: 16,
-                        boxShadow: "0 4px 8px rgba(0,0,0,0.05)",
-                      }}
-                    >
-                      <strong>{rec.title}</strong>
-                      <p>{rec.summary}</p>
-                      {rec.link && (
-                        <a
-                          href={rec.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            color: "#007bff",
-                            textDecoration: "underline",
-                          }}
+            <div style={styles.questionsGrid}>
+              {questionsToAsk.map(({ id, question }) => (
+                <div key={id} style={{
+                  ...styles.questionCard,
+                  transform: answers[id] ? "scale(1.02)" : "scale(1)",
+                  borderColor: answers[id] ? "rgba(0, 255, 255, 0.6)" : "rgba(0, 255, 255, 0.3)",
+                }}>
+                  <p style={styles.questionText}>{question}</p>
+                  <div style={styles.choicesContainer}>
+                    {Choices.map((choice) => {
+                      const selected = answers[id] === choice;
+                      return (
+                        <button
+                          key={choice}
+                          onClick={() => handleSelect(id, choice)}
+                          style={selected ? { ...styles.choiceButton, ...styles.choiceButtonSelected } : styles.choiceButton}
                         >
-                          Read more →
-                        </a>
-                      )}
-                    </div>
-                  ))}
-                </>
-              )}
+                          {choice}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
 
-              <div style={{ textAlign: "center", marginTop: 50 }}>
-                <button
-                  onClick={reset}
-                  style={{
-                    padding: "14px 40px",
-                    backgroundColor: "#6c757d",
-                    color: "white",
-                    border: "none",
-                    borderRadius: 28,
-                    cursor: "pointer",
-                    fontSize: 18,
-                    fontWeight: "700",
-                  }}
-                >
-                  Retake Assessment
-                </button>
+            <button
+              onClick={handleSubmit}
+              disabled={loading || !allAnswered}
+              style={{
+                ...styles.submitButton,
+                opacity: loading || !allAnswered ? 0.6 : 1,
+                cursor: loading || !allAnswered ? "not-allowed" : "pointer",
+              }}
+            >
+              {loading ? "ANALYZING..." : "SUBMIT ASSESSMENT"}
+            </button>
+
+            <button
+              type="button"
+              aria-label="Submit assessment"
+              onClick={handleSubmit}
+              disabled={loading || !allAnswered}
+              style={{
+                ...styles.floatingSubmit,
+                ...(loading || !allAnswered ? styles.floatingSubmitDisabled : {}),
+                background: "linear-gradient(45deg, #ff0080, #00ffff)",
+                color: "#ffffff",
+                border: "none",
+                fontWeight: 800,
+                fontSize: "1rem",
+              }}
+            >
+              {loading ? "ANALYZING..." : "SUBMIT"}
+            </button>
+          </>
+        ) : (
+          <div style={{ textAlign: "center", maxWidth: "800px", margin: "0 auto" }}>
+            <h2 style={{ fontSize: "2.5rem", fontWeight: "800", marginBottom: "20px", color: "#00ffff" }}>
+              ✨ ASSESSMENT COMPLETE ✨
+            </h2>
+            <p style={{ fontSize: "1.2rem", color: "#b0b0ff", marginBottom: "40px", lineHeight: "1.6" }}>
+              Your neural patterns have been analyzed. Here are personalized recommendations to enhance your mental wellness journey.
+            </p>
+
+            {recommendations.map((rec, i) => (
+              <div key={i} style={{
+                background: "rgba(20, 20, 40, 0.9)",
+                border: "1px solid rgba(255, 0, 128, 0.4)",
+                borderRadius: "15px",
+                padding: "25px",
+                margin: "20px 0",
+                textAlign: "left",
+                backdropFilter: "blur(15px)",
+                boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 0, 128, 0.2)",
+              }}>
+                <h4 style={{ color: "#00ffff", fontSize: "1.3rem", marginBottom: "15px" }}>{rec.title}</h4>
+                <p style={{ color: "#ffffff", lineHeight: "1.6", marginBottom: "15px" }}>{rec.summary}</p>
+                {rec.link && <a href={rec.link} target="_blank" rel="noopener noreferrer" style={{ color: "#ff0080", fontWeight: "600" }}>Explore Resource →</a>}
               </div>
-            </>
-          )}
-        </div>
-      </main>
-    </>
+            ))}
+
+            <button onClick={reset} style={styles.navButton}>🔄 RETAKE ASSESSMENT</button>
+          </div>
+        )}
+      </div>
+    </div>
   );
 }

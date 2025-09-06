@@ -1,302 +1,208 @@
-import React from 'react';
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext'; // Adjust path as needed
-import NavBar from '../components/NavBar';
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext.jsx';
+import NavBar from '../components/NavBar.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
-  const [fullName, setFullName] = useState('');
+  const { signUp, loading } = useAuth();
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
-  const { signUp, loading } = useAuth();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
 
-    // Client-side validation
     if (password !== confirmPassword) {
-      setErrorMsg("Passwords don't match.");
+      setErrorMsg("Passwords don't match");
       return;
     }
-
     if (password.length < 6) {
-      setErrorMsg("Password must be at least 6 characters long.");
+      setErrorMsg("Password must be at least 6 characters");
       return;
     }
 
-    try {
-      const result = await signUp(email, password, {
-        userData: {
-          full_name: fullName,
-          name: fullName
-        }
-      });
+    const result = await signUp(email, password);
+    if (result.success) {
+      setSuccessMsg('Account created! Please check your email if confirmation is enabled.');
+      setEmail(''); setPassword(''); setConfirmPassword('');
+      setTimeout(() => navigate('/login'), 2000);
+    } else {
+      setErrorMsg(result.error);
+    }
+  };
 
-      if (result.success) {
-        setSuccessMsg('Account created successfully! Please check your email for verification.');
-        
-        // Clear form
-        setFullName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
-
-        // If email verification is required, show message
-        if (result.needsVerification) {
-          setSuccessMsg('Account created! Please check your email and click the verification link before signing in.');
-        } else {
-          // If no verification needed, redirect to dashboard or login
-          setTimeout(() => {
-            window.location.href = '/dashboard'; // or wherever you want to redirect
-          }, 2000);
-        }
-      } else {
-        // Handle specific error cases
-        if (result.error.includes('already registered')) {
-          setErrorMsg('An account with this email already exists. Try signing in instead.');
-        } else if (result.error.includes('Password')) {
-          setErrorMsg('Password must be at least 6 characters long.');
-        } else {
-          setErrorMsg(result.error);
-        }
-      }
-    } catch (error) {
-      console.error('Signup error:', error);
-      setErrorMsg('An unexpected error occurred. Please try again.');
+  // UI styles aligned with Chatbot neon theme
+  const styles = {
+    page: {
+      paddingTop: '90px',
+      minHeight: '100vh',
+      background: "radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06), transparent 15%), radial-gradient(circle at 90% 90%, rgba(0,255,255,0.06), transparent 15%), linear-gradient(180deg, #020014 0%, #080018 100%)",
+      color: '#e6f7ff',
+      fontFamily: "'Inter', 'Segoe UI', sans-serif",
+    },
+    mainWrap: {
+      maxWidth: '520px',
+      margin: '40px auto',
+      padding: '28px',
+      borderRadius: '16px',
+      background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
+      border: '1px solid rgba(0,255,255,0.04)',
+      boxShadow: '0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,128,0.02)',
+      position: 'relative',
+      overflow: 'hidden',
+    },
+    header: {
+      textAlign: 'center',
+      marginBottom: '18px',
+    },
+    title: {
+      fontSize: '28px',
+      fontWeight: 800,
+      background: 'linear-gradient(90deg, #00ffff, #b58bff)',
+      WebkitBackgroundClip: 'text',
+      backgroundClip: 'text',
+      color: 'transparent',
+      letterSpacing: '-0.5px',
+    },
+    accentBar: {
+      height: '6px',
+      width: '90px',
+      margin: '12px auto 0',
+      borderRadius: '999px',
+      background: 'linear-gradient(90deg,#00ffff,#ff9ad0)'
+    },
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '12px',
+    },
+    input: {
+      padding: '12px 14px',
+      borderRadius: '12px',
+      border: '1px solid rgba(255,255,255,0.06)',
+      background: 'rgba(255,255,255,0.02)',
+      color: '#e6f7ff',
+      outline: 'none',
+      fontSize: '15px',
+      boxShadow: '0 6px 20px rgba(0,255,255,0.02)',
+      transition: 'box-shadow 0.15s ease, transform 0.12s ease'
+    },
+    inputFocus: {
+      boxShadow: '0 8px 30px rgba(0,255,255,0.06)',
+      transform: 'translateY(-1px)'
+    },
+    error: {
+      color: '#ff6b7a',
+      background: 'linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,0.03))',
+      padding: '8px',
+      borderRadius: '8px',
+    },
+    success: {
+      color: '#6ef2bf',
+      background: 'linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,0.03))',
+      padding: '8px',
+      borderRadius: '8px',
+    },
+    submitBtn: {
+      padding: '12px 16px',
+      borderRadius: '12px',
+      border: 'none',
+      fontWeight: 800,
+      cursor: 'pointer',
+      background: 'linear-gradient(45deg, #ff0080, #00ffff)',
+      color: '#00121a',
+      boxShadow: '0 8px 30px rgba(255,0,128,0.08), 0 8px 30px rgba(0,255,255,0.08)'
+    },
+    footer: {
+      marginTop: '12px',
+      textAlign: 'center',
+      color: '#9fe8ff',
+      fontSize: '14px',
+    },
+    neonOverlay: {
+      position: 'fixed',
+      top: '90px',
+      left: 0,
+      right: 0,
+      bottom: 0,
+      pointerEvents: 'none',
+      zIndex: 0,
+      background: 'radial-gradient(circle at 15% 10%, rgba(255,0,128,0.05) 0%, transparent 20%), radial-gradient(circle at 85% 90%, rgba(0,255,255,0.05) 0%, transparent 20%)',
+      mixBlendMode: 'screen',
     }
   };
 
   return (
-    <div style={pageWrapper}>
+    <>
       <NavBar />
 
-      <div style={mainContainer}>
-        {/* Left Welcome Section */}
-        <div style={welcomeSection}>
-          <h2 style={welcomeTitle}>We're excited for you to create an account!</h2>
-          <p style={welcomeText}>
-            Join our community and gain access to exclusive features, personalized
-            content, and much more. Your journey to better mental wellness starts here.
-          </p>
+      <div style={styles.page}>
+        <div style={styles.neonOverlay} />
 
-          <div style={iconContainer}>
-            {/* Brain Icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="#ffffff"
-              viewBox="0 0 24 24"
-              width="80"
-              height="80"
-              style={{ marginRight: '1.5rem' }}
-            >
-              <path d="M12 2a7 7 0 00-7 7v3a7 7 0 0014 0v-3a7 7 0 00-7-7zm5 10a5 5 0 01-10 0v-3a5 5 0 0110 0v3z" />
-              <path d="M10 14h4v2h-4z" />
-            </svg>
+        <main style={styles.mainWrap}>
+          <div style={{ position: 'absolute', top: -80, left: -80, width: 320, height: 320, borderRadius: '50%', filter: 'blur(60px)', background: 'linear-gradient(135deg, rgba(0,255,255,0.14), rgba(109,0,255,0.12))', opacity: 0.8, transform: 'rotate(20deg)' }} />
+          <div style={{ position: 'absolute', bottom: -60, right: -60, width: 260, height: 260, borderRadius: '50%', filter: 'blur(50px)', background: 'linear-gradient(135deg, rgba(255,0,128,0.12), rgba(255,184,107,0.08))', opacity: 0.75 }} />
 
-            {/* Heart Icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="#ffffff"
-              viewBox="0 0 24 24"
-              width="80"
-              height="80"
-            >
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 3.99 4 6.5 4c1.54 0 3.04.99 3.57 2.36h1.87C14.46 4.99 15.96 4 17.5 4 20.01 4 22 6 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-            </svg>
-          </div>
-        </div>
+          <header style={styles.header}>
+            <h1 style={styles.title}>Create account</h1>
+            <div style={styles.accentBar} />
+          </header>
 
-        {/* Right Signup Form Section */}
-        <div style={formWrapper}>
-          <h2 style={title}>Create an Account</h2>
-
-          <form style={form} onSubmit={handleSubmit}>
-            <label style={label}>Full Name</label>
-            <input
-              type="text"
-              placeholder="Your name"
-              style={input}
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              disabled={loading}
-            />
-
-            <label style={label}>Email</label>
+          <form onSubmit={handleSubmit} style={styles.form}>
             <input
               type="email"
-              placeholder="you@example.com"
-              style={input}
+              placeholder="you@domain.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={e => setEmail(e.target.value)}
               required
               disabled={loading}
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
             />
 
-            <label style={label}>Password</label>
             <input
               type="password"
-              placeholder="••••••••"
-              style={input}
+              placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={e => setPassword(e.target.value)}
               required
               disabled={loading}
-              minLength="6"
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
             />
 
-            <label style={label}>Confirm Password</label>
             <input
               type="password"
-              placeholder="••••••••"
-              style={input}
+              placeholder="Confirm password"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={e => setConfirmPassword(e.target.value)}
               required
               disabled={loading}
-              minLength="6"
+              style={styles.input}
+              onFocus={(e) => e.currentTarget.style.boxShadow = styles.inputFocus.boxShadow}
+              onBlur={(e) => e.currentTarget.style.boxShadow = styles.input.boxShadow}
             />
 
-            {errorMsg && (
-              <p style={{ color: '#ff4d6d', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                {errorMsg}
-              </p>
-            )}
+            {errorMsg && <div style={styles.error}>{errorMsg}</div>}
+            {successMsg && <div style={styles.success}>{successMsg}</div>}
 
-            {successMsg && (
-              <p style={{ color: '#4CAF50', marginBottom: '1rem', fontSize: '0.9rem' }}>
-                {successMsg}
-              </p>
-            )}
-
-            <button 
-              type="submit" 
-              style={{
-                ...button,
-                opacity: loading ? 0.7 : 1,
-                cursor: loading ? 'not-allowed' : 'pointer'
-              }}
-              disabled={loading}
-            >
-              {loading ? 'Creating Account...' : 'Sign Up'}
-            </button>
+            <button type="submit" disabled={loading} style={styles.submitBtn}>{loading ? 'Signing Up...' : 'Sign up'}</button>
           </form>
 
-          <p style={footerText}>
-            Already have an account? <a href="/login" style={link}>Log in</a>
-          </p>
-        </div>
+          <div style={styles.footer}>Already have an account? <a href="/login" style={{ color: '#b7faff', textDecoration: 'underline' }}>Log in</a></div>
+
+        </main>
       </div>
-    </div>
+
+      <style>{`@keyframes neonPulse { 0%,100% { filter: drop-shadow(0 0 6px rgba(0,255,255,0.08)) drop-shadow(0 0 10px rgba(255,0,128,0.04)); } 50% { transform: translateY(-2px); filter: drop-shadow(0 0 12px rgba(0,255,255,0.12)) drop-shadow(0 0 18px rgba(255,0,128,0.08)); } }`}</style>
+    </>
   );
 }
-
-// --- Styles ---
-const pageWrapper = {
-  backgroundColor: '#f9f9ff',
-  minHeight: '100vh',
-  padding: '3rem 1rem',
-  fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-};
-
-const mainContainer = {
-  display: 'flex',
-  maxWidth: '1100px',
-  margin: '0 auto',
-  padding: '2rem',
-  gap: '3rem',
-};
-
-const welcomeSection = {
-  flex: 1.3,
-  background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)', // purple to blue gradient
-  color: '#fff',
-  borderRadius: '10px',
-  padding: '3rem 2rem',
-  boxShadow: '0 0 15px rgba(38, 0, 77, 0.3)',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-};
-
-const welcomeTitle = {
-  fontSize: '1.9rem',
-  marginBottom: '1rem',
-  fontWeight: '700',
-};
-
-const welcomeText = {
-  fontSize: '1.2rem',
-  lineHeight: '1.5',
-};
-
-const iconContainer = {
-  display: 'flex',
-  marginTop: '2rem',
-  justifyContent: 'flex-start',
-  alignItems: 'center',
-};
-
-const formWrapper = {
-  flex: 1,
-  backgroundColor: '#2a2a72', // deep blue-purple
-  borderRadius: '10px',
-  padding: '3rem 3.5rem',
-  boxShadow: '0 0 12px rgba(0,0,0,0.15)',
-};
-
-const title = {
-  marginBottom: '2rem',
-  color: '#d1d5ff',
-  textAlign: 'center',
-};
-
-const form = {
-  display: 'flex',
-  flexDirection: 'column',
-  textAlign: 'left',
-};
-
-const label = {
-  marginBottom: '0.5rem',
-  fontWeight: '600',
-  color: '#e6e6ff',
-};
-
-const input = {
-  padding: '0.75rem',
-  marginBottom: '1.25rem',
-  borderRadius: '5px',
-  border: '1px solid #ccc',
-  fontSize: '1rem',
-};
-
-const button = {
-  padding: '0.75rem',
-  background: 'linear-gradient(90deg, #667eea, #764ba2)',
-  color: '#fff',
-  fontWeight: '600',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  transition: 'background 0.3s ease',
-  fontSize: '1rem',
-};
-
-const footerText = {
-  marginTop: '1.5rem',
-  fontSize: '0.9rem',
-  textAlign: 'center',
-  color: '#cdd6f4',
-};
-
-const link = {
-  color: '#a4b3ff',
-  textDecoration: 'none',
-  fontWeight: '600',
-};
