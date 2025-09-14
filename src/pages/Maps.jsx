@@ -131,18 +131,18 @@ export default function Maps() {
   );
 
   const styles = {
-    page: { paddingTop: 90, minHeight: "100vh", background: "radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06), transparent 15%), radial-gradient(circle at 90% 90%, rgba(0,255,255,0.06), transparent 15%), linear-gradient(180deg, #020014 0%, #080018 100%)", color: "#e6f7ff", fontFamily: "'Inter', sans-serif", padding: "40px 20px" },
+    page: { paddingTop: 90, minHeight: "100vh", background: "radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06), transparent 15%), radial-gradient(circle at 90% 90%, rgba(0,255,255,0.06), transparent 15%), linear-gradient(180deg, #020014 0%, #080018 100%)", color: "#e6f7ff", fontFamily: "'Space Grotesk', 'Roboto', sans-serif", padding: "40px 20px" },
     container: { maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 360px", gap: 28, alignItems: "start" },
     feed: { background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))", borderRadius: 14, padding: 18, border: "1px solid rgba(0,255,255,0.04)", boxShadow: "0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,128,0.02)" },
     sidebar: { background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))", borderRadius: 14, padding: 16, border: "1px solid rgba(0,255,255,0.04)", height: "fit-content" },
-    inputLarge: { width: "100%", padding: 12, borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", color: "#e6f7ff", fontSize: 15, marginBottom: 8 },
-    inputSmall: { padding: 10, borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", color: "#e6f7ff", fontSize: 14, marginBottom: 8 },
-    postBtn: { padding: "10px 14px", border: "none", borderRadius: 10, background: "linear-gradient(45deg, #ff0080, #00ffff)", color: "#00121a", fontWeight: 800, cursor: "pointer" },
-    deleteBtn: { padding: "6px 10px", borderRadius: 8, border: "none", background: "linear-gradient(45deg, #ff6b6b, #ff9a9a)", color: "#fff", cursor: "pointer", fontWeight: 700 },
+    inputLarge: { width: "100%", padding: 12, borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", color: "#e6f7ff", fontSize: 15, marginBottom: 8, fontFamily: "'Space Grotesk', 'Roboto', sans-serif" },
+    inputSmall: { padding: 10, borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", color: "#e6f7ff", fontSize: 14, marginBottom: 8, fontFamily: "'Space Grotesk', 'Roboto', sans-serif" },
+    postBtn: { padding: "10px 14px", border: "none", borderRadius: 10, background: "linear-gradient(45deg, #ff0080, #00ffff)", color: "#00121a", fontWeight: 800, cursor: "pointer", fontFamily: "'Space Grotesk', 'Roboto', sans-serif" },
+    deleteBtn: { padding: "6px 10px", borderRadius: 8, border: "none", background: "linear-gradient(45deg, #ff6b6b, #ff9a9a)", color: "#fff", cursor: "pointer", fontWeight: 700, fontFamily: "'Space Grotesk', 'Roboto', sans-serif" },
     postCard: { borderRadius: 12, padding: 14, marginBottom: 12, background: "linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0))", border: "1px solid rgba(0,255,255,0.04)" },
     authorRow: { display: "flex", justifyContent: "space-between", marginBottom: 8, color: "#9fe8ff" },
     replyBox: { display: "flex", gap: 8, marginTop: 10 },
-    replyInput: { flex: 1, padding: 8, borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", color: "#e6f7ff" },
+    replyInput: { flex: 1, padding: 8, borderRadius: 10, border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", color: "#e6f7ff", fontFamily: "'Space Grotesk', 'Roboto', sans-serif" },
     small: { color: "#bfefff", fontSize: 12 },
     neonOverlay: { position: "fixed", top: 90, left: 0, right: 0, bottom: 0, pointerEvents: "none", zIndex: 0, background: "radial-gradient(circle at 15% 10%, rgba(255,0,128,0.05) 0%, transparent 20%), radial-gradient(circle at 85% 90%, rgba(0,255,255,0.05) 0%, transparent 20%)", mixBlendMode: "screen" }
   };

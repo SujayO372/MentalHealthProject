@@ -144,11 +144,7 @@ export default function Signup() {
 
       <div style={styles.page}>
         <div style={styles.neonOverlay} />
-
         <main style={styles.mainWrap}>
-          <div style={{ position: 'absolute', top: -80, left: -80, width: 320, height: 320, borderRadius: '50%', filter: 'blur(60px)', background: 'linear-gradient(135deg, rgba(0,255,255,0.14), rgba(109,0,255,0.12))', opacity: 0.8, transform: 'rotate(20deg)' }} />
-          <div style={{ position: 'absolute', bottom: -60, right: -60, width: 260, height: 260, borderRadius: '50%', filter: 'blur(50px)', background: 'linear-gradient(135deg, rgba(255,0,128,0.12), rgba(255,184,107,0.08))', opacity: 0.75 }} />
-
           <header style={styles.header}>
             <h1 style={styles.title}>Create account</h1>
             <div style={styles.accentBar} />
