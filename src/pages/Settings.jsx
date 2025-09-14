@@ -1,29 +1,147 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../components/NavBar';
-import useAuth from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext';
+import { supabase } from '../lib/supabase';
 
 function Settings() {
-  const { session, user, loading, signOut } = useAuth();
+  const { user, loading, signOut } = useAuth();
 
-  const [name, setName] = useState('')
+  // form state
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [notificationsEnabled, setNotificationsEnabled] = useState(
-    JSON.parse(localStorage.getItem('notificationsEnabled')) ?? true
-  );
   const [password, setPassword] = useState('');
+  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const [saving, setSaving] = useState(false);
 
-  const newUser = {
-    username: name,
-    email: email
+  // profile load state
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [loadError, setLoadError] = useState(null);
+
+  // Fetch profile (robust)
+  const fetchProfile = async (abortSignal) => {
+    if (!user) return;
+    setProfileLoading(true);
+    setLoadError(null);
+    try {
+      setEmail(user.email || '');
+
+      const { data, error } = await supabase
+        .from('users')
+        .select('username, notifications_enabled')
+        .eq('auth_id', user.id)
+        .single();
+
+      if (abortSignal?.aborted) return;
+
+      if (error) {
+        // helpful debug logging
+        console.error('Settings.fetchProfile supabase error:', error);
+        setLoadError(error.message || 'Failed to load profile');
+        return;
+      }
+
+      if (data) {
+        setUsername(data.username ?? '');
+        setNotificationsEnabled(Boolean(data.notifications_enabled));
+      } else {
+        // no profile row found — fallback
+        console.warn('No profile row found for auth_id=', user.id);
+        setLoadError('No profile found. You may need to create a profile row in the `users` table.');
+      }
+    } catch (err) {
+      if (!abortSignal?.aborted) {
+        console.error('Settings.fetchProfile unexpected error:', err);
+        setLoadError(err.message || 'Unexpected error loading profile');
+      }
+    } finally {
+      if (!abortSignal?.aborted) setProfileLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (!user) return;
+
+    // abortable pattern to prevent state updates after unmount
+    const controller = { aborted: false };
+    fetchProfile(controller);
+
+    return () => { controller.aborted = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   const handleSave = async () => {
-      //this specific line, because you don't have a database table for users (we use the authentication
-      //table instead), might be different - but the key idea here is we want to change
-      //the user's username and email by replacing the existing user row in the database
-      //with a new row that has the updated username and email
-      const { data, error } = await supabase.from("users").update(newUser).eq('username', username)
+    if (!user) return;
+    setSaving(true);
+
+    try {
+      // 1) Update Auth (email/password) using Supabase v2 API
+      const { data: authData, error: authError } = await supabase.auth.updateUser({
+        email: email || undefined,
+        password: password || undefined,
+      });
+      if (authError) {
+        console.error('supabase.auth.updateUser error:', authError);
+        throw authError;
+      }
+
+      // 2) Update profile in users table
+      const { error: profileError } = await supabase
+        .from('users')
+        .update({
+          username,
+          notifications_enabled: notificationsEnabled,
+        })
+        .eq('auth_id', user.id);
+
+      if (profileError) {
+        console.error('supabase.from(users).update error:', profileError);
+        throw profileError;
+      }
+
+      // 3) Update localStorage & dispatch event (so Home updates instantly)
+      try {
+        localStorage.setItem('userName', username);
+        window.dispatchEvent(new CustomEvent('userNameChanged', { detail: username }));
+      } catch (e) {
+        console.warn('localStorage update failed (non-fatal):', e);
+      }
+
+      alert('Profile updated successfully!');
+      setPassword('');
+    } catch (err) {
+      console.error('Update failed:', err);
+      const message = (err && (err.message || err.error_description || err.msg)) || 'Unknown error';
+      alert(`Update failed: ${message}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
+  // If the auth context is still loading, show the same Loading message you used before
+  if (loading) return <div>Loading...</div>;
+
+  if (!user)
+    return (
+      <div style={{ padding: 50, textAlign: 'center', minHeight: '100vh', background: '#0a0a0a', color: '#0ff' }}>
+        <h2 style={{ fontSize: 28 }}>Please log in to access settings</h2>
+        <p style={{ fontSize: 16, margin: '12px 0' }}>Click below to go to the login page.</p>
+        <a
+          href="/login"
+          style={{
+            padding: '12px 24px',
+            background: 'linear-gradient(90deg,#ff0080,#00ffff)',
+            color: '#00121a',
+            borderRadius: 12,
+            fontWeight: 700,
+            textDecoration: 'none'
+          }}
+        >
+          Go to Login
+        </a>
+      </div>
+    );
+
+  // --- UI (unchanged neon look) ---
   return (
     <>
       <NavBar />
@@ -38,10 +156,10 @@ function Settings() {
             </p>
             <div style={iconContainer}>
               <svg viewBox="0 0 24 24" width="70" height="70" style={iconPink}>
-                <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.63l-1.92-3.32a.49.49 0 00-.6-.21l-2.39.96a7.05 7.05 0 00-1.63-.94l-.36-2.54a.488.488 0 00-.48-.41h-3.84c-.24 0-.44.17-.48.41l-.36 2.54c-.6.23-1.15.54-1.63.94l-2.39-.96a.49.49 0 00-.6.21L2.71 8.85a.49.49 0 00.12.63l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 00-.12.63l1.92 3.32c.14.24.42.32.66.21l2.39-.96c.48.4 1.03.72 1.63.94l.36 2.54c.04.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.6-.23 1.15-.54 1.63-.94l2.39.96c.24.1.52.02.66-.21l1.92-3.32a.49.49 0 00-.12-.63l-2.03-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z"/>
+                <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 00.12-.63l-1.92-3.32a.49.49 0 00-.6-.21l-2.39.96a7.05 7.05 0 00-1.63-.94l-.36-2.54a.488.488 0 00-.48-.41h-3.84c-.24 0-.44.17-.48.41l-.36 2.54c-.6.23-1.15.54-1.63.94l-2.39-.96a.49.49 0 00-.6.21L2.71 8.85a.49.49 0 00.12.63l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 00-.12.63l1.92 3.32c.14.24.42.32.66.21l2.39-.96c.48.4 1.03.72 1.63.94l.36 2.54c.04.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.6-.23 1.15-.54 1.63-.94l2.39.96c.24.1.52.02.66-.21l1.92-3.32a.49.49 0 00-.12-.63l-2.03-1.58zM12 15.6a3.6 3.6 0 110-7.2 3.6 3.6 0 010 7.2z" />
               </svg>
               <svg viewBox="0 0 24 24" width="70" height="70" style={iconCyan}>
-                <path d="M12 24c1.3 0 2.4-1 2.5-2.3h-5A2.5 2.5 0 0012 24zm6.4-6V11c0-3.1-2-5.7-4.8-6.7V4a1.6 1.6 0 00-3.2 0v.3C7.6 5.3 5.6 7.9 5.6 11v7L4 19.6V21h16v-1.4l-1.6-1.6z"/>
+                <path d="M12 24c1.3 0 2.4-1 2.5-2.3h-5A2.5 2.5 0 0012 24zm6.4-6V11c0-3.1-2-5.7-4.8-6.7V4a1.6 1.6 0 00-3.2 0v.3C7.6 5.3 5.6 7.9 5.6 11v7L4 19.6V21h16v-1.4l-1.6-1.6z" />
               </svg>
             </div>
           </aside>
@@ -49,24 +167,67 @@ function Settings() {
           {/* Right Neon Form */}
           <main style={rightPanel}>
             <h3 style={formTitle}>Settings</h3>
-            <form style={form}>
-              <label style={label}>Name</label>
-              {/*make sure setname and setemail are updating name, email properly 
-              with the hooks, use print statements to debug*/}
-              <input style={input} type="text" value={name} onChange={e => setName(e.target.value)} />
+
+            {/* show loading spinner / error inline so user sees why form might be blank */}
+            {profileLoading ? (
+              <div style={{ marginBottom: 12, color: '#bfefff' }}>Loading profile...</div>
+            ) : loadError ? (
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ color: '#ffb4c6', marginBottom: 8 }}>Could not load profile: {loadError}</div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button
+                    onClick={() => {
+                      // retry fetch
+                      const controller = { aborted: false };
+                      fetchProfile(controller);
+                    }}
+                    style={{ ...button, padding: '8px 12px' }}
+                  >
+                    Retry
+                  </button>
+                </div>
+              </div>
+            ) : null}
+
+            <form style={form} onSubmit={(e) => e.preventDefault()}>
+              <label style={label}>Username</label>
+              <input
+                style={input}
+                type="text"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+              />
 
               <label style={label}>Email Address</label>
-              <input style={input} type="email" value={email} onChange={e => setEmail(e.target.value)} />
+              <input
+                style={input}
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+              />
 
               <label style={label}>New Password</label>
-              <input style={input} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter new password" />
+              <input
+                style={input}
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Leave blank to keep current"
+              />
 
-              {/* <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-                <input type="checkbox" checked={notificationsEnabled} onChange={e => setNotificationsEnabled(e.target.checked)} style={{ marginRight: '8px' }} />
+              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                <input
+                  type="checkbox"
+                  checked={notificationsEnabled}
+                  onChange={e => setNotificationsEnabled(e.target.checked)}
+                  style={{ marginRight: '8px' }}
+                />
                 <label style={checkboxLabel}>Enable Email Notifications</label>
-              </div> */}
+              </div>
 
-              <button type="button" onClick={handleSave} style={button}>Save Settings</button>
+              <button type="button" onClick={handleSave} style={button} disabled={saving}>
+                {saving ? 'Saving...' : 'Save Settings'}
+              </button>
             </form>
           </main>
         </div>
@@ -85,7 +246,7 @@ function Settings() {
 
 export default Settings;
 
-// --- Styles ---
+// --- Styles (unchanged neon UI) ---
 const pageWrapper = {
   minHeight: '100vh',
   fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
