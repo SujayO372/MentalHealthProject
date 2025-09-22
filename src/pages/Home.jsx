@@ -53,17 +53,51 @@ function Home() {
         }
 
         .neon-card {
-          background: rgba(255, 255, 255, 0.08);
-          backdrop-filter: blur(15px);
-          border-radius: 20px;
-          padding: 25px;
+          border-radius: 15px;
+          padding: 20px;
           transition: all 0.3s ease;
           text-align: center;
           color: white;
+          cursor: pointer;
+          border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .neon-card:hover {
-          transform: translateY(-6px);
+          transform: translateY(-4px);
+        }
+
+        .neon-card h3 {
+          font-size: 1.1rem;
+          margin-bottom: 10px;
+        }
+
+        .neon-card p {
+          font-size: 0.9rem;
+          line-height: 1.4;
+        }
+
+        .card-mood {
+          background: linear-gradient(135deg, #00f5ff, #0080ff);
+        }
+        
+        .card-guided {
+          background: linear-gradient(135deg, #ff69b4, #ff1493);
+        }
+        
+        .card-community {
+          background: linear-gradient(135deg, #ffa500, #ff8c00);
+        }
+        
+        .card-library {
+          background: linear-gradient(135deg, #7fff00, #32cd32);
+        }
+        
+        .card-wellness {
+          background: linear-gradient(135deg, #32cd32, #228b22);
+        }
+        
+        .card-progress {
+          background: linear-gradient(135deg, #20b2aa, #008b8b);
         }
 
         .neon-text {
@@ -72,13 +106,13 @@ function Home() {
           animation: textGlow 2s ease-in-out infinite alternate;
         }
 
-        .features {
+        .section {
           padding: 60px 20px;
           max-width: 1200px;
           margin: 0 auto;
         }
 
-        .features h2 {
+        .section h2 {
           text-align: center;
           margin-bottom: 40px;
           font-size: 2.5rem;
@@ -86,11 +120,62 @@ function Home() {
           text-shadow: 0 0 15px #ff69b4;
         }
 
-        /* Color accents for each card */
-        .card-mood h3 { color: #00f5ff; }
-        .card-guided h3 { color: #ff69b4; }
-        .card-community h3 { color: #ffa500; }
-        .card-library h3 { color: #7fff00; }
+        .section h3 {
+          font-size: 1.8rem;
+          margin-bottom: 20px;
+          color: #333;
+        }
+
+        .section p {
+          font-size: 1.1rem;
+          line-height: 1.6;
+          color: #555;
+          margin-bottom: 15px;
+        }
+
+        /* Card text colors */
+        .card-mood h3, .card-guided h3, .card-community h3, .card-library h3,
+        .card-wellness h3, .card-progress h3 { 
+          color: white; 
+          font-weight: bold;
+          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 20px;
+          margin: 30px 0;
+        }
+
+        .stat-card {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 20px;
+          border-radius: 15px;
+          text-align: center;
+          backdrop-filter: blur(10px);
+        }
+
+        .stat-card p {
+          color: #333;
+          font-weight: 500;
+        }
+
+        .stat-number {
+          font-size: 2.5rem;
+          font-weight: bold;
+          color: #00f5ff;
+          display: block;
+        }
+
+        .privacy-note {
+          background: rgba(131, 56, 236, 0.1);
+          border: 1px solid rgba(131, 56, 236, 0.3);
+          padding: 20px;
+          border-radius: 10px;
+          margin: 30px 0;
+          text-align: center;
+        }
       `}</style>
 
       <NavBar />
@@ -131,12 +216,12 @@ function Home() {
       </div>
 
       {/* Features Section */}
-      <div className="features">
-        <h2>✨ Explore Our Features ✨</h2>
+      <div className="section">
+        <h2 style={{ fontSize: '2rem' }}>✨ Explore Our Features ✨</h2>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-          gap: '25px'
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: '20px'
         }}>
           <div className="neon-card card-mood">
             <h3>📊 Mood Tracking</h3>
@@ -154,6 +239,51 @@ function Home() {
             <h3>📚 Resource Library</h3>
             <p>Access curated articles, tips, and expert knowledge to stay informed and empowered.</p>
           </div>
+          <div className="neon-card card-wellness">
+            <h3>🌱 Wellness Plans</h3>
+            <p>Personalized daily routines combining therapy techniques, self-care, and healthy habits.</p>
+          </div>
+          <div className="neon-card card-progress">
+            <h3>📈 Progress Insights</h3>
+            <p>Track your mental health journey with detailed analytics and milestone celebrations.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Mental Health Statistics */}
+      <div className="section">
+        <h2>🧠 Understanding Mental Health</h2>
+        <p style={{ textAlign: 'center', fontSize: '1.2rem', marginBottom: '40px' }}>
+          You're not alone in your mental health journey. These statistics show how common mental health challenges are:
+        </p>
+        <div className="stats-grid">
+          <div className="stat-card">
+            <span className="stat-number">1 in 4</span>
+            <p>people experience mental health issues each year</p>
+          </div>
+          <div className="stat-card">
+            <span className="stat-number">84%</span>
+            <p>report improvement with proper treatment and support</p>
+          </div>
+          <div className="stat-card">
+            <span className="stat-number">50%</span>
+            <p>of mental health conditions start by age 14</p>
+          </div>
+          <div className="stat-card">
+            <span className="stat-number">90%</span>
+            <p>of people who seek help report feeling better</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Privacy and Security */}
+      <div className="section">
+        <div className="privacy-note">
+          <h3>🔒 Your Privacy Matters</h3>
+          <p>
+            All your data is encrypted and protected. We never share your personal information 
+            without your explicit consent. Your mental health journey is private and secure with us.
+          </p>
         </div>
       </div>
     </>

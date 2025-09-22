@@ -122,12 +122,208 @@ export default function Maps() {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (
+    <>
+      <NavBar />
+      <div style={{
+        minHeight: "100vh",
+        background: "radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06), transparent 15%), radial-gradient(circle at 90% 90%, rgba(0,255,255,0.06), transparent 15%), linear-gradient(180deg, #020014 0%, #080018 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#e6f7ff",
+        fontFamily: "'Space Grotesk', 'Roboto', sans-serif"
+      }}>
+        <div style={{
+          textAlign: "center",
+          padding: "40px",
+          background: "linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))",
+          borderRadius: "20px",
+          border: "1px solid rgba(0,255,255,0.1)",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.6), 0 0 30px rgba(255,0,128,0.02)"
+        }}>
+          <div style={{
+            width: "60px",
+            height: "60px",
+            border: "3px solid rgba(0,255,255,0.3)",
+            borderTop: "3px solid #00ffff",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+            margin: "0 auto 20px"
+          }}></div>
+          <h2 style={{ fontSize: "1.8rem", marginBottom: "10px", color: "#00ffff" }}>Loading...</h2>
+          <p style={{ color: "#9fe8ff" }}>Preparing your community experience</p>
+        </div>
+        <style jsx>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    </>
+  );
+
   if (!user) return (
-    <div style={{ padding: 50, textAlign: "center" }}>
-      <h2>Please log in</h2>
-      <button onClick={() => signIn("YOUR_EMAIL", "YOUR_PASSWORD")} style={{ padding: "12px 24px", borderRadius: 12 }}>Sign In</button>
-    </div>
+    <>
+      <NavBar />
+      <div style={{
+        minHeight: "100vh",
+        background: "radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06), transparent 15%), radial-gradient(circle at 90% 90%, rgba(0,255,255,0.06), transparent 15%), linear-gradient(180deg, #020014 0%, #080018 100%)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "20px",
+        color: "#e6f7ff",
+        fontFamily: "'Space Grotesk', 'Roboto', sans-serif",
+        position: "relative"
+      }}>
+        {/* Background Effects */}
+        <div style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "radial-gradient(circle at 20% 30%, rgba(255,0,128,0.08) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(0,255,255,0.08) 0%, transparent 40%)",
+          animation: "pulse 4s ease-in-out infinite alternate"
+        }} />
+        
+        <div style={{
+          maxWidth: "500px",
+          width: "100%",
+          textAlign: "center",
+          position: "relative",
+          zIndex: 1
+        }}>
+          {/* Main Card */}
+          <div style={{
+            background: "linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
+            borderRadius: "24px",
+            padding: "50px 40px",
+            border: "1px solid rgba(0,255,255,0.15)",
+            boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 40px rgba(255,0,128,0.05)",
+            backdropFilter: "blur(20px)"
+          }}>
+            {/* Icon */}
+            <div style={{
+              width: "80px",
+              height: "80px",
+              background: "linear-gradient(135deg, #ff0080, #00ffff)",
+              borderRadius: "20px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 30px",
+              fontSize: "40px",
+              animation: "glow 2s ease-in-out infinite alternate"
+            }}>
+              🌟
+            </div>
+
+            {/* Title */}
+            <h1 style={{
+              fontSize: "2.8rem",
+              fontWeight: "800",
+              margin: "0 0 15px",
+              background: "linear-gradient(135deg, #00ffff, #ff0080)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text"
+            }}>
+              Join Our Community
+            </h1>
+
+            {/* Subtitle */}
+            <p style={{
+              fontSize: "1.3rem",
+              color: "#9fe8ff",
+              marginBottom: "35px",
+              lineHeight: "1.5"
+            }}>
+              Connect with others on their mental health journey. Share experiences, find support, and grow together.
+            </p>
+
+            {/* Features List */}
+            <div style={{
+              marginBottom: "40px",
+              textAlign: "left"
+            }}>
+              {[
+                { icon: "💬", text: "Real-time discussions and support" },
+                { icon: "🤝", text: "Connect with like-minded individuals" },
+                { icon: "📚", text: "Share resources and experiences" },
+                { icon: "🔒", text: "Safe and moderated environment" }
+              ].map((feature, index) => (
+                <div key={index} style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "15px",
+                  padding: "12px 16px",
+                  background: "rgba(0,255,255,0.05)",
+                  borderRadius: "12px",
+                  border: "1px solid rgba(0,255,255,0.08)"
+                }}>
+                  <span style={{ fontSize: "24px", marginRight: "15px" }}>{feature.icon}</span>
+                  <span style={{ color: "#dff8ff", fontSize: "1.1rem" }}>{feature.text}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Sign In Button */}
+            <button
+              onClick={() => window.location.href = '/signup'}
+              style={{
+                padding: "18px 40px",
+                fontSize: "1.2rem",
+                fontWeight: "800",
+                border: "none",
+                borderRadius: "16px",
+                background: "linear-gradient(135deg, #ff0080, #00ffff)",
+                color: "#001a2e",
+                cursor: "pointer",
+                transition: "all 0.3s ease",
+                fontFamily: "'Space Grotesk', 'Roboto', sans-serif",
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                boxShadow: "0 8px 25px rgba(255,0,128,0.3)"
+              }}
+              onMouseEnter={e => {
+                e.target.style.transform = "translateY(-3px)";
+                e.target.style.boxShadow = "0 12px 35px rgba(255,0,128,0.4)";
+              }}
+              onMouseLeave={e => {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 8px 25px rgba(255,0,128,0.3)";
+              }}
+            >
+              Sign In to Continue
+            </button>
+
+            {/* Help Text */}
+            <p style={{
+              marginTop: "25px",
+              color: "#7dd3fc",
+              fontSize: "0.95rem"
+            }}>
+              Need help? <a href="/support" style={{ color: "#00ffff", textDecoration: "underline" }}>Contact Support</a>
+            </p>
+          </div>
+        </div>
+
+        <style jsx>{`
+          @keyframes pulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+          }
+          
+          @keyframes glow {
+            0% { box-shadow: 0 0 20px rgba(255,0,128,0.3); }
+            100% { box-shadow: 0 0 30px rgba(0,255,255,0.4); }
+          }
+        `}</style>
+      </div>
+    </>
   );
 
   const styles = {
