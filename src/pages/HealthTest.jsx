@@ -101,10 +101,9 @@ export default function HealthTest() {
     }
 
     setLoading(true);
-
     try {
       const payload = { answers };
-      const res = await fetch("http://127.0.0.1:5000/health-test", {
+      const res = await fetch("http://129.153.80.76:5000/health-test", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

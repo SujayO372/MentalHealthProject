@@ -57,10 +57,10 @@ export default function Chatbot() {
     setMessages(newMessages);
     persistChatMessages(chatId, newMessages);
     setInput("");
-
+      
     if (isFirstMessage) {
       try {
-        const topicRes = await fetch("http://127.0.0.1:5000/get-topic", {
+        const topicRes = await fetch("http://129.153.80.76:5000/get-topic", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ text: userMessage }),
@@ -102,7 +102,7 @@ export default function Chatbot() {
     }
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/query", {
+      const response = await fetch("http://129.153.80.76:5000/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: userMessage }),
