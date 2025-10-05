@@ -1,8 +1,8 @@
 import React from "react";
-import { useLocation } from "react-router-dom"; // 👈 if you're using react-router
+import { useLocation } from "react-router-dom";
 
 export default function NavBar() {
-  const location = useLocation(); // gives us the current path
+  const location = useLocation();
 
   const navItems = [
     { name: "Home", href: "/" },
@@ -26,8 +26,9 @@ export default function NavBar() {
         top: 0,
         zIndex: 1000,
         backdropFilter: "blur(25px) saturate(180%)",
-        backgroundColor: "rgba(31, 41, 55, 0.35)",
-        boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+        backgroundColor: "rgba(10, 10, 15, 0.9)",
+        boxShadow: "0 8px 24px rgba(0,245,255,0.15)",
+        borderBottom: "1px solid rgba(0, 245, 255, 0.3)",
         borderRadius: "0 0 16px 16px",
         transition: "background 0.3s ease",
       }}
@@ -41,7 +42,7 @@ export default function NavBar() {
             href={href}
             style={{
               position: "relative",
-              color: isActive ? "#50e3c2" : "#f9fafb",
+              color: isActive ? "#00f5ff" : "#d0d0d0",
               textDecoration: "none",
               fontWeight: "500",
               fontSize: "1rem",
@@ -57,8 +58,8 @@ export default function NavBar() {
                 left: 0,
                 height: "2px",
                 width: isActive ? "100%" : "0%",
-                backgroundColor: "#50e3c2",
-                boxShadow: "0 0 6px #50e3c2",
+                backgroundColor: "#00f5ff",
+                boxShadow: "0 0 8px #00f5ff, 0 0 12px #00f5ff",
                 transition: "width 0.3s ease",
               }}
               className="underline"
@@ -70,7 +71,7 @@ export default function NavBar() {
       <style>
         {`
           a:hover {
-            color: #50e3c2 !important;
+            color: #00f5ff !important;
           }
           a:hover span {
             width: 100% !important;
