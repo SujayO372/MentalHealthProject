@@ -44,12 +44,32 @@ function Home() {
         .neon-overlay {
           position: fixed;
           top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(circle at 20% 30%, rgba(0,245,255,0.15), transparent 70%),
-                      radial-gradient(circle at 80% 70%, rgba(255,0,110,0.15), transparent 70%),
-                      radial-gradient(circle at 50% 90%, rgba(131,56,236,0.15), transparent 70%);
+          background: #0a0a0f;
+          z-index: -2;
+        }
+
+        .neon-overlay::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: 
+            radial-gradient(circle at 20% 30%, rgba(0,245,255,0.25), transparent 50%),
+            radial-gradient(circle at 80% 70%, rgba(255,0,255,0.2), transparent 50%),
+            radial-gradient(circle at 50% 50%, rgba(138,43,226,0.15), transparent 60%),
+            radial-gradient(circle at 90% 20%, rgba(0,255,157,0.18), transparent 45%);
           background-size: 200% 200%;
-          animation: gradientShift 12s ease infinite;
+          animation: gradientShift 15s ease infinite;
           z-index: -1;
+        }
+
+        .neon-overlay::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background-image: 
+            repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,245,255,0.03) 2px, rgba(0,245,255,0.03) 4px),
+            repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,0,255,0.03) 2px, rgba(255,0,255,0.03) 4px);
+          opacity: 0.4;
         }
 
         .neon-card {
@@ -101,8 +121,8 @@ function Home() {
         }
 
         .neon-text {
-          color: #000000;
-          text-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff;
+          color: #00f5ff;
+          text-shadow: 0 0 10px #00f5ff, 0 0 20px #00f5ff, 0 0 30px #00f5ff;
           animation: textGlow 2s ease-in-out infinite alternate;
         }
 
@@ -116,20 +136,20 @@ function Home() {
           text-align: center;
           margin-bottom: 40px;
           font-size: 2.5rem;
-          color: #000;
-          text-shadow: 0 0 15px #ff69b4;
+          color: #ffffff;
+          text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff69b4;
         }
 
         .section h3 {
           font-size: 1.8rem;
           margin-bottom: 20px;
-          color: #333;
+          color: #ffffff;
         }
 
         .section p {
           font-size: 1.1rem;
           line-height: 1.6;
-          color: #555;
+          color: #d0d0d0;
           margin-bottom: 15px;
         }
 
@@ -154,10 +174,11 @@ function Home() {
           border-radius: 15px;
           text-align: center;
           backdrop-filter: blur(10px);
+          border: 1px solid rgba(0,245,255,0.3);
         }
 
         .stat-card p {
-          color: #333;
+          color: #d0d0d0;
           font-weight: 500;
         }
 
@@ -166,15 +187,21 @@ function Home() {
           font-weight: bold;
           color: #00f5ff;
           display: block;
+          text-shadow: 0 0 10px #00f5ff;
         }
 
         .privacy-note {
-          background: rgba(131, 56, 236, 0.1);
-          border: 1px solid rgba(131, 56, 236, 0.3);
+          background: rgba(138, 43, 226, 0.15);
+          border: 1px solid rgba(138, 43, 226, 0.5);
           padding: 20px;
           border-radius: 10px;
           margin: 30px 0;
           text-align: center;
+        }
+
+        .privacy-note h3 {
+          color: #ff69b4;
+          text-shadow: 0 0 10px #ff69b4;
         }
       `}</style>
 
@@ -199,8 +226,8 @@ function Home() {
             fontSize: '3.5rem',
             fontWeight: '700',
             marginBottom: '20px',
-            color: '#000000',
-            textShadow: '0 0 20px #ff69b4'
+            color: '#ffffff',
+            textShadow: '0 0 20px #ff69b4, 0 0 40px #ff69b4, 0 0 60px #ff1493'
           }}>
             Welcome to SereneSpace
           </h1>
