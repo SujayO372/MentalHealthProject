@@ -57,7 +57,7 @@ export default function Chatbot() {
     setMessages(newMessages);
     persistChatMessages(chatId, newMessages);
     setInput("");
-      
+
     if (isFirstMessage) {
       try {
         const topicRes = await fetch("http://129.153.80.76:5000/get-topic", {
@@ -178,7 +178,6 @@ export default function Chatbot() {
 
   const styles = {
     page: {
-      // make room for the fixed NavBar (assumes NavBar is ~80px tall)
       paddingTop: '90px',
       minHeight: '100vh',
       background: 'radial-gradient(circle at 10% 10%, rgba(255,0,128,0.06), transparent 15%), radial-gradient(circle at 90% 90%, rgba(0,255,255,0.06), transparent 15%), linear-gradient(180deg, #020014 0%, #080018 100%)',
@@ -390,7 +389,17 @@ export default function Chatbot() {
                         }}
                       />
                     ) : (
-                      <span style={{ flex: 1, marginRight: '10px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <span
+                        style={{
+                          flex: 1,
+                          marginRight: '10px',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          color: chat.title ? undefined : '#7fe6ff',
+                          fontStyle: chat.title ? 'normal' : 'italic'
+                        }}
+                      >
                         {chat.title || "Untitled"}
                       </span>
                     )}
@@ -426,13 +435,7 @@ export default function Chatbot() {
 
             <div style={styles.messagesWrap} id="messagesWrap">
               {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex',
-                    justifyContent: msg.isUser ? 'flex-end' : 'flex-start',
-                  }}
-                >
+                <div key={i} style={{ alignSelf: msg.isUser ? 'flex-end' : 'flex-start' }}>
                   <div style={msg.isUser ? styles.userBubble : styles.botBubble}>
                     {msg.messageContent}
                     <div style={styles.timeText}>{msg.timestamp}</div>
@@ -441,36 +444,36 @@ export default function Chatbot() {
               ))}
             </div>
 
-            {/* Input */}
             <div style={styles.inputRow}>
               <input
-                type="text"
+                style={styles.input}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder="Type your message..."
-                style={styles.input}
               />
-
-              <button
-                onClick={handleSend}
-                style={styles.sendBtn}
-              >
-                Send
-              </button>
+              <button onClick={handleSend} style={styles.sendBtn}>Send</button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Local CSS for subtle animations */}
       <style>{`
         @keyframes neonPulse {
-          0%,100% { filter: drop-shadow(0 0 6px rgba(0,255,255,0.08)) drop-shadow(0 0 10px rgba(255,0,128,0.04)); }
-          50% { transform: translateY(-2px); filter: drop-shadow(0 0 12px rgba(0,255,255,0.12)) drop-shadow(0 0 18px rgba(255,0,128,0.08)); }
+          0%,100% {
+            filter: drop-shadow(0 0 6px rgba(0,255,255,0.08))
+                    drop-shadow(0 0 10px rgba(255,0,128,0.04));
+          }
+          50% {
+            transform: translateY(-2px);
+            filter: drop-shadow(0 0 12px rgba(0,255,255,0.12))
+                    drop-shadow(0 0 18px rgba(255,0,128,0.08));
+          }
         }
 
-        /* auto-scroll messages container when new messages arrive */
+        #messagesWrap {
+          scroll-behavior: smooth;
+        }
       `}</style>
     </>
   );
