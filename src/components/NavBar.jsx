@@ -11,6 +11,7 @@ export default function NavBar() {
     { name: "Assess your Health", href: "/healthtest" },
     { name: "Hotline Forum", href: "/maps" },
     { name: "Sign up", href: "/signup" },
+    { name: "Log in", href: "/login" },
     { name: "Settings", href: "/settings" },
   ];
 
