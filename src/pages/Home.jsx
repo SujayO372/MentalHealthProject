@@ -153,7 +153,6 @@ function Home() {
           margin-bottom: 15px;
         }
 
-        /* Card text colors */
         .card-mood h3, .card-guided h3, .card-community h3, .card-library h3,
         .card-wellness h3, .card-progress h3 { 
           color: white; 
@@ -220,6 +219,11 @@ function Home() {
         <div style={{ maxWidth: '2000px', margin: '0 auto', width: '100%', zIndex: 1 }}>
           <p style={{ fontSize: '1.1rem', marginBottom: '10px' }}>
             {greeting}, <strong className="neon-text">{username || 'Guest'}!</strong>
+          </p>
+
+          {/* Added 3-minute highlight */}
+          <p style={{ fontSize: '1.2rem', fontWeight: '500', marginBottom: '20px', color: '#00f5ff' }}>
+            Just 3 minutes a day can help you improve your wellness 🌟
           </p>
 
           <h1 style={{
@@ -311,7 +315,7 @@ function Home() {
             All your data is encrypted and protected. We never share your personal information 
             without your explicit consent. Your mental health journey is private and secure with us.
           </p>
-        </div>
+        </div> 
       </div>
     </>
   );
