@@ -221,10 +221,6 @@ function Home() {
             {greeting}, <strong className="neon-text">{username || 'Guest'}!</strong>
           </p>
 
-          {/* Added 3-minute highlight */}
-          <p style={{ fontSize: '1.2rem', fontWeight: '500', marginBottom: '20px', color: '#00f5ff' }}>
-            Just 3 minutes a day can help you improve your wellness 🌟
-          </p>
 
           <h1 style={{
             fontSize: '3.5rem',
@@ -237,8 +233,7 @@ function Home() {
           </h1>
 
           <p style={{ fontSize: '1.3rem', marginBottom: '30px', maxWidth: '600px' }}>
-            Support and evidence-based tools to help you thrive emotionally and mentally.
-          </p>
+Just 3 minutes a day can help you improve your wellness 🌟          </p>
 
           <p style={{ fontSize: '1.1rem', fontStyle: 'italic', opacity: 0.85, maxWidth: '500px' }}>
             Begin your path to wellness with reliable resources and compassionate care.
