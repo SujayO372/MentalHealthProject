@@ -9,7 +9,8 @@ export default function NavBar() {
     { name: "Serene AI", href: "/chatbot" },
     { name: "Check In", href: "/checkin" },
     { name: "Assess your Health", href: "/healthtest" },
-    { name: "Hotline Forum", href: "/maps" },
+    { name: "Hotline Forum", href: "/hotlines" },
+    { name: "Find Help", href: "/search" },
     { name: "Log in", href: "/login" },
     { name: "Settings", href: "/settings" },
   ];
